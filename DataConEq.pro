@@ -42,7 +42,9 @@ SOURCES += \
     formsetting_yzsb.cpp \
     formsetting_wlsz.cpp \
     formsetting_sjjy.cpp \
-    cdbcoustom.cpp
+    cdbcoustom.cpp \
+    coperationconfig.cpp \
+    qdatatype.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -62,8 +64,9 @@ HEADERS += \
     formsetting_yzsb.h \
     formsetting_wlsz.h \
     formsetting_sjjy.h \
-    datatype.h \
-    cdbcoustom.h
+    cdbcoustom.h \
+    coperationconfig.h \
+    qdatatype.h
 
 FORMS += \
         mainwindow.ui \

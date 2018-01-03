@@ -19,3 +19,4 @@ struct  stuChannel{
     char *pType;
 };
 #endif // DATATYPE_H
+

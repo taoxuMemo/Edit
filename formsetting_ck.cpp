@@ -1,7 +1,8 @@
 #include "formsetting_ck.h"
 #include "ui_formsetting_ck.h"
 #include"QMainWindow"
-#include"datatype.h"
+#include"qdatatype.h"
+#include"QMessageBox"
 int  FormSetting_CK::isNew=0;
 FormSetting_CK::FormSetting_CK(MainWindow *pMainWindow,QWidget *parent) :
     QWidget(parent),
@@ -63,4 +64,9 @@ void FormSetting_CK::on_pushButton_last_clicked()
     setAttribute(Qt::WA_DeleteOnClose, true);
     this->close();
 
+}
+
+void FormSetting_CK::on_comboBox_currentIndexChanged(int index)
+{
+    QMessageBox::information(this,"123",QString::number(index));
 }

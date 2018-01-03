@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //statusBar()->hide();
 
   //  setWindowFlags(Qt::FramelessWindowHint);
+    init();//初始化配置文件及数据库
     //**********************初始化窗体指针***********************************
     m_fm=NULL;
     m_fr=NULL;
@@ -32,6 +33,22 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+void MainWindow::init()
+{
+    m_pOpera=new COperationConfig();
+    if(m_pOpera->m_bTag==false)
+     {
+        this->close();
+        return;
+     }
+    for(int i=0;i<8;i++)
+        {
+       m_nCom[i]= m_pOpera->ReadCom(i+1);
+       bool bb=m_pOpera->ReadChn(&m_stuChan[i],i+1);
+
+    }
+
 }
 //***************************显示界面函数******************************
 void MainWindow::CreateMainBtn()
