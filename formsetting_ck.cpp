@@ -1,6 +1,6 @@
 #include "formsetting_ck.h"
 #include "ui_formsetting_ck.h"
-#include"QMainWindow"
+#include"mainwindow.h"
 #include"qdatatype.h"
 #include"QMessageBox"
 int  FormSetting_CK::isNew=0;
@@ -10,7 +10,7 @@ FormSetting_CK::FormSetting_CK(MainWindow *pMainWindow,QWidget *parent) :
 {
     ui->setupUi(this);
     m_Main=pMainWindow;
-   // pMainWindow->
+
     FormSetting_CK::isNew++;
     int num; //元素的数量
     //*************************控件初始化*****************************************
@@ -69,4 +69,41 @@ void FormSetting_CK::on_pushButton_last_clicked()
 void FormSetting_CK::on_comboBox_currentIndexChanged(int index)
 {
     QMessageBox::information(this,"123",QString::number(index));
+}
+//***********************保存按钮**********************************
+void FormSetting_CK::on_pushButton_3_clicked()
+{
+    int dexcom=ui->comboBox->currentIndex();
+//    char* cCom=g_pCom[dex];
+//    cCom+=3;
+//    int num=atoi(cCom);
+    int dexchn=ui->comboBox_2->currentIndex();
+    m_Main->m_nCom[dexcom]=dexchn+1;
+    m_Main->m_stuChan[dexchn].isrun=ui->checkBox->isChecked();
+    m_Main->m_stuChan[dexchn].nBaud=g_nBaud[ui->comboBox_3->currentIndex()];
+    m_Main->m_stuChan[dexchn].nData=g_cData[ui->comboBox_4->currentIndex()];
+    m_Main->m_stuChan[dexchn].nStop=g_fStop[ui->comboBox_5->currentIndex()];
+    m_Main->m_stuChan[dexchn].nParity=g_cParity[ui->comboBox_6->currentIndex()];
+
+    m_Main->m_stuChan[dexchn].bMinAvg=ui->checkBox_2->isChecked();
+    m_Main->m_stuChan[dexchn].bMinMax=ui->checkBox_3->isChecked();
+    m_Main->m_stuChan[dexchn].bMinMin=ui->checkBox_4->isChecked();
+    m_Main->m_stuChan[dexchn].bMinTotal=ui->checkBox_5->isChecked();
+    m_Main->m_stuChan[dexchn].bHourAvg=ui->checkBox_8->isChecked();
+    m_Main->m_stuChan[dexchn].bHourMax=ui->checkBox_6->isChecked();
+    m_Main->m_stuChan[dexchn].bHourMin=ui->checkBox_9->isChecked();
+    m_Main->m_stuChan[dexchn].bHourTotal=ui->checkBox_7->isChecked();
+    m_Main->m_stuChan[dexchn].bDayAvg=ui->checkBox_12->isChecked();
+    m_Main->m_stuChan[dexchn].bDayMax=ui->checkBox_10->isChecked();
+    m_Main->m_stuChan[dexchn].bDayMin=ui->checkBox_13->isChecked();
+    m_Main->m_stuChan[dexchn].bDayTotal=ui->checkBox_11->isChecked();
+
+    m_Main->m_stuChan[dexchn].nAlarmUp=ui->spinBox->value();
+    m_Main->m_stuChan[dexchn].nAlarmDown=ui->spinBox_2->value();
+    m_Main->m_stuChan[dexchn].nCycle=ui->spinBox_3->value();
+
+
+
+
+
 }

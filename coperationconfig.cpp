@@ -36,13 +36,7 @@ int COperationConfig::ReadCom(int num)
        COperationConfig::writelog(CONFIGCOMLEN,QString::number(num).toLatin1().data());
        return 0;
    }
-//   QString strNum=str.mid(3,1);
-//   int num=strNum.toInt();
-//   if(num>8 || num<1)
-//       {
-//       COperationConfig::writelog(CONFIGCOMVOER,QString::number(num).toLatin1().data());
-//       return 0;
-//   }
+
       char *pStr=str.toLatin1().data();
       pStr+=3;
       char cStr=*pStr;
@@ -56,7 +50,14 @@ int COperationConfig::ReadCom(int num)
 
 }
 bool COperationConfig::WriteCom(int num)
-{}
+{
+
+    if(!m_bTag)
+        return 0;
+    QString stttt="/com/com"+QString::number(num+1);
+    m_file->setValue(stttt,g_pChn[num]);
+
+}
 bool COperationConfig::ReadChn(stuChannel * stu,int num)
 {
     if(!m_bTag)
@@ -148,11 +149,149 @@ bool COperationConfig::ReadChn(stuChannel * stu,int num)
         COperationConfig::writelog(CONFIGPARITY,QString::number(num).toLatin1().data());
         return false;
     }
+//*********************************取checkbox分小时天********************************
+     QString strMinAvg= m_file->value(Sec+"/favg").toString();
+     if(CheckBool(strMinAvg))
+     {
+         COperationConfig::writelog(CONFIGCHNMINAVG,QString::number(num).toLatin1().data());
+         return false;
+     }
+     stu->bMinAvg=strMinAvg.toInt();
+
+     QString strMinMax= m_file->value(Sec+"/fmax").toString();
+     if(CheckBool(strMinMax))
+     {
+         COperationConfig::writelog(CONFIGCHNMINMAX,QString::number(num).toLatin1().data());
+         return false;
+     }
+     stu->bMinMax=strMinMax.toInt();
+
+     QString strMinMin= m_file->value(Sec+"/fmin").toString();
+     if(CheckBool(strMinMin))
+     {
+         COperationConfig::writelog(CONFIGCHNMINMIN,QString::number(num).toLatin1().data());
+         return false;
+     }
+     stu->bMinMin=strMinMin.toInt();
+
+     QString strMinTotal= m_file->value(Sec+"/ftotal").toString();
+     if(CheckBool(strMinTotal))
+     {
+         COperationConfig::writelog(CONFIGCHNMINTOTAL,QString::number(num).toLatin1().data());
+         return false;
+     }
+     stu->bMinTotal=strMinTotal.toInt();
+     //*************************************小时***************************************
+     QString strHourAvg= m_file->value(Sec+"/xavg").toString();
+     if(CheckBool(strHourAvg))
+     {
+         COperationConfig::writelog(CONFIGCHNHOURAVG,QString::number(num).toLatin1().data());
+         return false;
+     }
+     stu->bHourAvg=strHourAvg.toInt();
+
+     QString strHourMax= m_file->value(Sec+"/xmax").toString();
+     if(CheckBool(strHourMax))
+     {
+         COperationConfig::writelog(CONFIGCHNHOURMAX,QString::number(num).toLatin1().data());
+         return false;
+     }
+     stu->bHourMax=strHourMax.toInt();
+
+     QString strHourMin= m_file->value(Sec+"/xmin").toString();
+     if(CheckBool(strHourMin))
+     {
+         COperationConfig::writelog(CONFIGCHNHOURMIN,QString::number(num).toLatin1().data());
+         return false;
+     }
+     stu->bHourMin=strHourMin.toInt();
+
+     QString strHourTotal= m_file->value(Sec+"/xtotal").toString();
+     if(CheckBool(strHourTotal))
+     {
+         COperationConfig::writelog(CONFIGCHNHOURTOTAL,QString::number(num).toLatin1().data());
+         return false;
+     }
+     stu->bHourTotal=strHourTotal.toInt();
+     //***************************************天*************************************
+     QString strDayAvg= m_file->value(Sec+"/ravg").toString();
+     if(CheckBool(strDayAvg))
+     {
+         COperationConfig::writelog(CONFIGCHNDAYAVG,QString::number(num).toLatin1().data());
+         return false;
+     }
+     stu->bDayAvg=strDayAvg.toInt();
+
+     QString strDayMax= m_file->value(Sec+"/rmax").toString();
+     if(CheckBool(strDayMax))
+     {
+         COperationConfig::writelog(CONFIGCHNDAYMAX,QString::number(num).toLatin1().data());
+         return false;
+     }
+     stu->bDayMax=strDayMax.toInt();
+
+     QString strDayMin= m_file->value(Sec+"/rmin").toString();
+     if(CheckBool(strDayMin))
+     {
+         COperationConfig::writelog(CONFIGCHNDAYMIN,QString::number(num).toLatin1().data());
+         return false;
+     }
+     stu->bDayMin=strDayMin.toInt();
+
+     QString strDayTotal= m_file->value(Sec+"/rtotal").toString();
+     if(CheckBool(strDayTotal))
+     {
+         COperationConfig::writelog(CONFIGCHNDAYTOTAL,QString::number(num).toLatin1().data());
+         return false;
+     }
+     stu->bDayTotal=strDayTotal.toInt();
 
 
 }
-bool COperationConfig::writeChn(stuChannel chn)
-{}
+//***************判断是否为bool型*********************************
+bool COperationConfig::CheckBool(QString str)
+{
+    if(str.length()!=1)
+        return false;
+    char s=*(str.toLatin1().data());
+    if(s!='q' && s!='0')
+        return false;
+    return true;
+}
+bool COperationConfig::writeChn(stuChannel chn,int num)
+{
+    if(!m_bTag)
+        return 0;
+    //判断stu是否被new
+
+   QString Sec="/chn"+QString::number(num+1);
+
+   m_file->setValue(Sec+"/isrun",QString::number(chn.isrun));
+   m_file->setValue(Sec+"/baud",QString::number(chn.nBaud));
+   m_file->setValue(Sec+"/data",QString::number(chn.nData));
+   m_file->setValue(Sec+"/stop",QString::number(chn.nStop));
+   m_file->setValue(Sec+"/parity",QString(chn.nParity));
+
+   m_file->setValue(Sec+"/favg",QString::number(chn.bMinAvg));
+   m_file->setValue(Sec+"/fmin",QString::number(chn.bMinMin));
+   m_file->setValue(Sec+"/fmax",QString::number(chn.bMinMax));
+   m_file->setValue(Sec+"/ftotal",QString::number(chn.bMinTotal));
+
+   m_file->setValue(Sec+"/xavg",QString::number(chn.bHourAvg));
+   m_file->setValue(Sec+"/xmin",QString::number(chn.bHourMin));
+   m_file->setValue(Sec+"/xmax",QString::number(chn.bHourMax));
+   m_file->setValue(Sec+"/xtotal",QString::number(chn.bHourTotal));
+
+   m_file->setValue(Sec+"/ravg",QString::number(chn.bDayAvg));
+   m_file->setValue(Sec+"/rmin",QString::number(chn.bDayMin));
+   m_file->setValue(Sec+"/rmax",QString::number(chn.bDayMax));
+   m_file->setValue(Sec+"/rtotal",QString::number(chn.bDayTotal));
+
+   m_file->setValue(Sec+"/upper",QString::number(chn.nAlarmUp));
+   m_file->setValue(Sec+"/lower",QString::number(chn.nAlarmDown));
+   m_file->setValue(Sec+"/cycle",QString::number(chn.nCycle));
+
+}
 
 //********************************静态成员变量用于写入日志文件**************************************
 void COperationConfig::writelog(int nErr, char *sRemark)

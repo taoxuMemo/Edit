@@ -18,6 +18,25 @@ struct  stuChannel{
     char *pName;
     char *pModel;
     char *pType;
+    bool bMinAvg;
+    bool bMinMax;
+    bool bMinMin;
+    bool bMinTotal;
+    bool bHourAvg;
+    bool bHourMax;
+    bool bHourMin;
+    bool bHourTotal;
+    bool bDayAvg;
+    bool bDayMax;
+    bool bDayMin;
+    bool bDayTotal;
+    int nAlarmUp;
+    int nAlarmDown;
+    int nCycle;
+    char strCS[50];  //厂商
+    char strXH[20];  //型号
+    char strJCX[20];  //监测项
+    char strXY[20];  //协议
 };
 class QDatatype
 {
