@@ -13,6 +13,7 @@
 #include"formstate.h"
 #include"formsetting_ck.h"
 #include"formsetting_sjjy.h"
+#include "formsetting_wlsz.h"
 #include "coperationconfig.h"
 #include "qdatatype.h"
 namespace Ui {
@@ -26,6 +27,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    bool m_bRun;
     COperationConfig * m_pOpera;
     unsigned char m_nCom[8];
     stuChannel m_stuChan[8];
@@ -41,8 +43,9 @@ public:
     FormState * m_fstate;
     FormSetting_CK *m_fsetting_ck;
     FormSetting_SJJY *m_fsetting_sjjy;//时间设置界面指针
+    FormSetting_WLSZ *m_fsetting_wlsz;//网络设置界面指针
     //*************************初始化***************************************
-    void init();
+    bool init();
    //***************************创建界面函数****************************************
     void CreateMainBtn();
     void CreateRealTime();
@@ -54,6 +57,7 @@ public:
     void CreateSetting();
     void CreateState();
     void CreateSetting_ck();
+    void CreateSetting_wlsz();//网络参数设置
     void CreateSetting_sjjy();//时间校验界面启动函数
     int m_nTest;
 private slots:

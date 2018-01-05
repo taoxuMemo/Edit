@@ -16,6 +16,17 @@ public:
     ~FormSetting_WLSZ();
     MainWindow *m_Main;
     static int isNew;
+private slots:
+    void on_radioButton_YX_clicked(bool checked);
+
+    void on_radioButton_WX_clicked(bool checked);
+
+    void on_radioButton_TCP_clicked(bool checked);
+
+    void on_radioButton_UDP_clicked(bool checked);
+
+    void on_comboBox_ID_currentIndexChanged(int index);
+
 private:
     Ui::FormSetting_WLSZ *ui;
 };

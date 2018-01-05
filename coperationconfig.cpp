@@ -25,6 +25,35 @@ COperationConfig::~COperationConfig()
     if(m_file!=nullptr)
         delete m_file;
 }
+bool COperationConfig::ReadIPAddr(stuIPAddr *stu,int num)
+{
+    if(!m_bTag)
+        return 0;
+     QString Sec="/addr"+QString::number(num);
+     stu->bIsrun= m_file->value(Sec+"/isrun").toInt();
+     QString strname= m_file->value(Sec+"/name").toString();
+     int nName=strname.length();
+     if(nName>20)
+     {
+         COperationConfig::writelog(CONFIGIPNAMELEN,QString::number(num).toLatin1().data()) ;
+         return false;
+     }
+     memcpy(stu->sName,strname.toLatin1().data(),nName);
+     stu->sName[nName]='\0';
+
+     stu->sIP= m_file->value(Sec+"/ip").toString();
+     stu->nPort= m_file->value(Sec+"/port").toInt();
+
+     QString strextend= m_file->value(Sec+"/extend").toString();
+     int nExtend=strname.length();
+     if(strextend>19)
+     {
+         COperationConfig::writelog(CONFIGIPEXTENDLEN,QString::number(num).toLatin1().data()) ;
+         return false;
+     }
+     memcpy(stu->sExtend,strextend.toLatin1().data(),nExtend);
+     stu->sExtend[nName]='\0';
+}
 int COperationConfig::ReadCom(int num)
 {
     if(!m_bTag)
@@ -49,13 +78,12 @@ int COperationConfig::ReadCom(int num)
       return renum;
 
 }
-bool COperationConfig::WriteCom(int num)
+bool COperationConfig::WriteCom(int nCom,int nChn)
 {
-
     if(!m_bTag)
         return 0;
-    QString stttt="/com/com"+QString::number(num+1);
-    m_file->setValue(stttt,g_pChn[num]);
+    QString stttt="/com/com"+QString::number(nCom);
+    m_file->setValue(stttt,g_pChn[nChn]);
 
 }
 bool COperationConfig::ReadChn(stuChannel * stu,int num)
@@ -151,7 +179,7 @@ bool COperationConfig::ReadChn(stuChannel * stu,int num)
     }
 //*********************************取checkbox分小时天********************************
      QString strMinAvg= m_file->value(Sec+"/favg").toString();
-     if(CheckBool(strMinAvg))
+     if(!CheckBool(strMinAvg))
      {
          COperationConfig::writelog(CONFIGCHNMINAVG,QString::number(num).toLatin1().data());
          return false;
@@ -159,7 +187,7 @@ bool COperationConfig::ReadChn(stuChannel * stu,int num)
      stu->bMinAvg=strMinAvg.toInt();
 
      QString strMinMax= m_file->value(Sec+"/fmax").toString();
-     if(CheckBool(strMinMax))
+     if(!CheckBool(strMinMax))
      {
          COperationConfig::writelog(CONFIGCHNMINMAX,QString::number(num).toLatin1().data());
          return false;
@@ -167,7 +195,7 @@ bool COperationConfig::ReadChn(stuChannel * stu,int num)
      stu->bMinMax=strMinMax.toInt();
 
      QString strMinMin= m_file->value(Sec+"/fmin").toString();
-     if(CheckBool(strMinMin))
+     if(!CheckBool(strMinMin))
      {
          COperationConfig::writelog(CONFIGCHNMINMIN,QString::number(num).toLatin1().data());
          return false;
@@ -175,7 +203,7 @@ bool COperationConfig::ReadChn(stuChannel * stu,int num)
      stu->bMinMin=strMinMin.toInt();
 
      QString strMinTotal= m_file->value(Sec+"/ftotal").toString();
-     if(CheckBool(strMinTotal))
+     if(!CheckBool(strMinTotal))
      {
          COperationConfig::writelog(CONFIGCHNMINTOTAL,QString::number(num).toLatin1().data());
          return false;
@@ -183,7 +211,7 @@ bool COperationConfig::ReadChn(stuChannel * stu,int num)
      stu->bMinTotal=strMinTotal.toInt();
      //*************************************小时***************************************
      QString strHourAvg= m_file->value(Sec+"/xavg").toString();
-     if(CheckBool(strHourAvg))
+     if(!CheckBool(strHourAvg))
      {
          COperationConfig::writelog(CONFIGCHNHOURAVG,QString::number(num).toLatin1().data());
          return false;
@@ -191,7 +219,7 @@ bool COperationConfig::ReadChn(stuChannel * stu,int num)
      stu->bHourAvg=strHourAvg.toInt();
 
      QString strHourMax= m_file->value(Sec+"/xmax").toString();
-     if(CheckBool(strHourMax))
+     if(!CheckBool(strHourMax))
      {
          COperationConfig::writelog(CONFIGCHNHOURMAX,QString::number(num).toLatin1().data());
          return false;
@@ -199,7 +227,7 @@ bool COperationConfig::ReadChn(stuChannel * stu,int num)
      stu->bHourMax=strHourMax.toInt();
 
      QString strHourMin= m_file->value(Sec+"/xmin").toString();
-     if(CheckBool(strHourMin))
+     if(!CheckBool(strHourMin))
      {
          COperationConfig::writelog(CONFIGCHNHOURMIN,QString::number(num).toLatin1().data());
          return false;
@@ -207,7 +235,7 @@ bool COperationConfig::ReadChn(stuChannel * stu,int num)
      stu->bHourMin=strHourMin.toInt();
 
      QString strHourTotal= m_file->value(Sec+"/xtotal").toString();
-     if(CheckBool(strHourTotal))
+     if(!CheckBool(strHourTotal))
      {
          COperationConfig::writelog(CONFIGCHNHOURTOTAL,QString::number(num).toLatin1().data());
          return false;
@@ -215,7 +243,7 @@ bool COperationConfig::ReadChn(stuChannel * stu,int num)
      stu->bHourTotal=strHourTotal.toInt();
      //***************************************天*************************************
      QString strDayAvg= m_file->value(Sec+"/ravg").toString();
-     if(CheckBool(strDayAvg))
+     if(!CheckBool(strDayAvg))
      {
          COperationConfig::writelog(CONFIGCHNDAYAVG,QString::number(num).toLatin1().data());
          return false;
@@ -223,7 +251,7 @@ bool COperationConfig::ReadChn(stuChannel * stu,int num)
      stu->bDayAvg=strDayAvg.toInt();
 
      QString strDayMax= m_file->value(Sec+"/rmax").toString();
-     if(CheckBool(strDayMax))
+     if(!CheckBool(strDayMax))
      {
          COperationConfig::writelog(CONFIGCHNDAYMAX,QString::number(num).toLatin1().data());
          return false;
@@ -231,7 +259,7 @@ bool COperationConfig::ReadChn(stuChannel * stu,int num)
      stu->bDayMax=strDayMax.toInt();
 
      QString strDayMin= m_file->value(Sec+"/rmin").toString();
-     if(CheckBool(strDayMin))
+     if(!CheckBool(strDayMin))
      {
          COperationConfig::writelog(CONFIGCHNDAYMIN,QString::number(num).toLatin1().data());
          return false;
@@ -239,12 +267,19 @@ bool COperationConfig::ReadChn(stuChannel * stu,int num)
      stu->bDayMin=strDayMin.toInt();
 
      QString strDayTotal= m_file->value(Sec+"/rtotal").toString();
-     if(CheckBool(strDayTotal))
+     if(!CheckBool(strDayTotal))
      {
          COperationConfig::writelog(CONFIGCHNDAYTOTAL,QString::number(num).toLatin1().data());
          return false;
      }
      stu->bDayTotal=strDayTotal.toInt();
+
+     //***************************************报警值******************************************
+     stu->nAlarmUp=m_file->value(Sec+"/upper").toInt();
+     stu->nAlarmDown=m_file->value(Sec+"/lower").toInt();
+     stu->nCycle=m_file->value(Sec+"/cycle").toInt();
+     return true;
+
 
 
 }
@@ -254,7 +289,7 @@ bool COperationConfig::CheckBool(QString str)
     if(str.length()!=1)
         return false;
     char s=*(str.toLatin1().data());
-    if(s!='q' && s!='0')
+    if(s!='1' && s!='0')
         return false;
     return true;
 }

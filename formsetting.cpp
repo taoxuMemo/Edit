@@ -42,3 +42,9 @@ void FormSetting::on_pushButton_8_clicked()//时间设置按钮
     this->hide();
     m_Main->CreateSetting_sjjy();
 }
+//***************************************网络设置按钮触发函数******************************************************8
+void FormSetting::on_pushButton_7_clicked()
+{
+    this->hide();
+    m_Main->CreateSetting_wlsz();
+}

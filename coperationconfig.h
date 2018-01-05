@@ -24,6 +24,8 @@
 #define    CONFIGCHNDAYMAX          0x00000013      //配置文件提取 rmin错误
 #define    CONFIGCHNDAYMIN          0x00000014      //配置文件提取 rmax错误
 #define    CONFIGCHNDAYTOTAL        0x00000015      //配置文件提取 rtotal错误
+#define    CONFIGIPNAMELEN          0x00000016      //配置文件提取 IP地址中的name长度错误
+#define    CONFIGIPEXTENDLEN        0x00000017      //配置文件提取 IP地址中的extend长度错误
 class COperationConfig
 {
 public:
@@ -32,10 +34,13 @@ public:
     bool m_bTag;                   //判断配置文件是否存在
     int  ReadCom(int num);         //读取串口号参数代表串口号，返回对应的通道号，不含号码前的字母。
     bool ReadChn(stuChannel * stu,int num);   //读取通道号参数代表通道号，返回通道结构
-    bool WriteCom(int num);        //写入串口对应的通道号
+    bool WriteCom(int nCom,int nChn);        //写入串口对应的通道号
     bool writeChn(stuChannel chn,int num); //写入通道参数
     static   void writelog(int nErr,char * sRemark=NULL);//参数nErr错误码 sremark备注
     bool CheckBool(QString str); //判断传进来str是不是bool类型
+
+    bool ReadIPAddr(stuIPAddr *stu,int num);//读取IP地址
+    bool WriteIPAddr(stuIPAddr stu,int num); //写入IP地址
 private:
     const char * m_scom="com";
     const char * m_schn="chn";

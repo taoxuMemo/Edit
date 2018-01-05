@@ -9,9 +9,11 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     //statusBar()->hide();
-
+    m_bRun=true;
   //  setWindowFlags(Qt::FramelessWindowHint);
-    init();//初始化配置文件及数据库
+    m_bRun=init();//初始化配置文件及数据库
+    if(!m_bRun)
+        return;
     //**********************初始化窗体指针***********************************
     m_fm=NULL;
     m_fr=NULL;
@@ -24,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_fstate=NULL;
     m_fsetting_ck=NULL;
     m_fsetting_sjjy=NULL;
+    m_fsetting_wlsz=NULL;
     //***************************end**********************************
     m_fm=new FormMain(this,ui->widget);
     m_fm->show();
@@ -34,20 +37,26 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-void MainWindow::init()
+bool MainWindow::init()
 {
     m_pOpera=new COperationConfig();
     if(m_pOpera->m_bTag==false)
      {
-        this->close();
-        return;
+      //  this->close();
+        return false;
      }
     for(int i=0;i<8;i++)
         {
        m_nCom[i]= m_pOpera->ReadCom(i+1);
        bool bb=m_pOpera->ReadChn(&m_stuChan[i],i+1);
+       if(bb==false)
+           {
+          // QMessageBox::information(this,"异常信息","程序异常关闭 请查看错误日志！！！！");
+           return false;
+       }
 
     }
+    return true;
 
 }
 //***************************显示界面函数******************************
@@ -137,6 +146,16 @@ void MainWindow::CreateState()
         m_fstate->show();
     }
 }
+void MainWindow::CreateSetting_wlsz()
+{
+    if(FormSetting_WLSZ::isNew!=0)
+    {
+       m_fsetting_wlsz->show();
+    }else {
+        m_fsetting_wlsz=new FormSetting_WLSZ(this,ui->widget);
+        m_fsetting_wlsz->show();
+    }
+}
 void MainWindow::CreateSetting_ck()
 {
     if(FormSetting_CK::isNew!=0)
@@ -162,5 +181,6 @@ void MainWindow::on_pushButton_clicked()
 {
  //   MainWindow  *pp= (MainWindow*)ui->
  //   int aaa=pp->m_nTest;
-    QMessageBox::information(NULL, "Title", "Content", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+  //  QMessageBox::information(NULL, "Title", "Content", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    QApplication::exit(0);
 }

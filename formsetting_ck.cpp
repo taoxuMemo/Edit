@@ -65,10 +65,47 @@ void FormSetting_CK::on_pushButton_last_clicked()
     this->close();
 
 }
-
+//*******************************com选项变更*********************************
 void FormSetting_CK::on_comboBox_currentIndexChanged(int index)
 {
-    QMessageBox::information(this,"123",QString::number(index));
+
+    int nChn=m_Main->m_nCom[index];
+    ui->comboBox_2->setCurrentIndex(nChn-1);
+
+}
+//*******************************chn选项变更*********************************
+void FormSetting_CK::on_comboBox_2_currentIndexChanged(int index)
+{
+     //  QMessageBox::information(this,"123",QString::number(index));
+    stuChannel stuChan=m_Main->m_stuChan[index];
+    ui->comboBox_3->setCurrentText(QString::number(stuChan.nBaud));
+    ui->comboBox_4->setCurrentText(QString::number(stuChan.nData));
+    ui->comboBox_5->setCurrentText(QString::number(stuChan.nStop));
+    ui->comboBox_6->setCurrentText(QString(stuChan.nParity));
+
+    ui->checkBox_2->setChecked(stuChan.bMinAvg);
+    ui->checkBox_3->setChecked(stuChan.bMinMax);
+    ui->checkBox_4->setChecked(stuChan.bMinMin);
+    ui->checkBox_5->setChecked(stuChan.bMinTotal);
+
+    ui->checkBox_8->setChecked(stuChan.bHourAvg);
+    ui->checkBox_6->setChecked(stuChan.bHourMax);
+    ui->checkBox_9->setChecked(stuChan.bHourMin);
+    ui->checkBox_7->setChecked(stuChan.bHourTotal);
+
+    ui->checkBox_12->setChecked(stuChan.bDayAvg);
+    ui->checkBox_10->setChecked(stuChan.bDayMax);
+    ui->checkBox_13->setChecked(stuChan.bDayMin);
+    ui->checkBox_11->setChecked(stuChan.bDayTotal);
+
+    ui->spinBox->setValue(stuChan.nAlarmUp);
+    ui->spinBox_2->setValue(stuChan.nAlarmDown);
+    ui->spinBox_3->setValue(stuChan.nCycle);
+
+  //  int dex =ui->comboBox_3->currentIndex();
+  //  QMessageBox::information(this,"123",QString::number(dex));
+   // stuChan.nBaud
+
 }
 //***********************保存按钮**********************************
 void FormSetting_CK::on_pushButton_3_clicked()
@@ -102,8 +139,11 @@ void FormSetting_CK::on_pushButton_3_clicked()
     m_Main->m_stuChan[dexchn].nAlarmDown=ui->spinBox_2->value();
     m_Main->m_stuChan[dexchn].nCycle=ui->spinBox_3->value();
 
-
-
-
-
+      if(QMessageBox::information(this,"配置信息","是否确定修改配置信息",QMessageBox::Yes | QMessageBox::No)==QMessageBox::Yes)
+          {
+          m_Main->m_pOpera->WriteCom(dexcom+1,dexchn);
+          m_Main->m_pOpera->writeChn(m_Main->m_stuChan[dexchn],dexchn);
+      }
 }
+
+
