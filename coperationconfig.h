@@ -26,6 +26,8 @@
 #define    CONFIGCHNDAYTOTAL        0x00000015      //配置文件提取 rtotal错误
 #define    CONFIGIPNAMELEN          0x00000016      //配置文件提取 IP地址中的name长度错误
 #define    CONFIGIPEXTENDLEN        0x00000017      //配置文件提取 IP地址中的extend长度错误
+#define    CONFIGIPIPADDRLEN        0x00000018      //配置文件提取 IP地址中的IP长度错误
+
 class COperationConfig
 {
 public:

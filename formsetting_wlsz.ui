@@ -173,7 +173,7 @@ color: rgb(238, 238, 236);</string>
      <string>启用</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="lineEdit_NAME">
     <property name="geometry">
      <rect>
       <x>90</x>
@@ -394,6 +394,19 @@ color: rgb(238, 238, 236);</string>
      <string>启用下面IP地址</string>
     </property>
    </widget>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>40</y>
+     <width>89</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>保存</string>
+   </property>
   </widget>
  </widget>
  <resources/>

@@ -40,19 +40,40 @@ bool COperationConfig::ReadIPAddr(stuIPAddr *stu,int num)
      }
      memcpy(stu->sName,strname.toLatin1().data(),nName);
      stu->sName[nName]='\0';
+     QString strIP=m_file->value(Sec+"/ip").toString();
+     int nIP=strIP.length();
+     if(nIP>19)
+     {
+         COperationConfig::writelog(CONFIGIPIPADDRLEN,QString::number(num).toLatin1().data()) ;
+         return false;
+     }
+     memcpy(stu->sIP,strIP.toLatin1().data(),nIP);
+     stu->sIP[nIP]='\0';
 
-     stu->sIP= m_file->value(Sec+"/ip").toString();
      stu->nPort= m_file->value(Sec+"/port").toInt();
 
      QString strextend= m_file->value(Sec+"/extend").toString();
      int nExtend=strname.length();
-     if(strextend>19)
+     if(nExtend>19)
      {
          COperationConfig::writelog(CONFIGIPEXTENDLEN,QString::number(num).toLatin1().data()) ;
          return false;
      }
      memcpy(stu->sExtend,strextend.toLatin1().data(),nExtend);
-     stu->sExtend[nName]='\0';
+     stu->sExtend[nExtend]='\0';
+}
+
+bool COperationConfig::WriteIPAddr(stuIPAddr stu, int num)
+{
+    if(!m_bTag)
+        return 0;
+    QString Sec="/chn"+QString::number(num+1);
+
+    m_file->setValue(Sec+"/isrun",QString::number(stu.bIsrun));
+    m_file->setValue(Sec+"/name",QString(stu.sName));
+    m_file->setValue(Sec+"/ip",QString(stu.sIP));
+    m_file->setValue(Sec+"/port",QString::number(stu.nPort));
+    m_file->setValue(Sec+"/extend",QString(stu.sExtend));
 }
 int COperationConfig::ReadCom(int num)
 {

@@ -27,6 +27,8 @@ private slots:
 
     void on_comboBox_ID_currentIndexChanged(int index);
 
+    void on_pushButton_clicked();
+
 private:
     Ui::FormSetting_WLSZ *ui;
 };

@@ -31,6 +31,8 @@ public:
     COperationConfig * m_pOpera;
     unsigned char m_nCom[8];
     stuChannel m_stuChan[8];
+    stuIPAddr  m_stuIPA[8];
+    bool       m_bXY;   //true是TCP    flase是UDP
     //****************************界面指针******************************************
     FormMain * m_fm;//主按钮界面
     FormAbout * m_fabout;
