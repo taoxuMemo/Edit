@@ -44,7 +44,9 @@ SOURCES += \
     formsetting_sjjy.cpp \
     cdbcoustom.cpp \
     coperationconfig.cpp \
-    qdatatype.cpp
+    qdatatype.cpp \
+    cmythread.cpp \
+    cmysocket.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -66,7 +68,9 @@ HEADERS += \
     formsetting_sjjy.h \
     cdbcoustom.h \
     coperationconfig.h \
-    qdatatype.h
+    qdatatype.h \
+    cmythread.h \
+    cmysocket.h
 
 FORMS += \
         mainwindow.ui \
