@@ -61,6 +61,7 @@ bool COperationConfig::ReadIPAddr(stuIPAddr *stu,int num)
      }
      memcpy(stu->sExtend,strextend.toLatin1().data(),nExtend);
      stu->sExtend[nExtend]='\0';
+     stu->isChange=true;
 }
 
 bool COperationConfig::WriteIPAddr(stuIPAddr stu, int num)

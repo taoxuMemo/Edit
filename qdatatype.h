@@ -40,6 +40,7 @@ struct  stuChannel{
     char strXY[20];  //协议
 };
 struct stuIPAddr{
+        bool isChange;
         bool bIsrun;
         char sName[50];
         char sIP[20];

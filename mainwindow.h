@@ -16,6 +16,8 @@
 #include "formsetting_wlsz.h"
 #include "coperationconfig.h"
 #include "qdatatype.h"
+#include"cmysocketthread.h"
+#include"qstringlistmodel.h"
 namespace Ui {
 class MainWindow;
 }
@@ -65,8 +67,16 @@ public:
 private slots:
     void on_pushButton_clicked();
 
+    void on_pushButton_2_clicked();
+
+    void DisplayMsg(QString);
+
 private:
     Ui::MainWindow *ui;
+
+    QStringListModel * m_model;
+    CMySocketThread m_MyThread;
+  //  bool m_isRun;
 };
 
 #endif // MAINWINDOW_H

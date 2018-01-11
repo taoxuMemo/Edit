@@ -9,11 +9,12 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     //statusBar()->hide();
-    m_bRun=true;
-    //  setWindowFlags(Qt::FramelessWindowHint);
-    m_bRun=init();//初始化配置文件及数据库
-    if(!m_bRun)
-        return;
+    m_bRun=false;
+    //    //  setWindowFlags(Qt::FramelessWindowHint);
+    //    m_bRun=init();//初始化配置文件及数据库
+    //    if(!m_bRun)
+    //        return;
+    init();
     //**********************初始化窗体指针***********************************
     m_fm=NULL;
     m_fr=NULL;
@@ -63,7 +64,7 @@ bool MainWindow::init()
         bool bb=m_pOpera->ReadIPAddr(&m_stuIPA[i],i+1);
     }
 
-return true;
+    return true;
 
 }
 //***************************显示界面函数******************************
@@ -190,4 +191,32 @@ void MainWindow::on_pushButton_clicked()
     //   int aaa=pp->m_nTest;
     //  QMessageBox::information(NULL, "Title", "Content", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
     QApplication::exit(0);
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    if(m_bRun)
+    {
+
+
+        ui->pushButton_2->setText("停止");
+        m_bRun=!m_bRun;
+    }
+    else
+    {
+        ui->pushButton_2->setText("启动");
+        m_bRun=!m_bRun;
+    }
+    //启动网络连接
+
+}
+void MainWindow::DisplayMsg(QString msg)
+{
+
+
+
+
+    // ui->listView->model();
+
+
 }

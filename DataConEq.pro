@@ -46,7 +46,8 @@ SOURCES += \
     coperationconfig.cpp \
     qdatatype.cpp \
     cmythread.cpp \
-    cmysocket.cpp
+    cmysocket.cpp \
+    cmysocketthread.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -70,7 +71,8 @@ HEADERS += \
     coperationconfig.h \
     qdatatype.h \
     cmythread.h \
-    cmysocket.h
+    cmysocket.h \
+    cmysocketthread.h
 
 FORMS += \
         mainwindow.ui \
