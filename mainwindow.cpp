@@ -3,17 +3,26 @@
 #include "formmain.h"
 //#include "formreal.h"
 #include "QMessageBox"
+#include "QDateTime"
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     //statusBar()->hide();
-    m_bRun=false;
+    m_bRun=true;
     //    //  setWindowFlags(Qt::FramelessWindowHint);
     //    m_bRun=init();//初始化配置文件及数据库
     //    if(!m_bRun)
     //        return;
+    //*****************************************************
+    m_model=new  QStringListModel();
+    ui->listView_MSG->setModel(m_model);
+    connect(m_pMyThread, SIGNAL(TestSignal(QString)), this, SLOT(DisplayMsg(QString)));
+    connect(m_pNetConThread, SIGNAL(TestSignal(QString)), this, SLOT(DisplayMsg(QString)));
+
+
+
     init();
     //**********************初始化窗体指针***********************************
     m_fm=NULL;
@@ -32,11 +41,25 @@ MainWindow::MainWindow(QWidget *parent) :
     m_fm=new FormMain(this,ui->widget);
     m_fm->show();
     m_nTest=56;
+
+    m_pMyThread=new CMySocketThread(this);
+    m_pNetConThread=new CNetConThread(this);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete  m_pMyThread;
+    delete  m_pNetConThread;
+
+    for(int i=0;i<6;i++)
+    {
+        if(m_pMySocket[i]!=NULL)
+        {
+            delete m_pMySocket[i];
+            m_pMySocket[i]=NULL;
+        }
+    }
 }
 bool MainWindow::init()
 {
@@ -59,9 +82,12 @@ bool MainWindow::init()
 
     }
     //获取网络配置信息
-    for(int i=0;i<8;i++)
+    for(int i=0;i<6;i++)
     {
         bool bb=m_pOpera->ReadIPAddr(&m_stuIPA[i],i+1);
+
+        m_pMySocket[i]=new CMySocket();
+        m_pMySocket[i]->SetParam(m_stuIPA[i]);
     }
 
     return true;
@@ -198,14 +224,17 @@ void MainWindow::on_pushButton_2_clicked()
     if(m_bRun)
     {
 
-
         ui->pushButton_2->setText("停止");
         m_bRun=!m_bRun;
+        m_pNetConThread->start();
+        m_pMyThread->start();
     }
     else
     {
         ui->pushButton_2->setText("启动");
         m_bRun=!m_bRun;
+        m_pNetConThread->stop();
+        m_pMyThread->stop();
     }
     //启动网络连接
 
@@ -214,8 +243,11 @@ void MainWindow::DisplayMsg(QString msg)
 {
 
 
+    QString str=msg+"-----"+QDateTime::currentDateTime().toString("hh:mm:ss");
+    QStringList num =m_model->stringList();
 
-
+     num<<str;
+     m_model->setStringList(num);
     // ui->listView->model();
 
 

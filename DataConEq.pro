@@ -47,7 +47,8 @@ SOURCES += \
     qdatatype.cpp \
     cmythread.cpp \
     cmysocket.cpp \
-    cmysocketthread.cpp
+    cmysocketthread.cpp \
+    cnetconthread.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -72,7 +73,8 @@ HEADERS += \
     qdatatype.h \
     cmythread.h \
     cmysocket.h \
-    cmysocketthread.h
+    cmysocketthread.h \
+    cnetconthread.h
 
 FORMS += \
         mainwindow.ui \

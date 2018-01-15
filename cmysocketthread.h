@@ -6,11 +6,12 @@
 #include"qdatatype.h"
 #include"sys/socket.h"
 #include"netdb.h"
+#include "mainwindow.h"
 class CMySocketThread : public QThread
 {
        Q_OBJECT
 public:
-    CMySocketThread();
+    explicit CMySocketThread(QObject *parent = 0);
     void stop();
     bool SetParam(stuIPAddr * sid,int num);
     stuIPAddr *  m_ipAddr[6];
@@ -25,6 +26,7 @@ protected:
   //  char buf[15] ;
     struct hostent *host[6];
     struct sockaddr_in serv_addr[6];
+    MainWindow *m_Main;
 signals:
     void TestSignal(QString);
 };

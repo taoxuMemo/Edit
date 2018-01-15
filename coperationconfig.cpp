@@ -62,6 +62,7 @@ bool COperationConfig::ReadIPAddr(stuIPAddr *stu,int num)
      memcpy(stu->sExtend,strextend.toLatin1().data(),nExtend);
      stu->sExtend[nExtend]='\0';
      stu->isChange=true;
+     return true;
 }
 
 bool COperationConfig::WriteIPAddr(stuIPAddr stu, int num)
@@ -75,6 +76,7 @@ bool COperationConfig::WriteIPAddr(stuIPAddr stu, int num)
     m_file->setValue(Sec+"/ip",QString(stu.sIP));
     m_file->setValue(Sec+"/port",QString::number(stu.nPort));
     m_file->setValue(Sec+"/extend",QString(stu.sExtend));
+    return true;
 }
 int COperationConfig::ReadCom(int num)
 {
@@ -106,6 +108,7 @@ bool COperationConfig::WriteCom(int nCom,int nChn)
         return 0;
     QString stttt="/com/com"+QString::number(nCom);
     m_file->setValue(stttt,g_pChn[nChn]);
+    return true;
 
 }
 bool COperationConfig::ReadChn(stuChannel * stu,int num)
@@ -347,7 +350,7 @@ bool COperationConfig::writeChn(stuChannel chn,int num)
    m_file->setValue(Sec+"/upper",QString::number(chn.nAlarmUp));
    m_file->setValue(Sec+"/lower",QString::number(chn.nAlarmDown));
    m_file->setValue(Sec+"/cycle",QString::number(chn.nCycle));
-
+    return true;
 }
 
 //********************************静态成员变量用于写入日志文件**************************************

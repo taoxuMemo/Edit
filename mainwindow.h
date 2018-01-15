@@ -15,9 +15,14 @@
 #include"formsetting_sjjy.h"
 #include "formsetting_wlsz.h"
 #include "coperationconfig.h"
-#include "qdatatype.h"
+//#include "qdatatype.h"
 #include"cmysocketthread.h"
+
 #include"qstringlistmodel.h"
+#include "cmysocket.h"
+#include "cnetconthread.h"
+class CMySocketThread;
+class CNetConThread;
 namespace Ui {
 class MainWindow;
 }
@@ -48,6 +53,8 @@ public:
     FormSetting_CK *m_fsetting_ck;
     FormSetting_SJJY *m_fsetting_sjjy;//时间设置界面指针
     FormSetting_WLSZ *m_fsetting_wlsz;//网络设置界面指针
+    CMySocket * m_pMySocket[6];
+
     //*************************初始化***************************************
     bool init();
    //***************************创建界面函数****************************************
@@ -75,7 +82,10 @@ private:
     Ui::MainWindow *ui;
 
     QStringListModel * m_model;
-    CMySocketThread m_MyThread;
+
+    CMySocketThread * m_pMyThread;
+    CNetConThread   * m_pNetConThread;
+//    CMySocketThread  * m_pMyThread;
   //  bool m_isRun;
 };
 

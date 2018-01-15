@@ -9,8 +9,8 @@ int main(int argc, char *argv[])
     MainWindow w;
  //   w.setWindowFlags(w.windowFlags()&~Qt::WindowMaximizeButtonHint&~Qt::WindowMinimizeButtonHint);
   //  w.setWindowFlags(w.windowFlags()&~Qt::WindowMaximizeButtonHint&~Qt::WindowMinimizeButtonHint);
-    QString str="hah123fjdk";
-    int aa=str.toInt();
+//    QString str;//="hah123fjdk";
+ //   int aa=str.toInt();
     if(w.m_bRun)
         w.show();
     else
