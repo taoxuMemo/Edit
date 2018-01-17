@@ -48,7 +48,9 @@ SOURCES += \
     cmythread.cpp \
     cmysocket.cpp \
     cmysocketthread.cpp \
-    cnetconthread.cpp
+    cnetconthread.cpp \
+    cprotocol.cpp \
+    ctool.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -74,7 +76,9 @@ HEADERS += \
     cmythread.h \
     cmysocket.h \
     cmysocketthread.h \
-    cnetconthread.h
+    cnetconthread.h \
+    cprotocol.h \
+    ctool.h
 
 FORMS += \
         mainwindow.ui \

@@ -11,6 +11,7 @@ class CMySocketThread : public QThread
 {
        Q_OBJECT
 public:
+
     explicit CMySocketThread(QObject *parent = 0);
     void stop();
     bool SetParam(stuIPAddr * sid,int num);
