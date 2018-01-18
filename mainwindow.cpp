@@ -18,8 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //*****************************************************
     m_model=new  QStringListModel();
     ui->listView_MSG->setModel(m_model);
-    connect(m_pMyThread, SIGNAL(TestSignal(QString)), this, SLOT(DisplayMsg(QString)));
-    connect(m_pNetConThread, SIGNAL(TestSignal(QString)), this, SLOT(DisplayMsg(QString)));
+   // connect(m_pMyThread, SIGNAL(TestSignal(QString)), this, SLOT(DisplayMsg(QString)));
+  //  connect(m_pNetConThread, SIGNAL(TestSignal(QString)), this, SLOT(DisplayMsg(QString)));
 
 
 

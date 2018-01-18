@@ -5,7 +5,7 @@ CProtocol::CProtocol(QObject *parent) : QObject(parent)
 {
 
 }
-bool CProtocol::DataAnalysis(char * pData, int nLen)
+bool CProtocol::PackageCheck(char * pData, int nLen)
 {
     //判断包头
     if(*pData++!='#' || *pData++!='#')
@@ -30,9 +30,9 @@ bool CProtocol::DataAnalysis(char * pData, int nLen)
         return false;
     }
 
-    char sData[1500];
-    memset(sData,0,1500);
-    memcpy(sData,pData,len);
+  //  char sData[1500];
+    memset(m_sData,0,1500);
+    memcpy(m_sData,pData,len);
     pData+=len;
     //判断CRC
     int nCRC=0;//=CTool::CRC16_Checkout(pData,nLen);
@@ -46,7 +46,7 @@ bool CProtocol::DataAnalysis(char * pData, int nLen)
         }
         nCRC|=a;
     }
-    if(nCRC!=CTool::CRC16_Checkout(sData,len));
+    if(nCRC!=CTool::CRC16_Checkout((unsigned char *)sData,len));
     {
         return false;
     }

@@ -1,7 +1,7 @@
 #ifndef CNETCONTHREAD_H
 #define CNETCONTHREAD_H
 
-#include"qthread.h"
+#include"QThread"
 #include"mainwindow.h"
 class CNetConThread : public QThread
 {

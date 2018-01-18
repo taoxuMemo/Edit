@@ -4,11 +4,11 @@ CNetConThread::CNetConThread(QObject *parent): QThread(parent)
 {
     m_Main=(MainWindow*)parent;
 }
-void CMySocketThread::stop()
+void CNetConThread::stop()
 {
     m_isrun=false;
 }
-void CMySocketThread::run()
+void CNetConThread::run()
 {
     m_isrun=true;
     while(m_isrun)

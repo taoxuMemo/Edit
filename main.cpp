@@ -2,7 +2,7 @@
 #include <QApplication>
 #include "qdatatype.h"
 #include"qmessagebox.h"
-
+#include"ctool.h"
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -11,6 +11,9 @@ int main(int argc, char *argv[])
   //  w.setWindowFlags(w.windowFlags()&~Qt::WindowMaximizeButtonHint&~Qt::WindowMinimizeButtonHint);
 //    QString str;//="hah123fjdk";
  //   int aa=str.toInt();
+    char aa='5';
+    char bb='F';
+    int zz=CTool::chartohex8(aa,bb);
     if(w.m_bRun)
         w.show();
     else

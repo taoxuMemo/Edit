@@ -22,6 +22,18 @@ int CTool::chartohex(char d)
     else
         return -1;
 }
+int CTool::chartohex8(char h,char l)
+{
+    int high=0,low=0;
+    high=CTool::chartohex(h);
+    if(high==-1)
+        return -1;
+    low=CTool::chartohex(l);
+    if(low==-1)
+        return -1;
+    return (high<<=4)|=low;
+
+}
 
 unsigned int CTool::CRC16_Checkout ( unsigned char *puchMsg, unsigned int usDataLen )
 {
