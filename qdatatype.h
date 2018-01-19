@@ -6,7 +6,7 @@
 #define DATALENGTH      4
 #define CRCLENGTH       4
 #define PACKAGETAIL     2
-
+#define PACKAGEHEADTAIL PACKAGEHEAD+DATALENGTH+CRCLENGTH+PACKAGETAIL
 extern const char * g_pCom[];//={"com1","com2","com3","com4","com5","com6","com7","com8"};
 extern const char * g_pChn[];//={"chn1","chn2","chn3","chn4","chn5","chn6","chn7","chn8"};
 static const int    g_nBaud[]={115200,76800,57600,43000,38400,19200,14400,9600,4800,2400};

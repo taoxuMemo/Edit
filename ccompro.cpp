@@ -1,6 +1,6 @@
 #include "ccompro.h"
 
-CComPro::CComPro()
+CComPro::CComPro(QObject *parent): CProtocol(parent)
 {
 
 }

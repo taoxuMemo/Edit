@@ -1,6 +1,7 @@
 #include "cprotocol.h"
 #include "ctool.h"
 #include"qdatatype.h"
+#include"ctool.h"
 CProtocol::CProtocol(QObject *parent) : QObject(parent)
 {
 
@@ -30,7 +31,7 @@ bool CProtocol::PackageCheck(char * pData, int nLen)
         return false;
     }
 
-  //  char sData[1500];
+    //  char sData[1500];
     memset(m_sData,0,1500);
     memcpy(m_sData,pData,len);
     pData+=len;
@@ -46,7 +47,7 @@ bool CProtocol::PackageCheck(char * pData, int nLen)
         }
         nCRC|=a;
     }
-    if(nCRC!=CTool::CRC16_Checkout((unsigned char *)sData,len));
+    if(nCRC!=CTool::CRC16_Checkout((unsigned char *)pData,len));
     {
         return false;
     }
@@ -58,3 +59,66 @@ bool CProtocol::PackageCheck(char * pData, int nLen)
     }
     return true;
 }
+int CProtocol::AddPackageCheck(char *pData, int nLen)
+{
+    char sdata[1500];
+    char *pdata=sdata;
+    memset(pdata,0,1500);
+    //添加包头
+    *pdata++='#';
+    *pdata++='#';
+
+    //添加长度
+    QString b=QString("%1").arg(nLen, DATALENGTH, 10, QChar('0'));
+    memcpy(pdata,b.toLatin1().data(),DATALENGTH);
+    pdata+=DATALENGTH;
+    memcpy(pdata,pData,nLen);
+    pdata+=nLen;
+
+    //添加校验
+    int nCRC=CTool::CRC16_Checkout((unsigned char *)pData,(unsigned int)nLen);
+    QString c=QString("%1").arg(nCRC, CRCLENGTH, 16, QChar('0')).toUpper();
+    memcpy(pdata,c.toLatin1().data(),CRCLENGTH);
+    pdata+=CRCLENGTH;
+
+    //添加包尾
+    *pdata++=0x0D;
+    *pdata++=0x0A;
+
+    memcpy(pData,pdata,nLen+PACKAGEHEADTAIL);
+    return nLen+PACKAGEHEADTAIL;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
