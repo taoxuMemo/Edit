@@ -51,7 +51,9 @@ SOURCES += \
     cnetconthread.cpp \
     cprotocol.cpp \
     ctool.cpp \
-    ccompro.cpp
+    ccompro.cpp \
+    cjcbase.cpp \
+    cdbstjc.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -80,7 +82,9 @@ HEADERS += \
     cnetconthread.h \
     cprotocol.h \
     ctool.h \
-    ccompro.h
+    ccompro.h \
+    cjcbase.h \
+    cdbstjc.h
 
 FORMS += \
         mainwindow.ui \

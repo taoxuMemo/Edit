@@ -57,6 +57,63 @@ bool CProtocol::PackageCheck(char * pData, int nLen)
     {
         return false;
     }
+
+    pData=m_sData;
+    pData+=SJDJGZCB_QQBM_LEN;
+    if(!(*pData++='S' && *pData++='T' && *pData++='='))
+    {
+        //系统编码位置错误
+        return false;
+    }
+    int nXTBM=(CTool::chartoint(*pData++)*10)+CTool::chartoint(*pData++);
+
+    switch(nXTBM)
+    {
+    case XTBMB_DBSZLJC_NO:
+        break;
+    case XTBMB_KQZLJC_NO:
+        break;
+    case XTBMB_SHJZLJC_NO:
+        break;
+    case XTBMB_DXSZLJC_NO:
+        break;
+    case XTBMB_TRZLJC_NO:
+        break;
+    case XTBMB_HSZLJC_NO:
+        break;
+    case XTBMB_HFXYJWJC_NO:
+        break;
+    case XTBMB_DQHJWRY_NO:
+        break;
+    case XTBMB_DBSTHJWRY_NO:
+        break;
+    case XTBMB_DXSTHJWRY_NO:
+        break;
+    case XTBMB_HYHJWRY_NO:
+        break;
+    case XTBMB_TRHJWRY_NO:
+        break;
+    case XTBMB_SHJWRY_NO:
+        break;
+    case XTBMB_ZDHJWRY_NO:
+        break;
+    case XTBMB_FSXHJWRY_NO:
+        break;
+    case XTBMB_GDYCWRY_NO:
+        break;
+    case XTBMB_DCHJWRY_NO:
+        break;
+    case XTBMB_YQPFGCJK_NO:
+        break;
+    case XTBMB_WSPFGCJK_NO:
+        break;
+    case XTBMB_XTJH_NO:
+        break;
+    default:
+        //请求编码异常
+        break;
+    }
+
     return true;
 }
 int CProtocol::AddPackageCheck(char *pData, int nLen)
