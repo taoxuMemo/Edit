@@ -53,7 +53,8 @@ SOURCES += \
     ctool.cpp \
     ccompro.cpp \
     cjcbase.cpp \
-    cdbstjc.cpp
+    cdbstjc.cpp \
+    cserialthread.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -84,7 +85,8 @@ HEADERS += \
     ctool.h \
     ccompro.h \
     cjcbase.h \
-    cdbstjc.h
+    cdbstjc.h \
+    cserialthread.h
 
 FORMS += \
         mainwindow.ui \

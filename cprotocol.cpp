@@ -6,12 +6,12 @@ CProtocol::CProtocol(QObject *parent) : QObject(parent)
 {
 
 }
-bool CProtocol::PackageCheck(char * pData, int nLen)
+int CProtocol::PackageCheck(char * pData, int nLen)
 {
     //判断包头
     if(*pData++!='#' || *pData++!='#')
     {
-        return false;
+        return -1;
     }
 
     //判断长度
@@ -22,34 +22,44 @@ bool CProtocol::PackageCheck(char * pData, int nLen)
         int a=CTool::chartoint(*pData++);
         if(a==-1)
         {
-            return false;
+            return -1;
         }
         len+=a;
     }
     if(nLen!=(len+PACKAGEHEAD+PACKAGETAIL+CRCLENGTH+DATALENGTH))
     {
-        return false;
+        return -1;
     }
 
-    //  char sData[1500];
-    memset(m_sData,0,1500);
-    memcpy(m_sData,pData,len);
-    pData+=len;
+    //提取系统编码ST
+    pData+=SJDJGZCB_QQBM_LEN;
+    if(!(*pData++=='S' && *pData++=='T' && *pData++=='='))
+    {
+        //系统编码位置错误
+        return -1;
+    }
+    int nST=(CTool::chartoint(*pData++)*10)+CTool::chartoint(*pData++);
+    pData-=SJDJGZCB_QQBM_LEN;
     //判断CRC
-    int nCRC=0;//=CTool::CRC16_Checkout(pData,nLen);
+    //  char sData[1500];
+    //    memset(m_sData,0,1500);
+    //    memcpy(m_sData,pData,len);
+    unsigned int nDataCRC=CTool::CRC16_Checkout((unsigned char *)pData,(unsigned int)len);
+    pData+=len;
+    unsigned int nCRC=0;
     for(int i=0;i<CRCLENGTH;i++)
     {
         nCRC<<=4;
         int a=CTool::chartohex(*pData++);
         if(a==-1)
         {
-            return false;
+            return -1;
         }
         nCRC|=a;
     }
-    if(nCRC!=CTool::CRC16_Checkout((unsigned char *)pData,len));
+    if(nCRC!=nDataCRC)
     {
-        return false;
+        return -1;
     }
 
     //判断包尾
@@ -58,63 +68,63 @@ bool CProtocol::PackageCheck(char * pData, int nLen)
         return false;
     }
 
-    pData=m_sData;
-    pData+=SJDJGZCB_QQBM_LEN;
-    if(!(*pData++='S' && *pData++='T' && *pData++='='))
-    {
-        //系统编码位置错误
-        return false;
-    }
-    int nXTBM=(CTool::chartoint(*pData++)*10)+CTool::chartoint(*pData++);
+    //    char *ppData=m_sData;
+    //    ppData+=SJDJGZCB_QQBM_LEN;
+    //    if(!(*ppData++=='S' && *ppData++=='T' && *ppData++=='='))
+    //    {
+    //        //系统编码位置错误
+    //        return false;
+    //    }
+    //    int nXTBM=(CTool::chartoint(*ppData++)*10)+CTool::chartoint(*ppData++);
 
-    switch(nXTBM)
-    {
-    case XTBMB_DBSZLJC_NO:
-        break;
-    case XTBMB_KQZLJC_NO:
-        break;
-    case XTBMB_SHJZLJC_NO:
-        break;
-    case XTBMB_DXSZLJC_NO:
-        break;
-    case XTBMB_TRZLJC_NO:
-        break;
-    case XTBMB_HSZLJC_NO:
-        break;
-    case XTBMB_HFXYJWJC_NO:
-        break;
-    case XTBMB_DQHJWRY_NO:
-        break;
-    case XTBMB_DBSTHJWRY_NO:
-        break;
-    case XTBMB_DXSTHJWRY_NO:
-        break;
-    case XTBMB_HYHJWRY_NO:
-        break;
-    case XTBMB_TRHJWRY_NO:
-        break;
-    case XTBMB_SHJWRY_NO:
-        break;
-    case XTBMB_ZDHJWRY_NO:
-        break;
-    case XTBMB_FSXHJWRY_NO:
-        break;
-    case XTBMB_GDYCWRY_NO:
-        break;
-    case XTBMB_DCHJWRY_NO:
-        break;
-    case XTBMB_YQPFGCJK_NO:
-        break;
-    case XTBMB_WSPFGCJK_NO:
-        break;
-    case XTBMB_XTJH_NO:
-        break;
-    default:
-        //请求编码异常
-        break;
-    }
+    //    switch(nXTBM)
+    //    {
+    //    case XTBMB_DBSZLJC_NO:
+    //        break;
+    //    case XTBMB_KQZLJC_NO:
+    //        break;
+    //    case XTBMB_SHJZLJC_NO:
+    //        break;
+    //    case XTBMB_DXSZLJC_NO:
+    //        break;
+    //    case XTBMB_TRZLJC_NO:
+    //        break;
+    //    case XTBMB_HSZLJC_NO:
+    //        break;
+    //    case XTBMB_HFXYJWJC_NO:
+    //        break;
+    //    case XTBMB_DQHJWRY_NO:
+    //        break;
+    //    case XTBMB_DBSTHJWRY_NO:
+    //        break;
+    //    case XTBMB_DXSTHJWRY_NO:
+    //        break;
+    //    case XTBMB_HYHJWRY_NO:
+    //        break;
+    //    case XTBMB_TRHJWRY_NO:
+    //        break;
+    //    case XTBMB_SHJWRY_NO:
+    //        break;
+    //    case XTBMB_ZDHJWRY_NO:
+    //        break;
+    //    case XTBMB_FSXHJWRY_NO:
+    //        break;
+    //    case XTBMB_GDYCWRY_NO:
+    //        break;
+    //    case XTBMB_DCHJWRY_NO:
+    //        break;
+    //    case XTBMB_YQPFGCJK_NO:
+    //        break;
+    //    case XTBMB_WSPFGCJK_NO:
+    //        break;
+    //    case XTBMB_XTJH_NO:
+    //        break;
+    //    default:
+    //        //请求编码异常
+    //        break;
+    //    }
 
-    return true;
+    return nST;
 }
 int CProtocol::AddPackageCheck(char *pData, int nLen)
 {

@@ -69,6 +69,7 @@ bool FormState::initTL()
     modelKGL->setHeaderData(3,Qt::Horizontal,QString::fromLocal8Bit("状态"));
     ui->tableView_4->setModel(modelKGL);
     ui->tableView_4->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
+    return true;
 
 }
 

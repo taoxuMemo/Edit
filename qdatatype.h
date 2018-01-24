@@ -94,7 +94,22 @@
 #define MLBMB_TZYD_JHML                     9013                        //回应通知命令
 #define MLBMB_SJYD_JHML                     9014                        //数据应答命令
 
-
+//水监测因子编码表
+#define SJCYZ_WS_BM                         w00000                      //污水
+#define SJCYZ_PHZ_BM                        w01001                      //pH 值
+#define SJCYZ_HXXYL_BM                      w01018                      //化学需氧量
+#define SJCYZ_AD_BM                         w21003                      //氨氮
+//气监测因子编码表
+#define QJCYZ_FQ_BM                         a00000                      //废气
+#define QJCYZ_YQLS_BM                       a01011                      //烟气流速
+#define QJCYZ_YQWD_BM                       a01012                      //烟气温度
+#define QJCYZ_YQYL_BM                       a01013                      //烟气压力
+#define QJCYZ_YQSD_BM                       a01014                      //烟气湿度
+#define QJCYZ_YDJMJ_BM                      a01016                      //烟道截面积
+#define QJCYZ_YQHL_BM                       a19001                      //氧气含量
+#define QJCYZ_DYHW_BM                       a21002                      //氮氧化物
+#define QJCYZ_EYHL_BM                       a21026                      //二氧化硫
+#define QJCYZ_YC_BM                         a34013                      //烟尘
 
 
 extern  char g_DeviceMark[SJDJGZCB_SBWYBS_LEN+1];//最后一位结束位
@@ -138,13 +153,24 @@ struct  stuChannel{
     char strXY[20];  //协议
 };
 struct stuIPAddr{
-        bool isChange;
-        bool bIsrun;
-        char sName[50];
-        char sIP[20];
-        int nPort;
-        char sExtend[20];
+    bool isChange;
+    bool bIsrun;
+    char sName[50];
+    char sIP[20];
+    int nPort;
+    char sExtend[20];
 
+};
+//水监测因子
+struct stuSJCYZ
+{
+    char sValue[15];
+    char sTime[15];
+//    SJCYZ()
+//    {
+//        for(int i=0;i<15;i++)
+//            sValue[i]=0,sTime[i]=0;
+//    }
 };
 class QDatatype
 {

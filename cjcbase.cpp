@@ -1,6 +1,7 @@
 #include "cjcbase.h"
 #include "math.h"
-CJCBase::CJCBase(QObject *parent) : QObject(parent)
+//#include"qdatatype.h"
+CJCBase::CJCBase(QObject *parent) : CProtocol(parent)
 {
     memset(m_sQQBM,0,SJDJGZCB_QQBM_LEN+1);
     memset(m_sXTBM,0,SJDJGZCB_STBM_LEN+1);

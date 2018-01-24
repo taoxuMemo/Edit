@@ -21,6 +21,8 @@
 #include"qstringlistmodel.h"
 #include "cmysocket.h"
 #include "cnetconthread.h"
+#include "qqueue.h"
+#include "cdbstjc.h"
 class CMySocketThread;
 class CNetConThread;
 namespace Ui {
@@ -40,6 +42,12 @@ public:
     stuChannel m_stuChan[8];
     stuIPAddr  m_stuIPA[8];
     bool       m_bXY;   //true是TCP    flase是UDP
+
+    QQueue<QString> m_queCom;  //接收com发来的数据
+    QQueue<QString> m_queTcp;  //接收tcp发来的数据
+
+    CDBSTJC     m_DBSTJC;  //
+ //   QQueue m_queTcp<QString,int>;  //接收tcp发来的数据
     //****************************界面指针******************************************
     FormMain * m_fm;//主按钮界面
     FormAbout * m_fabout;
@@ -78,6 +86,7 @@ private slots:
 
     void DisplayMsg(QString);
 
+    void SerialData(QString);
 private:
     Ui::MainWindow *ui;
 

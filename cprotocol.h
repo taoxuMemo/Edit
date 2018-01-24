@@ -2,18 +2,25 @@
 #define CPROTOCOL_H
 
 #include <QObject>
-#include"cdbstjc.h"
-
+//#include"cdbstjc.h"
+//#include"mainwindow.h"
+class MainWindow;
 class CProtocol : public QObject
 {
     Q_OBJECT
 public:
     explicit CProtocol(QObject *parent = nullptr);
-    bool PackageCheck(char * pData,int nLen);  //验证包是否有效，并且赋值给成员变量
-    int  AddPackageCheck(char *pData,int nLen);//封装包
-    char m_sData[1500];
+    int     static   PackageCheck(char * pData,int nLen);  //验证包是否有效，并且赋值给成员变量,返回包类型
+    int     AddPackageCheck(char *pData,int nLen);//封装包
+    char    m_sData[1500];
+    int     m_nSerID;
+    int     m_nNetID;
+private:
+    bool    virtual SerialInterFace(char *pData,int nLen,int nID)=0;//串口接口  参数1.内容2.长度3.接口号
+    bool    virtual NetInterFace(char *pData,int nLen,int nID)=0;   //网络接口  参数1.内容2.长度3.接口号
+    MainWindow * m_pMain;
     //***************污染源类型******************
-    CDBSTJC m_dbstjc;
+    // CDBSTJC m_dbstjc;
 signals:
 
 public slots:
