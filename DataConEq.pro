@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
-
+QT       += sql
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = DataConEq
@@ -54,7 +54,8 @@ SOURCES += \
     ccompro.cpp \
     cjcbase.cpp \
     cdbstjc.cpp \
-    cserialthread.cpp
+    cserialthread.cpp \
+    cmysqlite.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -86,7 +87,8 @@ HEADERS += \
     ccompro.h \
     cjcbase.h \
     cdbstjc.h \
-    cserialthread.h
+    cserialthread.h \
+    cmysqlite.h
 
 FORMS += \
         mainwindow.ui \

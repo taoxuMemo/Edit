@@ -28,6 +28,11 @@
 #define    CONFIGIPEXTENDLEN        0x00000017      //配置文件提取 IP地址中的extend长度错误
 #define    CONFIGIPIPADDRLEN        0x00000018      //配置文件提取 IP地址中的IP长度错误
 
+//*********************************数据库错误****************************************8
+#define    ERRLOGDBOPENFAIL         0x00000080      //数据库打开失败
+#define    ERRLOGDBINSERTRD         0x00000081      //数据库打开失败
+
+
 class COperationConfig
 {
 public:

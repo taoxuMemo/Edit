@@ -28,6 +28,7 @@ public:
     int   m_nReCount;        //重发次数
     bool  CheckData(char * pData, int nLen);
     bool  CommandData();
+    bool  Splitinst(char *p,QString &a,QString &b);  //拆分指令等号前后的
 private:
     bool    virtual SerialInterFace(char *pData,int nLen,int nID)=0;//串口接口  参数1.内容2.长度3.接口号
     bool    virtual NetInterFace(char *pData,int nLen,int nID)=0;   //网络接口  参数1.内容2.长度3.接口号

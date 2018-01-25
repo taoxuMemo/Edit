@@ -41,3 +41,19 @@ bool CJCBase::CommandData()
         nCommand+=(CTool::chartoint(m_sMLBM[3+i])*pow10(3-i));
 
 }
+ bool  Splitinst(char *p,QString &a,QString &b) //拆分指令等号前后的
+ {
+     char *pp=p;
+     while(*p!=0)
+     {
+            if(*p=='=')
+            {
+                *p='0';
+                 p++;
+                 a=QString(QLatin1String(pp));
+                 b=QString(QLatin1String(p));
+            }
+            p++;
+     }
+     return false;
+ }
