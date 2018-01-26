@@ -36,6 +36,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void timerEvent( QTimerEvent *event );
+
     bool m_bRun;
     COperationConfig * m_pOpera;
     unsigned char m_nCom[8];
@@ -43,10 +45,10 @@ public:
     stuIPAddr  m_stuIPA[8];
     bool       m_bXY;   //true是TCP    flase是UDP
 
-    QQueue<QString> m_queCom;  //接收com发来的数据
-    QQueue<QString> m_queTcp;  //接收tcp发来的数据
+    QQueue<QString> m_queCom;   //接收com发来的数据
+    QQueue<QString> m_queTcp;   //接收tcp发来的数据
 
-    CDBSTJC     m_DBSTJC;  //
+    CDBSTJC     m_DBSTJC;       //地表项处理函数
  //   QQueue m_queTcp<QString,int>;  //接收tcp发来的数据
     //****************************界面指针******************************************
     FormMain * m_fm;//主按钮界面
@@ -62,6 +64,8 @@ public:
     FormSetting_SJJY *m_fsetting_sjjy;//时间设置界面指针
     FormSetting_WLSZ *m_fsetting_wlsz;//网络设置界面指针
     CMySocket * m_pMySocket[6];
+
+
 
     //*************************初始化***************************************
     bool init();

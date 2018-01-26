@@ -17,16 +17,20 @@ bool CJCBase::CheckData(char *pData, int nLen)
     char *plData=pData;
     memcpy(m_sQQBM,pData,SJDJGZCB_QQBM_LEN);
     plData+=SJDJGZCB_QQBM_LEN;
+    plData++;
     memcpy(m_sXTBM,plData,SJDJGZCB_STBM_LEN);
     plData+=SJDJGZCB_STBM_LEN;
+    plData++;
     memcpy(m_sMLBM,pData,SJDJGZCB_MLBM_LEN);
     plData+=SJDJGZCB_MLBM_LEN;
+    plData++;
     if(strncmp(m_sFWMM,plData,SJDJGZCB_FWMM_LEN)!=0)
     {
         //访问密码错误
         return false;
     }
     plData+=SJDJGZCB_FWMM_LEN;
+    plData++;
     if(strncmp(g_DeviceMark,plData,SJDJGZCB_SBWYBS_LEN)!=0)
     {
         //唯一标识错误

@@ -18,8 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //*****************************************************
     m_model=new  QStringListModel();
     ui->listView_MSG->setModel(m_model);
-   // connect(m_pMyThread, SIGNAL(TestSignal(QString)), this, SLOT(DisplayMsg(QString)));
-  //  connect(m_pNetConThread, SIGNAL(TestSignal(QString)), this, SLOT(DisplayMsg(QString)));
+    // connect(m_pMyThread, SIGNAL(TestSignal(QString)), this, SLOT(DisplayMsg(QString)));
+    //  connect(m_pNetConThread, SIGNAL(TestSignal(QString)), this, SLOT(DisplayMsg(QString)));
 
 
 
@@ -246,9 +246,57 @@ void MainWindow::DisplayMsg(QString msg)
     QString str=msg+"-----"+QDateTime::currentDateTime().toString("hh:mm:ss");
     QStringList num =m_model->stringList();
 
-     num<<str;
-     m_model->setStringList(num);
+    num<<str;
+    m_model->setStringList(num);
     // ui->listView->model();
 
 
 }
+void MainWindow::timerEvent(QTimerEvent *event)
+{
+    //********************实时数据上报间隔******************************
+    static int nMSB=0;
+    if(m_DBSTJC.m_nMSBJG==nMSB)
+    {
+        if(m_DBSTJC.m_bSSSJ==true)
+        {
+            //
+        }
+        nMSB=0;
+    }
+    nMSB++;
+    //分钟数据上报间隔
+
+    //小时数据上报间隔
+    //日数据上报间隔
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+s

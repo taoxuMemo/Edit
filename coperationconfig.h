@@ -29,8 +29,12 @@
 #define    CONFIGIPIPADDRLEN        0x00000018      //配置文件提取 IP地址中的IP长度错误
 
 //*********************************数据库错误****************************************8
-#define    ERRLOGDBOPENFAIL         0x00000080      //数据库打开失败
-#define    ERRLOGDBINSERTRD         0x00000081      //数据库打开失败
+#define    ERRLOGDBOPENFAIL         0x00000040      //数据库打开失败
+#define    ERRLOGDBINSERTRD         0x00000041      //数据库打开失败
+
+//***********************************协议解析异常******************************************
+#define    ERRLOGXYJXSJDYC         0x00000081       //数据段结构异常
+#define    ERRLOGXYJXSJDCP         0x00000082       //数据段结构CP=错误
 
 
 class COperationConfig
