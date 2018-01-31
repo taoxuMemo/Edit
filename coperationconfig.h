@@ -31,7 +31,8 @@
 //*********************************数据库错误****************************************8
 #define    ERRLOGDBOPENFAIL         0x00000040      //数据库打开失败
 #define    ERRLOGDBINSERTRD         0x00000041      //数据库打开失败
-
+#define    ERRLOGDBSELTIME          0x00000042      //查询实时数据起始时间与终止时间错误
+#define    ERRLOGDBSELEXEC          0x00000043      //执行select sql语句时异常
 //***********************************协议解析异常******************************************
 #define    ERRLOGXYJXSJDYC         0x00000081       //数据段结构异常
 #define    ERRLOGXYJXSJDCP         0x00000082       //数据段结构CP=错误

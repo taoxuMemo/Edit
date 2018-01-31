@@ -172,6 +172,44 @@ struct stuSJCYZ
 //            sValue[i]=0,sTime[i]=0;
 //    }
 };
+//因子上报设置
+struct stuYZSBSZ
+{
+    char sCoding[7];        //编码
+    int  nMSBJG;            //秒上报间隔
+    int  nFSBJG;            //分上报间隔
+    bool rtd;
+    bool fcou;
+    bool fmax;
+    bool fmin;
+    bool favg;
+
+    bool hcou;
+    bool hmax;
+    bool hmin;
+    bool havg;
+
+    bool rcou;
+    bool rmax;
+    bool rmin;
+    bool ravg;
+};
+
+//水监测因子编码表
+struct stuSJCYZBMB
+{
+    char sCoding[7];        //编码
+    char sName[20];         //中文名称
+    char sOldCoding[4];     //源编码
+    char sNDUnit[20];       //计量单位（浓度）
+    char sPFLUint[10];      //计量单位（排放量）
+    char sDataLen[10];      //数据长度（浓度）
+    int  nOper;             //操作符
+    int  nCoef;             //系数
+    stuYZSBSZ stuYZ;
+};
+
+
 class QDatatype
 {
 public:

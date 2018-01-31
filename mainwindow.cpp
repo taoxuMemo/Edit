@@ -252,6 +252,10 @@ void MainWindow::DisplayMsg(QString msg)
 
 
 }
+void MainWindow::SerialData(QString msg)
+{
+    return;
+}
 void MainWindow::timerEvent(QTimerEvent *event)
 {
     //********************实时数据上报间隔******************************
@@ -299,4 +303,4 @@ void MainWindow::timerEvent(QTimerEvent *event)
 
 
 
-s
+

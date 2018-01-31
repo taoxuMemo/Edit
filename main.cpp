@@ -19,6 +19,8 @@ int main(int argc, char *argv[])
     int nCRC=0x0D3F;
     QString c=QString("%1").arg(nCRC, 16, 2, QChar('0')).toUpper();
     QString str=c.toUpper();
+    QString strr="43127.34";
+    QString ss=strr.mid(2,10);
     if(w.m_bRun)
         w.show();
     else

@@ -2,9 +2,10 @@
 #include "ctool.h"
 #include"qdatatype.h"
 #include"ctool.h"
+#include "mainwindow.h"
 CProtocol::CProtocol(QObject *parent) : QObject(parent)
 {
-
+    m_pMain=(MainWindow *)parent;
 }
 int CProtocol::PackageCheck(char * pData, int nLen)
 {

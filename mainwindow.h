@@ -23,6 +23,7 @@
 #include "cnetconthread.h"
 #include "qqueue.h"
 #include "cdbstjc.h"
+#include "cmysqlite.h"
 class CMySocketThread;
 class CNetConThread;
 namespace Ui {
@@ -61,11 +62,11 @@ public:
     FormSetting * m_fsetting;
     FormState * m_fstate;
     FormSetting_CK *m_fsetting_ck;
-    FormSetting_SJJY *m_fsetting_sjjy;//时间设置界面指针
-    FormSetting_WLSZ *m_fsetting_wlsz;//网络设置界面指针
+    FormSetting_SJJY *m_fsetting_sjjy;  //时间设置界面指针
+    FormSetting_WLSZ *m_fsetting_wlsz;  //网络设置界面指针
     CMySocket * m_pMySocket[6];
 
-
+    CMySqlite m_mySql;                  //数据库操作类
 
     //*************************初始化***************************************
     bool init();

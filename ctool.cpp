@@ -54,3 +54,24 @@ unsigned int CTool::CRC16_Checkout ( unsigned char *puchMsg, unsigned int usData
     }
     return crc_reg;
 }
+QString CTool::douTostr(double d, char *s)
+{
+    QString str=QString::number(d);
+    int xs=0;
+    s++;
+    char ss=*s;
+    int zs=ss-'0';//整数个数
+
+    s++;
+    if(*s=='.')
+    {
+        s++;
+        xs=(*s)-'0';//小数个数
+    }
+    int jq=0;
+    int wz=str.indexOf(".");
+    if(wz>zs)
+        jq=wz-zs;
+    QString strRe=str.mid(jq,xs+zs+1);
+    return strRe;
+}
