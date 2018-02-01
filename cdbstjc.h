@@ -13,7 +13,7 @@ public:
     bool setData();
     bool NetInterFace(char *pData,int nLen,int nID);
     bool SerialInterFace(char *pData,int nLen,int nID);
-    bool GetValue(QString coding , int nType, QString &valMax , QString &valMin , QString &valAvg , QString &valTotal);//取数据库中的数据 参数nType 1 分钟 2 小时 3 天
+    bool GetValue(int nType);//取数据库中的数据 参数nType 1 分钟 2 小时 3 天
     QString SpellStr(QString coding,int type ,double dMax,double dMin,double dAvg,double dTotal);//拼写type 1分钟 2 小时 3 天
     stuSJCYZ m_stuWS,m_stuPHZ,m_stuHXXYL,m_stuAD;//污水，ph值，化学需氧量，氨氮
     char    m_sWS[9];       //污水

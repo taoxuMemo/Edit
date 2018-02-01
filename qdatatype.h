@@ -116,6 +116,7 @@ extern  char g_DeviceMark[SJDJGZCB_SBWYBS_LEN+1];//最后一位结束位
 
 extern const char * g_pCom[];//={"com1","com2","com3","com4","com5","com6","com7","com8"};
 extern const char * g_pChn[];//={"chn1","chn2","chn3","chn4","chn5","chn6","chn7","chn8"};
+extern const char * g_pSJCYZNOCOU[];
 static const int    g_nBaud[]={115200,76800,57600,43000,38400,19200,14400,9600,4800,2400};
 static const char   g_cData[]={8,7,6,5};
 static const float  g_fStop[]={1,1.5,2};

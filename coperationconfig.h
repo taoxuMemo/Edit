@@ -37,6 +37,8 @@
 #define    ERRLOGXYJXSJDYC         0x00000081       //数据段结构异常
 #define    ERRLOGXYJXSJDCP         0x00000082       //数据段结构CP=错误
 
+//************************************数据处理错误********************************************
+#define    ERRLOGTIMETYPE         0x00000060       //数据段结构CP=错误
 
 class COperationConfig
 {

@@ -61,3 +61,17 @@ QSqlQuery CMySqlite::SelRealData(QString coding , QDateTime begin , QDateTime en
     return query;
 
 }
+QSqlQuery CMySqlite::SelRtdData(QString coding, QDateTime begin, QDateTime end, double &dRtd)
+{
+   QSqlQuery query(database);
+   QString select_sql = "select * from c_rt_RealData where coding=\""+coding+"\" and type=\"Rtd\" and stime>\""+begin.toString("yyyy-MM-dd hh:mm:ss")+"\" and stime<\""+end.toString("yyyy-MM-dd hh:mm:ss")+"\"";
+   if(!query.exec(select_sql))
+   {
+       COperationConfig::writelog(ERRLOGDBSELEXEC,select_sql.toLatin1().data());
+       //        return NULL;
+   }
+   while (query.next()) {
+        dRtd=query.value(2).toDouble();
+    }
+   return query;
+}

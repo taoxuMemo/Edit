@@ -47,21 +47,21 @@ bool CDBSTJC::SerialInterFace(char *pData, int nLen, int nID)
             *pcouData=0;
             sCoding=QString(QLatin1String(couData));
             pcouData++;
-            couData==pcouData;
+            couData=pcouData;
             continue;
         }else if(*pcouData=='=')
         {
             *pcouData=0;
             sType=QString(QLatin1String(couData));
             pcouData++;
-            couData==pcouData;
+            couData=pcouData;
             continue;
         }else if(*pcouData==',')
         {
             *pcouData=0;
             sValue=QString(QLatin1String(couData));
             pcouData++;
-            couData==pcouData;
+            couData=pcouData;
             //存入数据库
 
 
@@ -131,34 +131,70 @@ QString CDBSTJC::SpellStr(QString coding,int type, double dMax, double dMin, dou
 }
 //****************计算最大最小累计值****
 //type:1分钟上传 2：小时上传  3：天上传
-bool  CDBSTJC::GetValue(QString coding, int nType, QString &valMax, QString &valMin, QString &valAvg, QString &valTotal)
+bool  CDBSTJC::GetValue(int nType)
 {
-    QDateTime dt=QDateTime::currentDateTime();
 
+    QString strSpell;
+//***********************拼接数据区字符串*******************************88
+    QDateTime dt=QDateTime::currentDateTime();//查询终止时间
+    QDateTime dtmin=dt;//查询起始时间
+    double dFQMax=0,dFQMin=0,dFQAvg=0,dFQCou=0;//污水的相关值
+    int num=0; //污水查询结果集的数量
     if(nType==1)
     {
-        QDateTime dtmin=dt;
         dtmin.addSecs(60*m_nFSBJG*-1);
-        double dTol=0,dMax=0,dMin=0,dAvg=0;
-        int num=0;
-        QSqlQuery mysql=m_pMain->m_mySql.SelRealData(coding,dtmin,dt,dMax,dMin,dAvg,dTol,num);
-        for(int i=0;i<20;i++)
-        {
-            QString sCoding=QString(m_stuYZSBSZ);
-            if()
-        }
-
-
     }else if(nType==2)
     {
-        QDateTime dtmin=dt;
         dtmin.addSecs(60*60*-1);
 
     }else if(nType==3)
     {
-        QDateTime dtmin=dt;
         dtmin.addDays(-1);
+    }else
+    {
+        COperationConfig::writelog(ERRLOGTIMETYPE);
     }
+    //  m_listJCYZ.size()
+
+    QSqlQuery mysql=m_pMain->m_mySql.SelRealData("w00000",dtmin,dt,dFQMax,dFQMin,dFQAvg,dFQCou,num);
+
+    for(int i=0;i<m_listJCYZ.length();i++)
+    {
+        double dTol=0,dMax=0,dMin=0,dAvg=0;
+        int nNum=0;
+        stuSJCYZBMB sjcy=  m_listJCYZ.at(i);
+        if(strncmp(sjcy.sCoding,"w00000",6)==0)
+        {
+            if(num!=0)
+                strSpell+=SpellUpStr(sjcy,nType,dFQMax,dFQMin,dFQAvg,dFQCou);
+            continue;
+        }
+        bool bMark=false; //标志是否属于不求累计值的项
+        m_pMain->m_mySql.SelRealData(sjcy.sCoding,dtmin,dt,dMax,dMin,dAvg,dTol,nNum);
+        for(int j=0;j<9;j++)
+        {
+            if(strncmp(sjcy.sCoding,g_pSJCYZNOCOU[j],6)==0)
+            {
+                if(nNum!=0)//是否有该项数据
+                {
+                    strSpell+=SpellUpStr(sjcy,nType,dMax,dMin,dAvg);
+                }
+                bMark=true;
+                break;
+            }
+        }
+        if(bMark==true)
+            continue;
+        if(nNum!=0)//是否有该项数据
+        {
+            if(num!=0)     //该段时间是否有污水数据
+                strSpell+=SpellUpStr(sjcy,nType,dMax,dMin,dAvg,dTol,dFQCou);
+            else
+                strSpell+=SpellUpStr(sjcy,nType,dMax,dMin,dAvg);
+        }
+    }
+
+    return true;
 }
 
 void CDBSTJC::timerEvent(QTimerEvent *event)

@@ -14,6 +14,7 @@ public:
     bool init();
     bool InsertRD(QString sCoding,QString sType,double dValue);
     QSqlQuery SelRealData(QString coding , QDateTime begin , QDateTime end ,double &dMax,double &dMin,double &dAvg,double &dTotal,int &num);
+    QSqlQuery SelRtdData(QString coding , QDateTime begin , QDateTime end ,double &dRtd);
 signals:
 
 public slots:
