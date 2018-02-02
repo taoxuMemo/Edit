@@ -75,3 +75,8 @@ void FormMain::on_pushButton_about_clicked()//触发关于我们按钮
     this->hide();
      m_Main->CreateAbout();
 }
+
+void FormMain::on_pushButton_clicked()
+{
+    m_Main->m_thdTest.MyListen();
+}

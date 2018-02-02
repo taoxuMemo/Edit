@@ -10,7 +10,7 @@ class CProtocol : public QObject
     Q_OBJECT
 public:
     explicit CProtocol(QObject *parent = nullptr);
-    int     static   PackageCheck(char * pData,int nLen);  //验证包是否有效，并且赋值给成员变量,返回包类型
+    int     PackageCheck(char * pData,int nLen);  //验证包是否有效，并且赋值给成员变量,返回包类型
     int     AddPackageCheck(char *pData,int nLen);//封装包
     char    m_sData[1500];
     int     m_nSerID;

@@ -147,3 +147,8 @@ void FormSetting_CK::on_pushButton_3_clicked()
 }
 
 
+
+void FormSetting_CK::on_pushButton_main_clicked()
+{
+
+}

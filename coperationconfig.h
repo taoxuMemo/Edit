@@ -34,9 +34,16 @@
 #define    ERRLOGDBSELTIME          0x00000042      //查询实时数据起始时间与终止时间错误
 #define    ERRLOGDBSELEXEC          0x00000043      //执行select sql语句时异常
 //***********************************协议解析异常******************************************
-#define    ERRLOGXYJXSJDYC         0x00000081       //数据段结构异常
-#define    ERRLOGXYJXSJDCP         0x00000082       //数据段结构CP=错误
+#define    ERRLOGXYJXSJDYC          0x00000081       //数据段结构异常
+#define    ERRLOGXYJXSJDCP          0x00000082       //数据段结构CP=错误
 
+#define   ERRORPACKAGEHEAD          0x00000091       //baotoucuowu
+#define   ERRORPACKAGELEN           0x00000092       //baotoucuowu
+#define   ERRORPACKAGECRC           0x00000093       //baotoucuowu
+#define   ERRORPACKAGETAIL          0x00000094       //baotoucuowu
+#define   ERRORPACKAGELENTYPE       0x00000095       //baotoucuowu
+#define   ERRORPACKAGECRCTYPE       0x00000096       //baotoucuowu
+#define   ERRORPACKAGEST            0x00000097      //
 //************************************数据处理错误********************************************
 #define    ERRLOGTIMETYPE         0x00000060       //数据段结构CP=错误
 

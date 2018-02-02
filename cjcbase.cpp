@@ -150,7 +150,7 @@ bool CJCBase::UploadReal()
         stuSJCYZBMB sjcy=  m_listJCYZ.at(i);
         if(sjcy.stuYZ.rtd==false)
             continue;
-        m_pMain->m_mySql.SelRtdData(sjcy,dtmin,dt,dRtd);
+        m_pMain->m_mySql.SelRtdData(QString(sjcy.sCoding),dtmin,dt,dRtd);
         if(dRtd!=0)
             strSpell+=SpellUpStr(sjcy,dRtd);
     }

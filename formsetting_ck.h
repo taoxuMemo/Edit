@@ -26,6 +26,8 @@ private slots:
 
     void on_comboBox_2_currentIndexChanged(int index);
 
+    void on_pushButton_main_clicked();
+
 private:
     Ui::FormSetting_CK *ui;
 };

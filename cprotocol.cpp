@@ -7,11 +7,13 @@ CProtocol::CProtocol(QObject *parent) : QObject(parent)
 {
     m_pMain=(MainWindow *)parent;
 }
+//fanhuishujuduanchangdu
 int CProtocol::PackageCheck(char * pData, int nLen)
 {
     //判断包头
     if(*pData++!='#' || *pData++!='#')
     {
+        COperationConfig::writelog(ERRORPACKAGEHEAD);
         return -1;
     }
 
@@ -23,12 +25,14 @@ int CProtocol::PackageCheck(char * pData, int nLen)
         int a=CTool::chartoint(*pData++);
         if(a==-1)
         {
+            COperationConfig::writelog(ERRORPACKAGELENTYPE);
             return -1;
         }
         len+=a;
     }
     if(nLen!=(len+PACKAGEHEAD+PACKAGETAIL+CRCLENGTH+DATALENGTH))
     {
+        COperationConfig::writelog(ERRORPACKAGELEN);
         return -1;
     }
 
@@ -37,6 +41,7 @@ int CProtocol::PackageCheck(char * pData, int nLen)
     if(!(*pData++=='S' && *pData++=='T' && *pData++=='='))
     {
         //系统编码位置错误
+        COperationConfig::writelog(ERRORPACKAGEST);
         return -1;
     }
     int nST=(CTool::chartoint(*pData++)*10)+CTool::chartoint(*pData++);
@@ -54,19 +59,22 @@ int CProtocol::PackageCheck(char * pData, int nLen)
         int a=CTool::chartohex(*pData++);
         if(a==-1)
         {
+            COperationConfig::writelog(ERRORPACKAGECRCTYPE);
             return -1;
         }
         nCRC|=a;
     }
     if(nCRC!=nDataCRC)
     {
+        COperationConfig::writelog(ERRORPACKAGECRC);
         return -1;
     }
 
     //判断包尾
     if(*pData++!=0x0d || *pData!=0x0a)
     {
-        return false;
+        COperationConfig::writelog(ERRORPACKAGETAIL);
+        return -1;
     }
 
     //    char *ppData=m_sData;

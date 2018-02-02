@@ -24,6 +24,7 @@
 #include "qqueue.h"
 #include "cdbstjc.h"
 #include "cmysqlite.h"
+#include "ctesttcpthd.h"
 class CMySocketThread;
 class CNetConThread;
 namespace Ui {
@@ -68,6 +69,7 @@ public:
 
     CMySqlite m_mySql;                  //数据库操作类
 
+    CTestTcpThd m_thdTest;              //
     //*************************初始化***************************************
     bool init();
    //***************************创建界面函数****************************************

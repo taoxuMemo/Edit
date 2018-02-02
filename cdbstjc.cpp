@@ -20,7 +20,12 @@ bool CDBSTJC::NetInterFace(char *pData, int nLen, int nID)
 //参数：*pData指向数据段指针，nLen数据段结构长度
 bool CDBSTJC::SerialInterFace(char *pData, int nLen, int nID)
 {
-    if(CheckData(pData,nLen)!=true)
+  //  if(nLen<)
+    int len=PackageCheck(pData,nLen);
+    if(len==-1)
+        return false;
+    pData+=6;
+    if(CheckData(pData,len)!=true)
     {
         COperationConfig::writelog(ERRLOGXYJXSJDYC);
         return false;

@@ -41,6 +41,8 @@ private slots:
 
     void on_pushButton_about_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::FormMain *ui;
 
