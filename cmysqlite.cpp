@@ -45,7 +45,7 @@ QSqlQuery CMySqlite::SelRealData(QString coding , QDateTime begin , QDateTime en
     }
     num=0;
     while (query.next()) {
-        double country = query.value(2).toDouble();
+        double country = query.value(3).toDouble();
         if(num==0)
         {
             dMax=dMin=dTotal=country;
@@ -71,7 +71,7 @@ QSqlQuery CMySqlite::SelRtdData(QString coding, QDateTime begin, QDateTime end, 
        //        return NULL;
    }
    while (query.next()) {
-        dRtd=query.value(2).toDouble();
+        dRtd=query.value(3).toDouble();
     }
    return query;
 }

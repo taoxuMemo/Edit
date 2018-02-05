@@ -78,5 +78,6 @@ void FormMain::on_pushButton_about_clicked()//触发关于我们按钮
 
 void FormMain::on_pushButton_clicked()
 {
-    m_Main->m_thdTest.MyListen();
+  //  m_Main->m_thdTest= new CTestTcpThd()
+    m_Main->m_pthdTest->MyListen();
 }

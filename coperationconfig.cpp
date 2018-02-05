@@ -370,3 +370,14 @@ void COperationConfig::writelog(int nErr, char *sRemark)
       //  QMessageBox::information(this,"writelog异常信息",ex);
      }
 }
+void COperationConfig::writeRD(QString str)
+{
+    QString strName="./realdata"+QDateTime::currentDateTime().toString("yyyy-MM-dd");
+    QFile file(strName);
+    file.open(QIODevice::WriteOnly|QIODevice::Append);
+  //  QString serr = QString("%1").arg(nErr, 8, 16, QLatin1Char('0'));
+    QString strData=QDateTime::currentDateTime().toString("hh:mm:ss")+"---"+str+"\n";
+    QByteArray ba=strData.toLatin1();
+    file.write(ba.data());
+    file.close();
+}

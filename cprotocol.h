@@ -15,8 +15,9 @@ public:
     char    m_sData[1500];
     int     m_nSerID;
     int     m_nNetID;
-protected:
     MainWindow * m_pMain;
+protected:
+
 private:
     bool    virtual SerialInterFace(char *pData,int nLen,int nID)=0;//串口接口  参数1.内容2.长度3.接口号
     bool    virtual NetInterFace(char *pData,int nLen,int nID)=0;   //网络接口  参数1.内容2.长度3.接口号

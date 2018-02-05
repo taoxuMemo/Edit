@@ -51,6 +51,7 @@ public:
     QQueue<QString> m_queTcp;   //接收tcp发来的数据
 
     CDBSTJC     m_DBSTJC;       //地表项处理函数
+    CJCBase     *m_pBase;
  //   QQueue m_queTcp<QString,int>;  //接收tcp发来的数据
     //****************************界面指针******************************************
     FormMain * m_fm;//主按钮界面
@@ -69,7 +70,7 @@ public:
 
     CMySqlite m_mySql;                  //数据库操作类
 
-    CTestTcpThd m_thdTest;              //
+    CTestTcpThd *m_pthdTest;              //
     //*************************初始化***************************************
     bool init();
    //***************************创建界面函数****************************************

@@ -58,6 +58,7 @@ public:
     bool WriteCom(int nCom,int nChn);        //写入串口对应的通道号
     bool writeChn(stuChannel chn,int num); //写入通道参数
     static   void writelog(int nErr,char * sRemark=NULL);//参数nErr错误码 sremark备注
+    static   void writeRD(QString str);
     bool CheckBool(QString str); //判断传进来str是不是bool类型
 
     bool ReadIPAddr(stuIPAddr *stu,int num);//读取IP地址

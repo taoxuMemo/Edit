@@ -48,7 +48,10 @@ void CTestTcpThd::readMessage()
  //   ui->textEdit->setText("connect 1");
     QByteArray arr =m_MyTcpSocket->readAll();
     QString ss=arr;
-    m_pMain->m_DBSTJC.SerialInterFace(ss.toLatin1().data(),ss.length(),2);
+    COperationConfig::writeRD(ss);
+
+  //  m_pMain->m_DBSTJC.SerialInterFace(arr.data(),arr.size(),2);
+    m_pMain->m_pBase->SerialInterFace(arr.data(),arr.size(),2);
 //    ui->textEdit->setText(ss);
 }
 void CTestTcpThd::removeUserFormList()

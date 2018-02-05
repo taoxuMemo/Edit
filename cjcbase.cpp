@@ -5,10 +5,12 @@
 //#include"qdatatype.h"
 CJCBase::CJCBase(QObject *parent) : CProtocol(parent)
 {
+ //   m_pQQBM=new char[21];
     memset(m_sQQBM,0,SJDJGZCB_QQBM_LEN+1);
     memset(m_sXTBM,0,SJDJGZCB_STBM_LEN+1);
     memset(m_sMLBM,0,SJDJGZCB_MLBM_LEN+1);
     memset(m_sFWMM,0,SJDJGZCB_FWMM_LEN+1);
+    strncpy(m_sFWMM,"PW=123456",SJDJGZCB_FWMM_LEN);
     m_nOverTime=0;
     m_nReCount=0;
     m_nMark=0;
@@ -16,14 +18,18 @@ CJCBase::CJCBase(QObject *parent) : CProtocol(parent)
 }
 bool CJCBase::CheckData(char *pData, int nLen)
 {
+ //   m_nPNUM=10;
+ //   m_pQQBM=new char[22];
     char *plData=pData;
-    memcpy(m_sQQBM,pData,SJDJGZCB_QQBM_LEN);
+ //   char sQQBM[SJDJGZCB_QQBM_LEN+1];
+    strncpy(m_sQQBM,pData,SJDJGZCB_QQBM_LEN);
+  //  strncpy(m_pQQBM,sQQBM,5);
     plData+=SJDJGZCB_QQBM_LEN;
     plData++;
-    memcpy(m_sXTBM,plData,SJDJGZCB_STBM_LEN);
+    strncpy(m_sXTBM,plData,SJDJGZCB_STBM_LEN);
     plData+=SJDJGZCB_STBM_LEN;
     plData++;
-    memcpy(m_sMLBM,pData,SJDJGZCB_MLBM_LEN);
+    strncpy(m_sMLBM,plData,SJDJGZCB_MLBM_LEN);
     plData+=SJDJGZCB_MLBM_LEN;
     plData++;
     if(strncmp(m_sFWMM,plData,SJDJGZCB_FWMM_LEN)!=0)

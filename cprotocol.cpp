@@ -35,17 +35,18 @@ int CProtocol::PackageCheck(char * pData, int nLen)
         COperationConfig::writelog(ERRORPACKAGELEN);
         return -1;
     }
-
+   // pData++;
     //提取系统编码ST
-    pData+=SJDJGZCB_QQBM_LEN;
-    if(!(*pData++=='S' && *pData++=='T' && *pData++=='='))
+    char *pST=pData+SJDJGZCB_QQBM_LEN+1;
+    if(!(*pST++=='S' && *pST++=='T' && *pST++=='='))
     {
         //系统编码位置错误
         COperationConfig::writelog(ERRORPACKAGEST);
         return -1;
     }
-    int nST=(CTool::chartoint(*pData++)*10)+CTool::chartoint(*pData++);
-    pData-=SJDJGZCB_QQBM_LEN;
+
+    int nST=(CTool::chartoint(*pST++)*10)+CTool::chartoint(*pST++);
+//    pData-=SJDJGZCB_QQBM_LEN+1;
     //判断CRC
     //  char sData[1500];
     //    memset(m_sData,0,1500);

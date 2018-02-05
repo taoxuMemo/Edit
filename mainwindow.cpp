@@ -44,6 +44,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     m_pMyThread=new CMySocketThread(this);
     m_pNetConThread=new CNetConThread(this);
+
+    //****************
+    m_pBase=new CDBSTJC(this);
+    m_pthdTest=new CTestTcpThd(this);
 }
 
 MainWindow::~MainWindow()
