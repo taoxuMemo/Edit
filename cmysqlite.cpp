@@ -20,7 +20,7 @@ bool CMySqlite::init()
 bool CMySqlite::InsertRD(QString sCoding,QString sType,double dValue)
 {
     QSqlQuery query(database);
-    QString strSql="INSERT INTO c_rt_RealData (coding,type,nvalue) VALUES(\""+sCoding +"\",\""+sType+"\","+dValue+")";
+    QString strSql="INSERT INTO c_rt_RealData (coding,type,nvalue) VALUES(\""+sCoding +"\",\""+sType+"\","+QString::number(dValue)+")";
     if(!query.exec(strSql))
     {
         COperationConfig::writelog(ERRLOGDBINSERTRD);

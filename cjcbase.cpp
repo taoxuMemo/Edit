@@ -5,7 +5,7 @@
 //#include"qdatatype.h"
 CJCBase::CJCBase(QObject *parent) : CProtocol(parent)
 {
- //   m_pQQBM=new char[21];
+    //   m_pQQBM=new char[21];
     memset(m_sQQBM,0,SJDJGZCB_QQBM_LEN+1);
     memset(m_sXTBM,0,SJDJGZCB_STBM_LEN+1);
     memset(m_sMLBM,0,SJDJGZCB_MLBM_LEN+1);
@@ -15,15 +15,46 @@ CJCBase::CJCBase(QObject *parent) : CProtocol(parent)
     m_nReCount=0;
     m_nMark=0;
 
+
+}
+bool CJCBase::TcpSendVal(char *pData, int nLen, int nID)
+{
+    if(nID==-1)
+    {
+        for(int i=0;i<6;i++)
+        {
+            if(m_pMain->m_pMySocket[i]!=NULL &&m_pMain->m_pMySocket[i]->isConnect==true)
+            {
+                if(m_pMain->m_pMySocket[i]->MySend( pData, nLen)==false)
+                {
+                    QString str="断开连接----"+QString(m_pMain->m_pMySocket[i]->m_IPAddr.sIP)+":"+QString::number(m_pMain->m_pMySocket[i]->m_IPAddr.nPort);
+                   // return false;
+                }
+            }
+        }
+    }else if(nID>=0 && nID<=6)
+    {
+        if(m_pMain->m_pMySocket[nID]!=NULL &&m_pMain->m_pMySocket[nID]->isConnect==true)
+        {
+            if(m_pMain->m_pMySocket[nID]->MySend( pData, nLen)==false)
+            {
+                QString str="断开连接----"+QString(m_pMain->m_pMySocket[i]->m_IPAddr.sIP)+":"+QString::number(m_pMain->m_pMySocket[i]->m_IPAddr.nPort);
+                return false;
+            }
+        }else
+            {return false;}
+
+    }
+    return true;
 }
 bool CJCBase::CheckData(char *pData, int nLen)
 {
- //   m_nPNUM=10;
- //   m_pQQBM=new char[22];
+    //   m_nPNUM=10;
+    //   m_pQQBM=new char[22];
     char *plData=pData;
- //   char sQQBM[SJDJGZCB_QQBM_LEN+1];
+    //   char sQQBM[SJDJGZCB_QQBM_LEN+1];
     strncpy(m_sQQBM,pData,SJDJGZCB_QQBM_LEN);
-  //  strncpy(m_pQQBM,sQQBM,5);
+    //  strncpy(m_pQQBM,sQQBM,5);
     plData+=SJDJGZCB_QQBM_LEN;
     plData++;
     strncpy(m_sXTBM,plData,SJDJGZCB_STBM_LEN);
@@ -41,8 +72,9 @@ bool CJCBase::CheckData(char *pData, int nLen)
     plData++;
     if(strncmp(g_DeviceMark,plData,SJDJGZCB_SBWYBS_LEN)!=0)
     {
+        ;
         //唯一标识错误
-        return false;
+        //  return false;
     }
     return true;
 }
@@ -73,7 +105,8 @@ QString CJCBase::SpellUpDataTable(QString QQBM, QString MLBM, int nFlag,QString 
 {
     QString strSpell;
 
-    strSpell="QN="+QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz");
+  //  strSpell="QN="+QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz");
+    strSpell=("QN="+QQBM);                          //请求编码
     strSpell+=(";ST="+QString::number(m_nXTBM));    //系统编码
     strSpell+=(";CN="+MLBM);                        //命令编码
     strSpell+=(";"+QString(m_sFWMM));               //访问密码

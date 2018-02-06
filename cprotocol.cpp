@@ -165,7 +165,22 @@ int CProtocol::AddPackageCheck(char *pData, int nLen)
     memcpy(pData,pdata,nLen+PACKAGEHEADTAIL);
     return nLen+PACKAGEHEADTAIL;
 }
-
+QByteArray CProtocol::SpellPackage(QString strData)
+{
+    QByteArray sSpell=strData.toLatin1();
+    QString strLen=QString("%1").arg(strData.length(), DATALENGTH, 10, QChar('0'));
+    sSpell.prepend(strLen);//添加长度
+    sSpell.prepend("##");  //添加包头##
+    //添加校验
+    QByteArray sCRC=strData.toLatin1();
+    int nCRC=CTool::CRC16_Checkout((unsigned char *)sCRC.data(),(unsigned int)sCRC.length());
+    QString c=QString("%1").arg(nCRC, CRCLENGTH, 16, QChar('0')).toUpper();
+    sSpell.append(c);
+    //添加包尾部
+    sSpell.append(0x0D);
+    sSpell.append(0x0A);
+    return sSpell;
+}
 
 
 

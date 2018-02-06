@@ -25,6 +25,13 @@ COperationConfig::~COperationConfig()
     if(m_file!=nullptr)
         delete m_file;
 }
+ QString  COperationConfig::getText(QString sGroup,QString sKey)
+ {
+     if(!m_bTag)
+         return 0;
+     QString str="/"+sGroup+"/"+sKey;
+     return m_file->value(str).toString();
+ }
 bool COperationConfig::ReadIPAddr(stuIPAddr *stu,int num)
 {
     if(!m_bTag)

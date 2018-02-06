@@ -14,6 +14,7 @@ public:
     explicit CJCBase(QObject *parent = nullptr);
     bool    virtual SerialInterFace(char *pData,int nLen,int nID)=0;//串口接口  参数1.内容2.长度3.接口号
     bool    virtual NetInterFace(char *pData,int nLen,int nID)=0;   //网络接口  参数1.内容2.长度3.接口号
+    bool    TcpSendVal(char *pData,int nLen,int nID=-1);            //nID表示上传SOCKET号 默认-1全部上传
     char  m_sQQBM[SJDJGZCB_QQBM_LEN+1];//请求编码
     char  m_sXTBM[SJDJGZCB_STBM_LEN+1]; //系统编码
     char  m_sMLBM[SJDJGZCB_MLBM_LEN+1]; //命令编码

@@ -61,21 +61,26 @@ bool CDBSTJC::SerialInterFace(char *pData, int nLen, int nID)
             pcouData++;
             couData=pcouData;
             continue;
-        }else if(*pcouData==',')
+        }else if(*pcouData==',' || *pcouData==';')
         {
             *pcouData=0;
             sValue=QString(QLatin1String(couData));
             pcouData++;
             couData=pcouData;
             //存入数据库
-
+            if(sType.compare("Rtd")!=0 && sType.compare("Cou")!=0)
+                continue;
+            if(sCoding.length()!=6)
+                continue;
+            double dVal=sValue.toDouble();
+            m_pMain->m_mySql.InsertRD(sCoding,sType,dVal);
 
             sCoding="";
             sType="";
             sValue="";
             continue;
         }
-
+        pcouData++;
     }
     return true;
 }
@@ -140,6 +145,7 @@ bool  CDBSTJC::GetValue(int nType)
 {
 
     QString strSpell;
+    QString strMLBM;
 //***********************拼接数据区字符串*******************************88
     QDateTime dt=QDateTime::currentDateTime();//查询终止时间
     QDateTime dtmin=dt;//查询起始时间
@@ -148,18 +154,23 @@ bool  CDBSTJC::GetValue(int nType)
     if(nType==1)
     {
         dtmin.addSecs(60*m_nFSBJG*-1);
+        strMLBM="2051";
     }else if(nType==2)
     {
         dtmin.addSecs(60*60*-1);
+        strMLBM="2061";
 
     }else if(nType==3)
     {
         dtmin.addDays(-1);
+        strMLBM="2031";
     }else
     {
         COperationConfig::writelog(ERRLOGTIMETYPE);
     }
     //  m_listJCYZ.size()
+    //添加DataTime字段
+    strSpell+="DataTime="+QDateTime::currentDateTime().toString("yyyyMMddhhmmss")+";";
 
     QSqlQuery mysql=m_pMain->m_mySql.SelRealData("w00000",dtmin,dt,dFQMax,dFQMin,dFQAvg,dFQCou,num);
 
@@ -198,7 +209,9 @@ bool  CDBSTJC::GetValue(int nType)
                 strSpell+=SpellUpStr(sjcy,nType,dMax,dMin,dAvg);
         }
     }
-
+    QString strQQBM=QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz");
+    QString strDataTable=SpellUpDataTable(strQQBM,strQQBM,4,strSpell);//拼接数据段
+    QByteArray  baSpell=SpellPackage(strDataTable); //拼接整个包
     return true;
 }
 

@@ -43,8 +43,10 @@ public:
     bool m_bRun;
     COperationConfig * m_pOpera;
     unsigned char m_nCom[8];
-    stuChannel m_stuChan[8];
-    stuIPAddr  m_stuIPA[8];
+    stuChannel  m_stuChan[8];
+    stuIPAddr   m_stuIPA[8];
+    QString     m_sSBWYBS;
+    QString     m_sPassWD;
     bool       m_bXY;   //true是TCP    flase是UDP
 
     QQueue<QString> m_queCom;   //接收com发来的数据

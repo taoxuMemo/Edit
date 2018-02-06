@@ -93,7 +93,27 @@ bool MainWindow::init()
         m_pMySocket[i]=new CMySocket();
         m_pMySocket[i]->SetParam(m_stuIPA[i]);
     }
-
+    //获取设备标识和访问密码
+    //memset(m_sSBWYBS,0,sizeof(m_sSBWYBS));
+    //memset(m_sPassWD,0,sizeof(m_sPassWD));
+    m_sPassWD=m_pOpera->getText("col","passwd");
+    if(m_sPassWD.length()!=6)
+    {
+        COperationConfig::writelog(CONFIGPASSWORD);
+        return false;
+    }
+    m_sSBWYBS=m_pOpera->getText("col","sysid");
+    if(m_sSBWYBS.length()!=24)
+    {
+        COperationConfig::writelog(CONFIGEQUIPMENTID);
+        return false;
+    }
+    //    QString str=m_pOpera->getText("col1","sysid2");
+    if(m_mySql.init()==false)
+    {
+        COperationConfig::writelog(CONFIGEQUIPMENTID);
+                return false;
+    }
     return true;
 
 }
