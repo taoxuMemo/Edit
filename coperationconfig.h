@@ -29,11 +29,13 @@
 #define    CONFIGIPIPADDRLEN        0x00000018      //配置文件提取 IP地址中的IP长度错误
 #define    CONFIGPASSWORD           0x00000019      //配置文件中的访问密码错误
 #define    CONFIGEQUIPMENTID        0x0000001A      //配置文件中的设备唯一标识错误
+#define    CONFIGCOLERROR           0x0000001B      //读取配置文件COL有字段不存在
 //*********************************数据库错误****************************************8
 #define    ERRLOGDBOPENFAIL         0x00000040      //数据库打开失败
 #define    ERRLOGDBINSERTRD         0x00000041      //数据库打开失败
 #define    ERRLOGDBSELTIME          0x00000042      //查询实时数据起始时间与终止时间错误
 #define    ERRLOGDBSELEXEC          0x00000043      //执行select sql语句时异常
+#define    ERRLOGDBDATALEN          0x00000044      //执行查询数据长度时语句时异常
 //***********************************协议解析异常******************************************
 #define    ERRLOGXYJXSJDYC          0x00000081       //数据段结构异常
 #define    ERRLOGXYJXSJDCP          0x00000082       //数据段结构CP=错误
@@ -64,7 +66,7 @@ public:
 
     bool ReadIPAddr(stuIPAddr *stu,int num);//读取IP地址
     bool WriteIPAddr(stuIPAddr stu,int num); //写入IP地址
-
+    bool ReadItem(stuYZSBSZ *stu,int num); //读取监测项的内容
     QString getText(QString ,QString );
 private:
     const char * m_scom="com";

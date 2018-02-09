@@ -23,7 +23,7 @@ bool CMySqlite::InsertRD(QString sCoding,QString sType,double dValue)
     QString strSql="INSERT INTO c_rt_RealData (coding,type,nvalue) VALUES(\""+sCoding +"\",\""+sType+"\","+QString::number(dValue)+")";
     if(!query.exec(strSql))
     {
-        COperationConfig::writelog(ERRLOGDBINSERTRD);
+        COperationConfig::writelog(ERRLOGDBINSERTRD,strSql.toLatin1().data());
         return false;
     }
     return true;
@@ -61,17 +61,31 @@ QSqlQuery CMySqlite::SelRealData(QString coding , QDateTime begin , QDateTime en
     return query;
 
 }
-QSqlQuery CMySqlite::SelRtdData(QString coding, QDateTime begin, QDateTime end, double &dRtd)
+
+QSqlQuery CMySqlite::SelRtdData( QDateTime begin, QDateTime end)
 {
    QSqlQuery query(database);
-   QString select_sql = "select * from c_rt_RealData where coding=\""+coding+"\" and type=\"Rtd\" and stime>\""+begin.toString("yyyy-MM-dd hh:mm:ss")+"\" and stime<\""+end.toString("yyyy-MM-dd hh:mm:ss")+"\"";
+   QString select_sql = "select * from c_rt_RealData where  stime>\""+begin.toString("yyyy-MM-dd hh:mm:ss")+"\" and stime<\""+end.toString("yyyy-MM-dd hh:mm:ss")+"\"  group by coding";
    if(!query.exec(select_sql))
    {
        COperationConfig::writelog(ERRLOGDBSELEXEC,select_sql.toLatin1().data());
        //        return NULL;
    }
-   while (query.next()) {
-        dRtd=query.value(3).toDouble();
-    }
+
    return query;
+}
+
+bool CMySqlite::SelDataLen(QString coding, QString & ret)
+{
+    QSqlQuery query(database);
+    QString select_sql = "select precision from factorInfo where  code=\""+coding+"\"";
+    if(!query.exec(select_sql))
+    {
+        while (query.next()) {
+            ret=query.value(0).toString();
+            return true;
+        }
+    }
+    COperationConfig::writelog(ERRLOGDBDATALEN,select_sql.toLatin1().data());
+    return false;
 }

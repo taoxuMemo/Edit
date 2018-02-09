@@ -15,7 +15,51 @@ CJCBase::CJCBase(QObject *parent) : CProtocol(parent)
     m_nReCount=0;
     m_nMark=0;
 
+    QString str=m_pMain->m_pOpera->getText("col","type");
 
+}
+bool CJCBase::init()
+{
+    QString str=m_pMain->m_pOpera->getText("col","type");
+    strncpy(m_sXTBM,str.toLatin1().data(),str.size());
+
+    str=m_pMain->m_pOpera->getText("col","sysid");
+    strncpy(m_sSBWYBS,str.toLatin1().data(),str.size());
+
+    str=m_pMain->m_pOpera->getText("col","passwd");
+    strncpy(m_sFWMM,str.toLatin1().data(),str.size());
+
+    str=m_pMain->m_pOpera->getText("col","Rtd");
+    m_nMSBJG=str.toInt();
+
+    str=m_pMain->m_pOpera->getText("col","min");
+    m_nFSBJG=str.toInt();
+
+    str=m_pMain->m_pOpera->getText("col","bRtd");
+    m_bSSSJ=str.toInt();
+
+    str=m_pMain->m_pOpera->getText("col","bmin");
+    m_bFZSJ=str.toInt();
+
+    str=m_pMain->m_pOpera->getText("col","bhour");
+    m_bXSSJ=str.toInt();
+
+    str=m_pMain->m_pOpera->getText("col","bday");
+    m_bRSJ=str.toInt();
+    for(int i=0;i<ITEMSTULEN;i++)
+    {
+        m_pMain->m_pOpera->ReadItem(&m_stuSJCYZBMB[i].stuYZ,i+1);
+        m_stuSJCYZBMB[i].sCoding=m_stuSJCYZBMB[i].stuYZ.sCoding;
+        QString strN=QString(m_stuSJCYZBMB[i].sCoding);
+        if(strN.length()==6)
+        {
+            QString sDLen;
+            if(m_pMain->m_mySql.SelDataLen(strN,sDLen))
+            {
+                strncpy(m_stuSJCYZBMB[i].sDataLen,sDLen.toLatin1().data(),sDLen.length());
+            }
+        }
+    }
 }
 bool CJCBase::TcpSendVal(char *pData, int nLen, int nID)
 {
@@ -28,7 +72,7 @@ bool CJCBase::TcpSendVal(char *pData, int nLen, int nID)
                 if(m_pMain->m_pMySocket[i]->MySend( pData, nLen)==false)
                 {
                     QString str="断开连接----"+QString(m_pMain->m_pMySocket[i]->m_IPAddr.sIP)+":"+QString::number(m_pMain->m_pMySocket[i]->m_IPAddr.nPort);
-                   // return false;
+                    // return false;
                 }
             }
         }
@@ -38,11 +82,11 @@ bool CJCBase::TcpSendVal(char *pData, int nLen, int nID)
         {
             if(m_pMain->m_pMySocket[nID]->MySend( pData, nLen)==false)
             {
-                QString str="断开连接----"+QString(m_pMain->m_pMySocket[i]->m_IPAddr.sIP)+":"+QString::number(m_pMain->m_pMySocket[i]->m_IPAddr.nPort);
+                QString str="断开连接----"+QString(m_pMain->m_pMySocket[nID]->m_IPAddr.sIP)+":"+QString::number(m_pMain->m_pMySocket[nID]->m_IPAddr.nPort);
                 return false;
             }
         }else
-            {return false;}
+        {return false;}
 
     }
     return true;
@@ -105,7 +149,7 @@ QString CJCBase::SpellUpDataTable(QString QQBM, QString MLBM, int nFlag,QString 
 {
     QString strSpell;
 
-  //  strSpell="QN="+QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz");
+    //  strSpell="QN="+QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz");
     strSpell=("QN="+QQBM);                          //请求编码
     strSpell+=(";ST="+QString::number(m_nXTBM));    //系统编码
     strSpell+=(";CN="+MLBM);                        //命令编码
@@ -171,10 +215,12 @@ QString CJCBase::SpellUpStr(stuSJCYZBMB stu, int type, double dMax, double dMin,
 QString CJCBase::SpellUpStr(stuSJCYZBMB stu, double dRtd)
 {
     QString retstr;
+    retstr+=QString(stu.sCoding)+"-Rtd=";
     retstr+=CTool::douTostr(dRtd,stu.sDataLen)+",";
     retstr+=QString(stu.sCoding)+"-Flag=N;";
     return retstr;
 }
+//发送实时数据
 bool CJCBase::UploadReal()
 {
     QString strSpell;
@@ -182,16 +228,25 @@ bool CJCBase::UploadReal()
     QDateTime dt=QDateTime::currentDateTime();//查询终止时间
     QDateTime dtmin=dt;//查询起始时间
     dtmin.addSecs(m_nMSBJG*-1);
-    for(int i=0;i<m_listJCYZ.length();i++)
-    {
-        double dRtd=0;
-        int nNum=0;
-        stuSJCYZBMB sjcy=  m_listJCYZ.at(i);
-        if(sjcy.stuYZ.rtd==false)
-            continue;
-        m_pMain->m_mySql.SelRtdData(QString(sjcy.sCoding),dtmin,dt,dRtd);
-        if(dRtd!=0)
-            strSpell+=SpellUpStr(sjcy,dRtd);
+    QSqlQuery query=m_pMain->m_mySql.SelRtdData(dtmin,dt);
+    while (query.next()) {
+        QString strC =query.value(1).toString();
+        double dVal =query.value(3).toDouble();
+        for(int i=0;m_listJCYZ.length();i++)
+        {
+            if(QString(m_stuYZSBSZ[i].sCoding).compare(strC)==0 && m_stuYZSBSZ[i].rtd==true);
+         //       strSpell+=SpellUpStr(sjcy,dVal);
+        }
+
     }
+
+    if(strSpell.length()!=0)
+    {
+        QString strQQBM=QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz");
+        QString strDataTable=SpellUpDataTable(strQQBM,"2011",4,strSpell);//拼接数据段
+        QByteArray  baSpell=SpellPackage(strDataTable); //拼接整个包
+        TcpSendVal(baSpell.data(),baSpell.size());
+    }
+    return true;
 
 }

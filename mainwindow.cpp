@@ -22,7 +22,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //  connect(m_pNetConThread, SIGNAL(TestSignal(QString)), this, SLOT(DisplayMsg(QString)));
 
 
-
     init();
     //**********************初始化窗体指针***********************************
     m_fm=NULL;
@@ -47,6 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //****************
     m_pBase=new CDBSTJC(this);
+    m_pBase->init();
     m_pthdTest=new CTestTcpThd(this);
 }
 
@@ -284,9 +284,9 @@ void MainWindow::timerEvent(QTimerEvent *event)
 {
     //********************实时数据上报间隔******************************
     static int nMSB=0;
-    if(m_DBSTJC.m_nMSBJG==nMSB)
+    if(m_pBase->m_nMSBJG==nMSB)
     {
-        if(m_DBSTJC.m_bSSSJ==true)
+        if(m_pBase->m_bSSSJ==true)
         {
             //
         }

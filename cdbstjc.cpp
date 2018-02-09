@@ -7,7 +7,17 @@
 #include "qdatatype.h"
 CDBSTJC::CDBSTJC(QObject *parent) : CJCBase(parent)
 {
+    int a=100;
 
+}
+CDBSTJC::~CDBSTJC()
+{
+    killTimer(m_nTimerId);
+}
+bool CDBSTJC::init()
+{
+    CJCBase::init();
+    m_nTimerId = startTimer(1000);
 }
 bool CDBSTJC::NetInterFace(char *pData, int nLen, int nID)
 {
@@ -210,8 +220,9 @@ bool  CDBSTJC::GetValue(int nType)
         }
     }
     QString strQQBM=QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz");
-    QString strDataTable=SpellUpDataTable(strQQBM,strQQBM,4,strSpell);//拼接数据段
+    QString strDataTable=SpellUpDataTable(strQQBM,strMLBM,4,strSpell);//拼接数据段
     QByteArray  baSpell=SpellPackage(strDataTable); //拼接整个包
+    TcpSendVal(baSpell.data(),baSpell.size());
     return true;
 }
 
@@ -222,8 +233,7 @@ void CDBSTJC::timerEvent(QTimerEvent *event)
     QTime time=QTime::currentTime();
     if(m_bSSSJ==true &&nTag!=0 && nTag%m_nMSBJG==0)
     {
-
-        ;
+        UploadReal();
     }
     if(nTag==3600)
         nTag=0;
@@ -236,17 +246,17 @@ void CDBSTJC::timerEvent(QTimerEvent *event)
     //分钟上报
     if(m_bFZSJ==true && nSec==0 && nMin%m_nFSBJG!=0)//添加上报标记
     {
-        //GetValue();
+        GetValue(1);
         ;
     }
     //小时上报
     if(m_bXSSJ==true && nMin==0&&nSec==0)
     {
-        ;
+        GetValue(2);
     }
     //小时上报数据
     if(m_bRSJ==true && nHour==0 && nMin==0 && nSec==0)
     {
-
+        GetValue(3);
     }
 }

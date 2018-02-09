@@ -9,6 +9,8 @@ class CDBSTJC : public CJCBase
     Q_OBJECT
 public:
     explicit CDBSTJC(QObject *parent = nullptr);
+    ~CDBSTJC();
+    bool init();
     void timerEvent( QTimerEvent *event );
     bool setData();
     bool NetInterFace(char *pData,int nLen,int nID);
@@ -21,6 +23,7 @@ public:
     char    m_sHXXYL[8];    //化学需氧量
     char    m_sAD[8];       //氨氮
     stuSJCYZBMB m_stuUpType;
+    int m_nTimerId;//定时器标志
 signals:
 
 public slots:

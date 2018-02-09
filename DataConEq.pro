@@ -57,7 +57,8 @@ SOURCES += \
     cdbstjc.cpp \
     cserialthread.cpp \
     cmysqlite.cpp \
-    ctesttcpthd.cpp
+    ctesttcpthd.cpp \
+    cdqhjwry.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -91,7 +92,8 @@ HEADERS += \
     cdbstjc.h \
     cserialthread.h \
     cmysqlite.h \
-    ctesttcpthd.h
+    ctesttcpthd.h \
+    cdqhjwry.h
 
 FORMS += \
         mainwindow.ui \

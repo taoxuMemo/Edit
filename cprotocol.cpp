@@ -44,8 +44,10 @@ int CProtocol::PackageCheck(char * pData, int nLen)
         COperationConfig::writelog(ERRORPACKAGEST);
         return -1;
     }
-
-    int nST=(CTool::chartoint(*pST++)*10)+CTool::chartoint(*pST++);
+        int aa=CTool::chartoint(*pST++)*10;
+        int bb=CTool::chartoint(*pST++);
+        int nST=aa+bb;
+   // int nST=(CTool::chartoint(*pST++)*10)+CTool::chartoint(*pST++);
 //    pData-=SJDJGZCB_QQBM_LEN+1;
     //判断CRC
     //  char sData[1500];
@@ -169,8 +171,9 @@ QByteArray CProtocol::SpellPackage(QString strData)
 {
     QByteArray sSpell=strData.toLatin1();
     QString strLen=QString("%1").arg(strData.length(), DATALENGTH, 10, QChar('0'));
-    sSpell.prepend(strLen);//添加长度
+    sSpell.prepend(strLen.toLatin1());//添加长度
     sSpell.prepend("##");  //添加包头##
+
     //添加校验
     QByteArray sCRC=strData.toLatin1();
     int nCRC=CTool::CRC16_Checkout((unsigned char *)sCRC.data(),(unsigned int)sCRC.length());

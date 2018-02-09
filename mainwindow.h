@@ -52,7 +52,7 @@ public:
     QQueue<QString> m_queCom;   //接收com发来的数据
     QQueue<QString> m_queTcp;   //接收tcp发来的数据
 
-    CDBSTJC     m_DBSTJC;       //地表项处理函数
+  //  CDBSTJC     m_DBSTJC;       //地表项处理函数
     CJCBase     *m_pBase;
  //   QQueue m_queTcp<QString,int>;  //接收tcp发来的数据
     //****************************界面指针******************************************

@@ -111,6 +111,9 @@
 #define QJCYZ_EYHL_BM                       a21026                      //二氧化硫
 #define QJCYZ_YC_BM                         a34013                      //烟尘
 
+//**********************************************************************************
+#define ITEMSTULEN                         12                           //监测项长度
+
 
 extern  char g_DeviceMark[SJDJGZCB_SBWYBS_LEN+1];//最后一位结束位
 
@@ -150,7 +153,7 @@ struct  stuChannel{
     int nCycle;
     char strCS[50];  //厂商
     char strXH[20];  //型号
-    char strJCX[20];  //监测项
+    char strJCX[7];  //监测项  如污水是w00000
     char strXY[20];  //协议
 };
 struct stuIPAddr{
@@ -176,9 +179,9 @@ struct stuSJCYZ
 //因子上报设置
 struct stuYZSBSZ
 {
-    char sCoding[7];        //编码
-    int  nMSBJG;            //秒上报间隔
-    int  nFSBJG;            //分上报间隔
+    char sCoding[7];                //编码
+    double  dAlarmUp;               //报警上限
+    double  dAlarmDown;             //报警下限
     bool rtd;
     bool fcou;
     bool fmax;
