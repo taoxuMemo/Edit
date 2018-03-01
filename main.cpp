@@ -16,6 +16,9 @@ int main(int argc, char *argv[])
 //    int zz=CTool::chartohex8(aa,bb);
 //    int i=52;
 //    QString b=QString("%1").arg(i, 4, 10, QChar('0'));
+    QString strrr="das123";
+    int aa=strrr.toInt();
+    int nn=atoi("365hh");
     int nCRC=0x0D3F;
     QString c=QString("%1").arg(nCRC, 16, 2, QChar('0')).toUpper();
     QString str=c.toUpper();

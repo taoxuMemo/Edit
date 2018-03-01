@@ -22,9 +22,14 @@ bool CDBSTJC::init()
 bool CDBSTJC::NetInterFace(char *pData, int nLen, int nID)
 {
     m_nNetID=nID;
-    bool  bTag=this->CheckData(pData,nLen);
+    int len=PackageCheck(pData,nLen);
+    if(len==-1)
+        return false;
+     pData+=6;
+    bool  bTag=this->CheckData(pData,len);
     if(bTag==false)
         return false;
+
     return true;
 }
 //参数：*pData指向数据段指针，nLen数据段结构长度

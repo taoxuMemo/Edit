@@ -30,6 +30,7 @@
 #define    CONFIGPASSWORD           0x00000019      //配置文件中的访问密码错误
 #define    CONFIGEQUIPMENTID        0x0000001A      //配置文件中的设备唯一标识错误
 #define    CONFIGCOLERROR           0x0000001B      //读取配置文件COL有字段不存在
+#define    CONFIGCODINGERROR        0x0000001C      //读取item段的coding错误
 //*********************************数据库错误****************************************8
 #define    ERRLOGDBOPENFAIL         0x00000040      //数据库打开失败
 #define    ERRLOGDBINSERTRD         0x00000041      //数据库打开失败
@@ -46,7 +47,9 @@
 #define   ERRORPACKAGETAIL          0x00000094       //baotoucuowu
 #define   ERRORPACKAGELENTYPE       0x00000095       //baotoucuowu
 #define   ERRORPACKAGECRCTYPE       0x00000096       //baotoucuowu
-#define   ERRORPACKAGEST            0x00000097      //
+#define   ERRORPACKAGEST            0x00000097       //
+#define   ERRORSJDJGZCCNLEN         0x00000098       //数据段结构组成CN长度错误
+#define   ERRORSJDJGZCCNNAME        0x00000099       //数据段结构组成CN长度错误
 //************************************数据处理错误********************************************
 #define    ERRLOGTIMETYPE         0x00000060       //数据段结构CP=错误
 
@@ -63,6 +66,8 @@ public:
     static   void writelog(int nErr,char * sRemark=NULL);//参数nErr错误码 sremark备注
     static   void writeRD(QString str);
     bool CheckBool(QString str); //判断传进来str是不是bool类型
+
+//    bool ReadItem(stuYZSBSZ *stu,int num);//读取配置文件ITEM监测因子字段
 
     bool ReadIPAddr(stuIPAddr *stu,int num);//读取IP地址
     bool WriteIPAddr(stuIPAddr stu,int num); //写入IP地址

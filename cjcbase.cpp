@@ -49,7 +49,8 @@ bool CJCBase::init()
     for(int i=0;i<ITEMSTULEN;i++)
     {
         m_pMain->m_pOpera->ReadItem(&m_stuSJCYZBMB[i].stuYZ,i+1);
-        m_stuSJCYZBMB[i].sCoding=m_stuSJCYZBMB[i].stuYZ.sCoding;
+        strncpy(m_stuSJCYZBMB[i].sCoding,m_stuSJCYZBMB[i].stuYZ.sCoding,7);
+        //   m_stuSJCYZBMB[i].sCoding=m_stuSJCYZBMB[i].stuYZ.sCoding;
         QString strN=QString(m_stuSJCYZBMB[i].sCoding);
         if(strN.length()==6)
         {
@@ -145,6 +146,28 @@ bool  Splitinst(char *p,QString &a,QString &b) //拆分指令等号前后的
     }
     return false;
 }
+QList<QString> CJCBase::SplitMH(char *pd, int nlen)
+{
+    char p[1024];
+    memset(p,0,1024);
+    strncpy((char *)p,pd,nlen);
+    char *pp=(char *)p;
+
+    QList<QString> ls;
+    for(int i=0;i<nlen;i++)
+    {
+        if(p[i]==';')
+        {
+            p[i]=0;
+            ls.insert(0,QString(QLatin1String(pp)));
+            pp=&p[i+1];
+        }
+        if(i==nlen-1)
+        {
+            ls.insert(0,QString(QLatin1String(pp)));
+        }
+    }
+}
 QString CJCBase::SpellUpDataTable(QString QQBM, QString MLBM, int nFlag,QString sDataArea)
 {
     QString strSpell;
@@ -235,7 +258,7 @@ bool CJCBase::UploadReal()
         for(int i=0;m_listJCYZ.length();i++)
         {
             if(QString(m_stuYZSBSZ[i].sCoding).compare(strC)==0 && m_stuYZSBSZ[i].rtd==true);
-         //       strSpell+=SpellUpStr(sjcy,dVal);
+            //       strSpell+=SpellUpStr(sjcy,dVal);
         }
 
     }
@@ -249,4 +272,338 @@ bool CJCBase::UploadReal()
     }
     return true;
 
+}
+//*******************************************与上位机通讯协议解析*******************************************************************
+//获取命令编码  pData数据段结构组成表   nLen数据段结构组成表长度
+int CJCBase::GetCN(char *pData, int nLen)
+{
+    if(nLen<(20+5+7))
+    {
+        COperationConfig::writelog(ERRORSJDJGZCCNLEN,QString::number(nLen).toLatin1().data());
+        return -1;
+    }
+    char * data=pData;
+    data+=(20+5);
+    if(*data=='C' && *(data+1)=='N' && *(data+2)=='=')
+    {
+        char nData[5];
+        memset(nData,0,5);
+        strncpy(nData,(data+3),4);
+        int nCommand=atoi(nData);
+        return nCommand;
+    }else
+    {
+        char errData[8];
+        memcpy(errData,0,8);
+        strncpy(errData,data,7);
+        COperationConfig::writelog(ERRORSJDJGZCCNNAME,errData);
+        return -2;
+    }
+}
+QString  CJCBase::GetQN(char *pData, int nLen)
+{
+    ;
+}
+int  CJCBase::GetST(char *pData, int nLen)
+{
+    ;
+}
+QString  CJCBase::GetPW(char *pData, int nLen)
+{
+    ;
+}
+QString  CJCBase::GetMN(char *pData, int nLen)
+{
+    ;
+}
+bool CJCBase::CommandCode(int nCommand)
+{
+    switch(nCommand)
+    {
+    case 1000:
+        break;
+    case 1011:
+        break;
+    case 1012:
+        break;
+    case 1061:
+        break;
+    case 1062:
+        break;
+    case 1063:
+        break;
+    case 1064:
+        break;
+    case 1072:
+        break;
+    case 2011:
+        break;
+    case 2012:
+        break;
+    case 2021:
+        break;
+    case 2022:
+        break;
+    case 2031:
+        break;
+    case 2041:
+        break;
+    case 2051:
+        break;
+    case 2061:
+        break;
+    case 3011:
+        break;
+    case 3012:
+        break;
+    case 3013:
+        break;
+    case 3014:
+        break;
+    case 3015:
+        break;
+    case 3016:
+        break;
+    case 3017:
+        break;
+    case 3018:
+        break;
+    case 3019:
+        break;
+    case 3020:
+        break;
+    case 3021:
+        break;
+    case 9013:
+        break;
+    case 9014:
+        break;
+    default:
+        break;
+
+    }
+}
+//发送函数及重发判断
+bool CJCBase::SendData()
+{
+    QDateTime dt=QDateTime::currentDateTime();
+    for(int i=0;i<m_listSend.size();i++)
+    {
+        UpDataStu uds=m_listSend.takeAt(i);
+        if(uds.nCnt==0)//第一次发送
+        {
+            //发送数据
+            uds.nCnt++;
+            QString strTime1=dt.toString("yyyy-MM-dd hh:mm:ss");
+            QByteArray ba=strTime1.toLatin1();
+            strncpy((char *)uds.sTime,ba.data(),20);
+            m_listSend.insert(0,uds);
+
+        }
+        else if(uds.nCnt<m_nReCount)//大于重发次数
+        {
+            QString strTime=QString(QLatin1String((char *)uds.sTime));
+            QDateTime  dt1 = QDateTime::fromString(strTime, "yyyy-MM-dd hh:mm:ss");
+            int nSec=dt1.secsTo(dt);
+            if(nSec>m_nOverTime)
+            {
+                //发送数据
+                uds.nCnt++;
+                QString strTime1=dt.toString("yyyy-MM-dd hh:mm:ss");
+                QByteArray ba=strTime1.toLatin1();
+                strncpy((char *)uds.sTime,ba.data(),20);
+            }
+            m_listSend.insert(0,uds);
+        }
+    }
+}
+//***********************************答复上位机平台**************************
+bool CJCBase::Ans1000(char *pd,int len)
+{
+
+    char sPD[1024];
+    memset(sPD,0,1024);
+    strncpy((char *)sPD,pd,len);
+    QString strPD=QString(QLatin1String(sPD));
+    QStringList list1 = strPD.split(";");
+
+    for(int i=0;i<list1.size();i++)
+    {
+        QString str1=list1.at(i);
+        QStringList listA=str1.split("=");
+        if(listA.size()==2)
+        {
+            QString strA=listA.at(0);
+            QString strB=listA.at(1);
+            if(strA.compare("OverTime")==0)
+            {
+                m_nOverTime=strB.toInt();
+            }
+            if(strA.compare("ReCount")==0)
+            {
+                m_nReCount=strB.toInt();
+            }
+
+        }
+    }
+    //相应上位机
+    QString strQQYD=SpellUpDataTable(QString(m_sQQBM),"9011",4,"QnRtn=1");//请求应答数据
+    QByteArray  baSpell=SpellPackage(strQQYD); //拼接整个包
+
+
+    QString strZXJG=SpellUpDataTable(QString(m_sQQBM),"9012",4,"ExeRtn=1");//执行结果数据
+    QByteArray  baSpell1=SpellPackage(strZXJG); //拼接整个包
+
+    return true;
+}
+bool CJCBase::Ans1011(char *pd,int len)
+{
+    QString strQQYD=SpellUpDataTable(QString(m_sQQBM),"9011",4,"QnRtn=1");//请求应答数据
+    QByteArray  baSpell=SpellPackage(strQQYD); //拼接整个包
+
+    QString strZXJG=SpellUpDataTable(QString(m_sQQBM),"9012",4,"ExeRtn=1");//执行结果数据
+    QByteArray  baSpell1=SpellPackage(strZXJG); //拼接整个包
+
+}
+bool CJCBase::Ans1012(char *pd,int len)
+{
+    char sPD[1024];
+    memset(sPD,0,1024);
+    strncpy((char *)sPD,pd,len);
+    QString strPD=QString(QLatin1String(sPD));
+    QStringList list1 = strPD.split(";");
+    QString sYQYB,sTime;//1仪器仪表ID ，2系统时间。
+    for(int i=0;i<list1.size();i++)
+    {
+        QString str1=list1.at(i);
+        QStringList listA=str1.split("=");
+        if(listA.size()==2)
+        {
+            QString strA=listA.at(0);
+            QString strB=listA.at(1);
+            if(strA.compare("PolId")==0)
+                sYQYB=strB;
+            if(strA.compare("SystemTime")==0)
+                sTime=strB;
+        }
+    }
+    if(sYQYB.length()!=0)
+    {
+        ;//设置仪器仪表的系统时间
+    }else
+    {
+        ;//设置本机系统时间
+    }
+
+
+    QString strQQYD=SpellUpDataTable(QString(m_sQQBM),"9011",4,"QnRtn=1");//请求应答数据
+    QByteArray  baSpell=SpellPackage(strQQYD); //拼接整个包
+
+    QString strZXJG=SpellUpDataTable(QString(m_sQQBM),"9012",4,"ExeRtn=1");//执行结果数据
+    QByteArray  baSpell1=SpellPackage(strZXJG); //拼接整个包
+
+}
+
+bool CJCBase::Ans1061(char *pd,int len)
+{
+
+    QString strQQYD=SpellUpDataTable(QString(m_sQQBM),"9011",4,"QnRtn=1");//请求应答数据
+    QByteArray  baSpell=SpellPackage(strQQYD); //拼接整个包
+
+    QString strN="RtdInterval="+QString::number(m_nMSBJG);
+    QString strFSXY=SpellUpDataTable(QString(m_sQQBM),"1061",4,strN);//发送相应
+    QByteArray  baSpell1=SpellPackage(strFSXY); //拼接整个包
+
+    QString strZXJG=SpellUpDataTable(QString(m_sQQBM),"9012",4,"ExeRtn=1");//执行结果数据
+    QByteArray  baSpell2=SpellPackage(strZXJG); //拼接整个包
+}
+
+bool CJCBase::Ans1062(char *pd,int len)
+{
+    char sPD[1024];
+    memset(sPD,0,1024);
+    strncpy((char *)sPD,pd,len);
+    QString strPD=QString(QLatin1String(sPD));
+    QStringList list1 = strPD.split("=");
+    if(list1.size()==2)
+    {
+        QString strA=list1.at(0);
+        QString strB=list1.at(1);
+        if(strA.compare("RtdInterval")==0)
+            m_nMSBJG=QString::number(strB);
+    }
+
+    QString strQQYD=SpellUpDataTable(QString(m_sQQBM),"9011",4,"QnRtn=1");//请求应答数据
+    QByteArray  baSpell=SpellPackage(strQQYD); //拼接整个包
+
+    QString strZXJG=SpellUpDataTable(QString(m_sQQBM),"9012",4,"ExeRtn=1");//执行结果数据
+    QByteArray  baSpell1=SpellPackage(strZXJG); //拼接整个包
+}
+bool CJCBase::Ans1063(char *pd,int len)
+{
+    QString strQQYD=SpellUpDataTable(QString(m_sQQBM),"9011",4,"QnRtn=1");//请求应答数据
+    QByteArray  baSpell=SpellPackage(strQQYD); //拼接整个包
+
+    QString strN="RtdInterval="+QString::number(m_nFSBJG);
+    QString strFSXY=SpellUpDataTable(QString(m_sQQBM),"1063",4,strN);//发送相应
+    QByteArray  baSpell1=SpellPackage(strFSXY); //拼接整个包
+
+    QString strZXJG=SpellUpDataTable(QString(m_sQQBM),"9012",4,"ExeRtn=1");//执行结果数据
+    QByteArray  baSpell2=SpellPackage(strZXJG); //拼接整个包
+}
+bool CJCBase::Ans1064(char *pd,int len)
+{
+    char sPD[1024];
+    memset(sPD,0,1024);
+    strncpy((char *)sPD,pd,len);
+    QString strPD=QString(QLatin1String(sPD));
+    QStringList list1 = strPD.split("=");
+    if(list1.size()==2)
+    {
+        QString strA=list1.at(0);
+        QString strB=list1.at(1);
+        if(strA.compare("RtdInterval")==0)
+            m_nFSBJG=QString::number(strB);
+    }
+
+    QString strQQYD=SpellUpDataTable(QString(m_sQQBM),"9011",4,"QnRtn=1");//请求应答数据
+    QByteArray  baSpell=SpellPackage(strQQYD); //拼接整个包
+
+    QString strZXJG=SpellUpDataTable(QString(m_sQQBM),"9012",4,"ExeRtn=1");//执行结果数据
+    QByteArray  baSpell1=SpellPackage(strZXJG); //拼接整个包
+}
+
+bool CJCBase::Ans1072(const char *pd, int len)
+{
+    char sPD[1024];
+    memset(sPD,0,1024);
+    strncpy((char *)sPD,pd,len);
+    QString strPD=QString(QLatin1String(sPD));
+    QStringList list1 = strPD.split("=");
+    if(list1.size()==2)
+    {
+        QString strA=list1.at(0);
+        QString strB=list1.at(1);
+        if(strA.compare("NewPW")==0)
+        {
+            QByteArray by=strB.toLatin1();
+            char * sPW=by.data();
+            strncpy((char *)&m_sFWMM[3],sPW,6);
+        }
+    }
+    QString strQQYD=SpellUpDataTable(QString(m_sQQBM),"9011",4,"QnRtn=1");//请求应答数据
+    QByteArray  baSpell=SpellPackage(strQQYD); //拼接整个包
+
+    QString strZXJG=SpellUpDataTable(QString(m_sQQBM),"9012",4,"ExeRtn=1");//执行结果数据
+    QByteArray  baSpell1=SpellPackage(strZXJG); //拼接整个包
+}
+bool CJCBase::Ans2011(const char *pd, int len)
+{
+    m_bSSSJ=true;
+
+    QString strQQYD=SpellUpDataTable(QString(m_sQQBM),"9011",4,"QnRtn=1");//请求应答数据
+    QByteArray  baSpell=SpellPackage(strQQYD); //拼接整个包
+
+    QString strZXJG=SpellUpDataTable(QString(m_sQQBM),"9012",4,"ExeRtn=1");//执行结果数据
+    QByteArray  baSpell1=SpellPackage(strZXJG); //拼接整个包
 }

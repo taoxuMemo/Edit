@@ -170,11 +170,11 @@ struct stuSJCYZ
 {
     char sValue[15];
     char sTime[15];
-//    SJCYZ()
-//    {
-//        for(int i=0;i<15;i++)
-//            sValue[i]=0,sTime[i]=0;
-//    }
+    //    SJCYZ()
+    //    {
+    //        for(int i=0;i<15;i++)
+    //            sValue[i]=0,sTime[i]=0;
+    //    }
 };
 //因子上报设置
 struct stuYZSBSZ
@@ -182,6 +182,7 @@ struct stuYZSBSZ
     char sCoding[7];                //编码
     double  dAlarmUp;               //报警上限
     double  dAlarmDown;             //报警下限
+    bool isrun;
     bool rtd;
     bool fcou;
     bool fmax;
@@ -197,6 +198,8 @@ struct stuYZSBSZ
     bool rmax;
     bool rmin;
     bool ravg;
+    int  nOper;             //操作符
+    int  nCoef;             //系数
 };
 
 //水监测因子编码表
@@ -208,12 +211,20 @@ struct stuSJCYZBMB
     char sNDUnit[20];       //计量单位（浓度）
     char sPFLUint[10];      //计量单位（排放量）
     char sDataLen[10];      //数据长度（浓度）
-    int  nOper;             //操作符
-    int  nCoef;             //系数
+
     stuYZSBSZ stuYZ;
 };
 
-
+//上传数据结构
+struct UpDataStu
+{
+    int  nIP;          //发给IP地址序号
+    char sQN[21];      //请求编码
+    int  nCnt;         //发送次数
+    char sTime[20];    //上次发送时间
+    char sData[1500];  //发送数据内容
+    int  nLen;         //有效位长度
+};
 class QDatatype
 {
 public:

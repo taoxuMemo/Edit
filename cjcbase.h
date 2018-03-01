@@ -41,9 +41,28 @@ public:
     bool m_bKGL;    //开关量
     int   m_nOverTime;       //超时响应时间
     int   m_nReCount;        //重发次数
+    QList<UpDataStu> m_listSend;
+    bool  SendData();
     bool  CheckData(char * pData, int nLen);
     bool  CommandData();
     bool  Splitinst(char *p,QString &a,QString &b);  //拆分指令等号前后的
+    QList<QString>  SplitMH(char *pd , int nlen);    //拆分数据CP=后数据段数量 以冒号为分割
+    //*************************************与平台通讯数据解析********************************************
+    int         GetCN(char * pData,int nLen);//得到命令编码
+    QString     GetQN(char * pData,int nLen);//得到请求编码
+    int         GetST(char * pData,int nLen);//得到系统编码
+    QString     GetPW(char * pData,int nLen);//得到访问密码
+    QString     GetMN(char * pData,int nLen);//得到设备唯一标识
+    bool        CommandCode(int nCommand);//解析上位机传过来的命令编码
+    bool        Ans1000(const char * pd ,int len);//设置超时时间及重发次数 参数为CP=后边内容
+    bool        Ans1011(const char * pd ,int len); //提取现场机时间 参数为CP=后边内容
+    bool        Ans1012(const char * pd ,int len); //提取现场机时间 参数为CP=后边内容
+    bool        Ans1061(const char * pd ,int len); //提取现场机时间 参数为CP=后边内容
+    bool        Ans1062(const char * pd ,int len); //提取现场机时间 参数为CP=后边内容
+    bool        Ans1063(const char * pd ,int len); //提取现场机时间 参数为CP=后边内容
+    bool        Ans1064(const char * pd ,int len); //提取现场机时间 参数为CP=后边内容
+    bool        Ans1072(const char * pd ,int len); //设置现场机访问密码
+    bool        Ans2011(const char * pd ,int len); //取污染物实时数据
     //***********拼接字符串********
     // double CalcCou(double );
     QString SpellUpStr(stuSJCYZBMB stu,double dRtd);
@@ -53,8 +72,6 @@ public:
     QString SpellUpStr(stuSJCYZBMB stu,int type,double dMax,double dMin,double dAvg,double dTotal,double dMaxZS,double dMinZS,double dAvgZS,double dTotalZS);//type 判断分钟还是小时还是日
     QString SpellUpDataTable(QString QQBM,QString MLBM,int nFlag,QString sDataArea);    //拼接数据段结构组成表
     bool    virtual UploadReal();  //上传实时数据
-
-
    //************************得到数据段各个字段的值**********************
  //   bool getQQBMQN(QString&,char *);
 

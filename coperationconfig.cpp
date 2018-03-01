@@ -38,6 +38,62 @@ QString  COperationConfig::getText(QString sGroup,QString sKey)
     }
     return re;
 }
+//****读取监测因子****************
+bool COperationConfig::ReadItem(stuYZSBSZ *stu, int num)
+{
+
+    if(!m_bTag)
+        return 0;
+    QString strName="item"+QString::number(num);
+    QString val=getText(strName,"coding");
+    if(val.length()!=6)
+    {
+        COperationConfig::writelog(CONFIGCODINGERROR,QString::number(num).toLatin1().data());
+        return false;
+    }
+    strncpy(stu->sCoding,val.toLatin1().data(),6);
+
+    val=getText(strName,"isrun");
+    stu->isrun=val.toInt();
+
+    val=getText(strName,"real");
+    stu->rtd=val.toInt();
+
+    val=getText(strName,"favg");
+    stu->favg=val.toInt();
+    val=getText(strName,"fmax");
+    stu->fmax=val.toInt();
+    val=getText(strName,"fmin");
+    stu->fmin=val.toInt();
+    val=getText(strName,"ftotal");
+    stu->fcou=val.toInt();
+    val=getText(strName,"xavg");
+    stu->havg=val.toInt();
+    val=getText(strName,"xmax");
+    stu->hmax=val.toInt();
+    val=getText(strName,"xmin");
+    stu->fmin=val.toInt();
+    val=getText(strName,"xtotal");
+    stu->hcou=val.toInt();
+    val=getText(strName,"ravg");
+    stu->ravg=val.toInt();
+    val=getText(strName,"rmax");
+    stu->rmax=val.toInt();
+    val=getText(strName,"rmin");
+    stu->rmin=val.toInt();
+    val=getText(strName,"rtotal");
+    stu->rcou=val.toInt();
+    val=getText(strName,"alarmup");
+    stu->dAlarmUp=val.toInt();
+    val=getText(strName,"alarmdown");
+    stu->dAlarmDown=val.toInt();
+    val=getText(strName,"oper");
+    stu->nOper=val.toInt();
+    val=getText(strName,"coef");
+    stu->nCoef=val.toInt();
+
+    return true;
+}
 bool COperationConfig::ReadIPAddr(stuIPAddr *stu,int num)
 {
     if(!m_bTag)
@@ -365,34 +421,34 @@ bool COperationConfig::writeChn(stuChannel chn,int num)
     m_file->setValue(Sec+"/cycle",QString::number(chn.nCycle));
     return true;
 }
-bool COperationConfig::ReadItem(stuYZSBSZ *stu, int num)
-{
-    QString strItem="item"+QString::number(num);
-    QString strRe=getText(strItem,"coding");
-    if(strRe.length()!=6)
-        return false;
-    strncpy(stu->sCoding,strRe.toLatin1().data(),7);
-    stu->rtd= getText(strItem,"rtd").toInt();
-    stu->favg= getText(strItem,"favg").toInt();
-    stu->fmax= getText(strItem,"fmax").toInt();
-    stu->fmin= getText(strItem,"fmin").toInt();
-    stu->fcou= getText(strItem,"ftotal").toInt();
+//bool COperationConfig::ReadItem(stuYZSBSZ *stu, int num)
+//{
+//    QString strItem="item"+QString::number(num);
+//    QString strRe=getText(strItem,"coding");
+//    if(strRe.length()!=6)
+//        return false;
+//    strncpy(stu->sCoding,strRe.toLatin1().data(),7);
+//    stu->rtd= getText(strItem,"rtd").toInt();
+//    stu->favg= getText(strItem,"favg").toInt();
+//    stu->fmax= getText(strItem,"fmax").toInt();
+//    stu->fmin= getText(strItem,"fmin").toInt();
+//    stu->fcou= getText(strItem,"ftotal").toInt();
 
-    stu->havg= getText(strItem,"xavg").toInt();
-    stu->hmax= getText(strItem,"xmax").toInt();
-    stu->hmin= getText(strItem,"xmin").toInt();
-    stu->hcou= getText(strItem,"xtotal").toInt();
+//    stu->havg= getText(strItem,"xavg").toInt();
+//    stu->hmax= getText(strItem,"xmax").toInt();
+//    stu->hmin= getText(strItem,"xmin").toInt();
+//    stu->hcou= getText(strItem,"xtotal").toInt();
 
-    stu->ravg= getText(strItem,"ravg").toInt();
-    stu->rmax= getText(strItem,"rmax").toInt();
-    stu->rmin= getText(strItem,"rmin").toInt();
-    stu->rcou= getText(strItem,"rtotal").toInt();
+//    stu->ravg= getText(strItem,"ravg").toInt();
+//    stu->rmax= getText(strItem,"rmax").toInt();
+//    stu->rmin= getText(strItem,"rmin").toInt();
+//    stu->rcou= getText(strItem,"rtotal").toInt();
 
-    stu->dAlarmUp= getText(strItem,"alarmup").toDouble();
-    stu->dAlarmDown= getText(strItem,"alarmdown").toDouble();
+//    stu->dAlarmUp= getText(strItem,"alarmup").toDouble();
+//    stu->dAlarmDown= getText(strItem,"alarmdown").toDouble();
 
 
-}
+//}
 //********************************静态成员变量用于写入日志文件**************************************
 void COperationConfig::writelog(int nErr, char *sRemark)
 {
