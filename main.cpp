@@ -3,27 +3,26 @@
 #include "qdatatype.h"
 #include"qmessagebox.h"
 #include"ctool.h"
+#include "QDateTime"
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
- //   w.setWindowFlags(w.windowFlags()&~Qt::WindowMaximizeButtonHint&~Qt::WindowMinimizeButtonHint);
-  //  w.setWindowFlags(w.windowFlags()&~Qt::WindowMaximizeButtonHint&~Qt::WindowMinimizeButtonHint);
-//    QString str;//="hah123fjdk";
- //   int aa=str.toInt();
-//    char aa='5';
-//    char bb='F';
-//    int zz=CTool::chartohex8(aa,bb);
-//    int i=52;
-//    QString b=QString("%1").arg(i, 4, 10, QChar('0'));
-    QString strrr="das123";
-    int aa=strrr.toInt();
-    int nn=atoi("365hh");
-    int nCRC=0x0D3F;
-    QString c=QString("%1").arg(nCRC, 16, 2, QChar('0')).toUpper();
-    QString str=c.toUpper();
-    QString strr="43127.34";
-    QString ss=strr.mid(2,10);
+//    QDateTime dt=QDateTime::currentDateTime();
+//    QDateTime  dt1 = QDateTime::fromString("2018-03-02 09:07:00", "yyyy-MM-dd hh:mm:ss");
+//    int nSec=dt1.secsTo(dt);
+    QList<QString> list1;
+    list1.insert(0,"aaaa");
+    list1.insert(0,"bbbb");
+    list1.insert(0,"cccc");
+    list1.append("ddd");
+    list1.insert(0,"eeee");
+    list1.insert(0,"ffff");
+    int nList=list1.size();
+    QString str1=list1.takeAt(0);
+    QString str2=list1.takeAt(0);
+    QString str3=list1.takeAt(0);
+    list1.removeAt(1);;
     if(w.m_bRun)
         w.show();
     else

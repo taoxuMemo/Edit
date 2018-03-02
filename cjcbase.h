@@ -26,6 +26,7 @@ public:
     char  m_nMark;           //分包及应答标志
     int   m_nPNUM;           //分包数量
     int   m_nPNO;            //分包号
+    int   m_nIPNO;           //当前数据的IP地址
     //**********************************************************
     //   int
     //*********************常规参数变量***********************
@@ -42,7 +43,8 @@ public:
     int   m_nOverTime;       //超时响应时间
     int   m_nReCount;        //重发次数
     QList<UpDataStu> m_listSend;
-    bool  SendData();
+    bool    SendData();  //从发送队列里提取发送
+    bool    AnsData(int nIP,QString strQN);   //接收到平台相应从列表里删除
     bool  CheckData(char * pData, int nLen);
     bool  CommandData();
     bool  Splitinst(char *p,QString &a,QString &b);  //拆分指令等号前后的
@@ -54,15 +56,16 @@ public:
     QString     GetPW(char * pData,int nLen);//得到访问密码
     QString     GetMN(char * pData,int nLen);//得到设备唯一标识
     bool        CommandCode(int nCommand);//解析上位机传过来的命令编码
-    bool        Ans1000(const char * pd ,int len);//设置超时时间及重发次数 参数为CP=后边内容
-    bool        Ans1011(const char * pd ,int len); //提取现场机时间 参数为CP=后边内容
-    bool        Ans1012(const char * pd ,int len); //提取现场机时间 参数为CP=后边内容
-    bool        Ans1061(const char * pd ,int len); //提取现场机时间 参数为CP=后边内容
-    bool        Ans1062(const char * pd ,int len); //提取现场机时间 参数为CP=后边内容
-    bool        Ans1063(const char * pd ,int len); //提取现场机时间 参数为CP=后边内容
-    bool        Ans1064(const char * pd ,int len); //提取现场机时间 参数为CP=后边内容
-    bool        Ans1072(const char * pd ,int len); //设置现场机访问密码
-    bool        Ans2011(const char * pd ,int len); //取污染物实时数据
+    bool        Ans1000(const char * pd ,int len,int nIP);//设置超时时间及重发次数 参数为CP=后边内容
+    bool        Ans1011(const char * pd ,int len,int nIP); //提取现场机时间 参数为CP=后边内容
+    bool        Ans1012(const char * pd ,int len,int nIP); //提取现场机时间 参数为CP=后边内容
+    bool        Ans1061(const char * pd ,int len,int nIP); //提取现场机时间 参数为CP=后边内容
+    bool        Ans1062(const char * pd ,int len,int nIP); //提取现场机时间 参数为CP=后边内容
+    bool        Ans1063(const char * pd ,int len,int nIP); //提取现场机时间 参数为CP=后边内容
+    bool        Ans1064(const char * pd ,int len,int nIP); //提取现场机时间 参数为CP=后边内容
+    bool        Ans1072(const char * pd ,int len,int nIP); //设置现场机访问密码
+    bool        Ans2011(const char * pd ,int len,int nIP); //取污染物实时数据
+    bool        Ans9014(const char * pd ,int len,int nIP); //上位机应答数据
     //***********拼接字符串********
     // double CalcCou(double );
     QString SpellUpStr(stuSJCYZBMB stu,double dRtd);
