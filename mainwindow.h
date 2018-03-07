@@ -97,6 +97,8 @@ private slots:
     void DisplayMsg(QString);
 
     void SerialData(QString);
+    void on_pushButton_3_clicked();
+
 private:
     Ui::MainWindow *ui;
 

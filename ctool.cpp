@@ -34,7 +34,20 @@ int CTool::chartohex8(char h,char l)
     return (high<<=4)|=low;
 
 }
-
+int CTool::strtoint(char *p, int len)
+{
+    int nRe=0;
+    for(int i=0;i<len;i++)
+    {
+        int n = CTool::chartoint(*p);
+        if(n==-1)
+            return -1;
+        nRe*=10;
+        nRe+=n;
+        p++;
+    }
+    return nRe;
+}
 unsigned int CTool::CRC16_Checkout ( unsigned char *puchMsg, unsigned int usDataLen )
 {
     unsigned int i,j,crc_reg,check;

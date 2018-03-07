@@ -11,6 +11,12 @@ int main(int argc, char *argv[])
 //    QDateTime dt=QDateTime::currentDateTime();
 //    QDateTime  dt1 = QDateTime::fromString("2018-03-02 09:07:00", "yyyy-MM-dd hh:mm:ss");
 //    int nSec=dt1.secsTo(dt);
+    QString strDou="--";
+    double dou=strDou.toDouble();
+    if(dou==0.2)
+        {
+        int aaaaa=1000;
+    }
     QList<QString> list1;
     list1.insert(0,"aaaa");
     list1.insert(0,"bbbb");

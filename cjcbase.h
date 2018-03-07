@@ -14,6 +14,7 @@ public:
     explicit CJCBase(QObject *parent = nullptr);
     bool    virtual SerialInterFace(char *pData,int nLen,int nID)=0;//串口接口  参数1.内容2.长度3.接口号
     bool    virtual NetInterFace(char *pData,int nLen,int nID)=0;   //网络接口  参数1.内容2.长度3.接口号
+    bool    virtual SerialInterFaceNew(char *pData,int nLen,int nID)=0;
     bool    virtual init();
     bool    getItem();
     bool    TcpSendVal(char *pData,int nLen,int nID=-1);            //nID表示上传SOCKET号 默认-1全部上传
@@ -21,12 +22,14 @@ public:
     char  m_sXTBM[SJDJGZCB_STBM_LEN+1]; //系统编码
     char  m_sMLBM[SJDJGZCB_MLBM_LEN+1]; //命令编码
     char  m_sFWMM[SJDJGZCB_FWMM_LEN+1]; //访问密码
-    char  m_sSBWYBS[SJDJGZCB_SBWYBS_LEN+1];//设备唯一标识
+    char  m_sSBWYBS[SJDJGZCB_SBWYBS_LEN+1]; //设备唯一标识
+    char  m_sDataArea[2048];                //数据区内容
+    int   m_nDataArea;                      //数据区长度
     int   m_nXTBM;
     char  m_nMark;           //分包及应答标志
     int   m_nPNUM;           //分包数量
     int   m_nPNO;            //分包号
-    int   m_nIPNO;           //当前数据的IP地址
+   // int   m_nIPNO;           //当前数据的IP地址
     //**********************************************************
     //   int
     //*********************常规参数变量***********************
@@ -44,11 +47,13 @@ public:
     int   m_nReCount;        //重发次数
     QList<UpDataStu> m_listSend;
     bool    SendData();  //从发送队列里提取发送
-    bool    AnsData(int nIP,QString strQN);   //接收到平台相应从列表里删除
+    bool    AnsData();   //接收到平台相应从列表里删除
     bool  CheckData(char * pData, int nLen);
     bool  CommandData();
     bool  Splitinst(char *p,QString &a,QString &b);  //拆分指令等号前后的
     QList<QString>  SplitMH(char *pd , int nlen);    //拆分数据CP=后数据段数量 以冒号为分割
+
+   // QString getSplit();
     //*************************************与平台通讯数据解析********************************************
     int         GetCN(char * pData,int nLen);//得到命令编码
     QString     GetQN(char * pData,int nLen);//得到请求编码
@@ -56,16 +61,16 @@ public:
     QString     GetPW(char * pData,int nLen);//得到访问密码
     QString     GetMN(char * pData,int nLen);//得到设备唯一标识
     bool        CommandCode(int nCommand);//解析上位机传过来的命令编码
-    bool        Ans1000(const char * pd ,int len,int nIP);//设置超时时间及重发次数 参数为CP=后边内容
-    bool        Ans1011(const char * pd ,int len,int nIP); //提取现场机时间 参数为CP=后边内容
-    bool        Ans1012(const char * pd ,int len,int nIP); //提取现场机时间 参数为CP=后边内容
-    bool        Ans1061(const char * pd ,int len,int nIP); //提取现场机时间 参数为CP=后边内容
-    bool        Ans1062(const char * pd ,int len,int nIP); //提取现场机时间 参数为CP=后边内容
-    bool        Ans1063(const char * pd ,int len,int nIP); //提取现场机时间 参数为CP=后边内容
-    bool        Ans1064(const char * pd ,int len,int nIP); //提取现场机时间 参数为CP=后边内容
-    bool        Ans1072(const char * pd ,int len,int nIP); //设置现场机访问密码
-    bool        Ans2011(const char * pd ,int len,int nIP); //取污染物实时数据
-    bool        Ans9014(const char * pd ,int len,int nIP); //上位机应答数据
+    bool        Ans1000();//设置超时时间及重发次数 参数为CP=后边内容
+    bool        Ans1011(); //提取现场机时间 参数为CP=后边内容
+    bool        Ans1012(); //提取现场机时间 参数为CP=后边内容
+    bool        Ans1061(); //提取现场机时间 参数为CP=后边内容
+    bool        Ans1062(); //提取现场机时间 参数为CP=后边内容
+    bool        Ans1063(); //提取现场机时间 参数为CP=后边内容
+    bool        Ans1064(); //提取现场机时间 参数为CP=后边内容
+    bool        Ans1072(); //设置现场机访问密码
+    bool        Ans2011(); //取污染物实时数据
+    bool        Ans9014(); //上位机应答数据
     //***********拼接字符串********
     // double CalcCou(double );
     QString SpellUpStr(stuSJCYZBMB stu,double dRtd);

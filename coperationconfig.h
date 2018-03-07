@@ -50,6 +50,8 @@
 #define   ERRORPACKAGEST            0x00000097       //
 #define   ERRORSJDJGZCCNLEN         0x00000098       //数据段结构组成CN长度错误
 #define   ERRORSJDJGZCCNNAME        0x00000099       //数据段结构组成CN长度错误
+#define   ERRORSTERROR              0x000000A0       //系统交互ST码错误
+#define   ERRORSERIALPROTOCOL       0x000000A1          //新串口解析协议
 //************************************数据处理错误********************************************
 #define    ERRLOGTIMETYPE         0x00000060       //数据段结构CP=错误
 

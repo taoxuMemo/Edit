@@ -5,6 +5,8 @@
 #include "mainwindow.h"
 #include "qsqlquery.h"
 #include "qdatatype.h"
+
+#include "ccolsvr.h"
 CDBSTJC::CDBSTJC(QObject *parent) : CJCBase(parent)
 {
     int a=100;
@@ -25,17 +27,43 @@ bool CDBSTJC::NetInterFace(char *pData, int nLen, int nID)
     int len=PackageCheck(pData,nLen);
     if(len==-1)
         return false;
-     pData+=6;
+    pData+=6;
     bool  bTag=this->CheckData(pData,len);
     if(bTag==false)
         return false;
-
+    //提取系统编码整形
+    QString sSTBM=QString(QLatin1String(m_sMLBM));
+    QStringList sl=sSTBM.split("=");
+    QString str=sl.at(1);
+    int nSTBM=str.toInt();
+    CommandCode(nSTBM);
     return true;
 }
 //参数：*pData指向数据段指针，nLen数据段结构长度
+bool CDBSTJC::SerialInterFaceNew(char *pData, int nLen, int nID)
+{
+    CColSvr cs;
+    if(cs.setData(pData,nLen)==false)
+    {
+
+        COperationConfig::writelog(ERRORSERIALPROTOCOL,QString::number(cs.m_nErrCode).toLatin1().data());
+        return false;
+    }
+    QList <stuCol> ls=cs.getlist();
+    for(int i=0;i<ls.size();i++)
+    {
+        stuCol stu=ls.at(i);
+        m_pMain->m_mySql.InsertRD(QString(QLatin1String(stu.sName)),QString(QLatin1String(stu.sType)),stu.dvalue);
+    }
+    if(cs.m_nErrCode!=0)
+    {
+        COperationConfig::writelog(ERRORSERIALPROTOCOL,QString::number(cs.m_nErrCode).toLatin1().data());
+    }
+    return true;
+}
 bool CDBSTJC::SerialInterFace(char *pData, int nLen, int nID)
 {
-  //  if(nLen<)
+    //  if(nLen<)
     int len=PackageCheck(pData,nLen);
     if(len==-1)
         return false;
@@ -161,7 +189,7 @@ bool  CDBSTJC::GetValue(int nType)
 
     QString strSpell;
     QString strMLBM;
-//***********************拼接数据区字符串*******************************88
+    //***********************拼接数据区字符串*******************************88
     QDateTime dt=QDateTime::currentDateTime();//查询终止时间
     QDateTime dtmin=dt;//查询起始时间
     double dFQMax=0,dFQMin=0,dFQAvg=0,dFQCou=0;//污水的相关值

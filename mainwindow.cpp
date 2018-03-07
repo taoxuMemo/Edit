@@ -112,7 +112,7 @@ bool MainWindow::init()
     if(m_mySql.init()==false)
     {
         COperationConfig::writelog(CONFIGEQUIPMENTID);
-                return false;
+        return false;
     }
     return true;
 
@@ -328,3 +328,14 @@ void MainWindow::timerEvent(QTimerEvent *event)
 
 
 
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    QString str=ui->textEdit->toPlainText();
+    char sData[1024];
+    strncpy((char *)sData,str.toLatin1().data(),str.size());
+    sData[str.size()]=0x0D;
+    sData[str.size()+1]=0x0A;
+    sData[str.size()+2]=0x00;
+    m_pBase->SerialInterFaceNew((char *)sData,str.size()+2,0);
+}

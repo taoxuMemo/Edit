@@ -13,7 +13,8 @@ public:
     int     PackageCheck(char * pData,int nLen);  //验证包是否有效，并且赋值给成员变量,返回包类型
     int     AddPackageCheck(char *pData,int nLen);//封装包
     QByteArray SpellPackage(QString);
-    char    m_sData[1500];
+    char    m_sData[2048];
+    int     m_nDataLen;
     int     m_nSerID;
     int     m_nNetID;
     MainWindow * m_pMain;

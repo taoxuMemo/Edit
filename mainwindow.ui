@@ -18,9 +18,9 @@
     <property name="geometry">
      <rect>
       <x>310</x>
-      <y>0</y>
+      <y>199</y>
       <width>480</width>
-      <height>450</height>
+      <height>251</height>
      </rect>
     </property>
    </widget>
@@ -57,6 +57,29 @@
       <y>100</y>
       <width>261</width>
       <height>341</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_3">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>20</y>
+      <width>111</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>发送测试数据</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="textEdit">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>60</y>
+      <width>441</width>
+      <height>111</height>
      </rect>
     </property>
    </widget>
