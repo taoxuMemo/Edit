@@ -33,7 +33,8 @@
 #define    CONFIGCODINGERROR        0x0000001C      //读取item段的coding错误
 //*********************************数据库错误****************************************8
 #define    ERRLOGDBOPENFAIL         0x00000040      //数据库打开失败
-#define    ERRLOGDBINSERTRD         0x00000041      //数据库打开失败
+#define    ERRLOGDBINSERTRD         0x00000041      //存储实时数据失败
+#define    ERRLOGDBINSERTINFO         0x00000045      //存储信息数据失败
 #define    ERRLOGDBSELTIME          0x00000042      //查询实时数据起始时间与终止时间错误
 #define    ERRLOGDBSELEXEC          0x00000043      //执行select sql语句时异常
 #define    ERRLOGDBDATALEN          0x00000044      //执行查询数据长度时语句时异常

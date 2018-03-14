@@ -49,11 +49,22 @@ bool CDBSTJC::SerialInterFaceNew(char *pData, int nLen, int nID)
         COperationConfig::writelog(ERRORSERIALPROTOCOL,QString::number(cs.m_nErrCode).toLatin1().data());
         return false;
     }
-    QList <stuCol> ls=cs.getlist();
-    for(int i=0;i<ls.size();i++)
+    if(cs.m_nCN==2011)
     {
-        stuCol stu=ls.at(i);
-        m_pMain->m_mySql.InsertRD(QString(QLatin1String(stu.sName)),QString(QLatin1String(stu.sType)),stu.dvalue);
+        QList <stuCol> ls=cs.getlist();
+        for(int i=0;i<ls.size();i++)
+        {
+            stuCol stu=ls.at(i);
+            m_pMain->m_mySql.InsertRD(QString(QLatin1String(stu.sName)),QString(QLatin1String(stu.sType)),stu.dvalue);
+        }
+    }else if(cs.m_nCN==3020)
+    {
+        QList <stuInfo> ls=cs.getlistinfo();
+        for(int i=0;i<ls.size();i++)
+        {
+            stuInfo stu=ls.at(i);
+            m_pMain->m_mySql.InsertInfo(QString(QLatin1String(stu.sName)),QString(QLatin1String(stu.sType)),QString(QLatin1String(stu.sValue)));
+        }
     }
     if(cs.m_nErrCode!=0)
     {

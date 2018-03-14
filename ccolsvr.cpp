@@ -122,3 +122,96 @@ QList<stuCol>   CColSvr::getlist()
         return relist;
     }
 }
+QList<stuInfo>   CColSvr::getlistinfo()
+{
+
+    QList<stuInfo> relist;
+    if(m_nCN==3020)
+    {
+        QString str=QString(QLatin1String(m_sData));
+        QStringList sl=str.split(";");
+        if(sl.size()!=2)
+        {
+            m_nErrCode=201;
+            return NULL;
+        }
+        QString  str1=sl.at(0);
+        QStringList sl1=str1.split("=");
+        QString  str12=sl1.at(1);
+        if(str12.size()!=6)
+        {
+            m_nErrCode=202;
+            return NULL;
+        }
+
+
+        QString  str2=sl.at(1);
+        QStringList sl2=str2.split("=");
+        for(int i=0;i<sl2.size();i++)
+        {
+            stuInfo stu;
+            QString     str21=sl2.at(i);
+            QStringList sl21=str21.at("-");
+            if(sl21.size()!=2)
+            {
+                m_nErrCode=203;
+                continue;
+            }
+            QString     str211=sl21.at(0);//信息编码
+            if(str211.size()!=6)
+            {
+                m_nErrCode=204;
+                continue;
+            }
+            QString     str212=sl21.at(1);
+            QStringList sl212=str212.split("=");
+            if(sl212.size()!=2)
+            {
+                m_nErrCode=205;
+                continue;
+            }
+            QString     str2121=sl212.at(0);
+            QString     str2122=sl212.at(1);   //值
+            if(str2122.size()>10)
+            {
+                m_nErrCode=206;
+                continue;
+            }
+            strncpy(stu.sName,str12.toLatin1().data(),6);
+            strncpy(stu.sType,str211.toLatin1().data(),6);
+            strncpy(stu.sValue,str2122.toLatin1().data(),10);
+            relist.append(stu);
+        }
+        return relist;
+    }
+}
+
+
+
+bool CColSvr::GetSZLStr(int nPort, bool bMark, QString sCoding, QString sPol)
+{
+    if(m_strSetting.size()!=0)
+    {
+        m_strSetting+=";";
+    }
+    m_strSetting+=QString::number(nPort+20)+","+QString::number(bMark)+",";
+    return true;
+}
+bool CColSvr::GetMNLStr(int nPort, bool bMark, int nType)
+{
+    if(m_strSetting.size()!=0)
+    {
+        m_strSetting+=";";
+    }
+    m_strSetting+=QString::number(nPort+30)+","+QString::number(bMark)+","+QString::number(nType);
+    return true;
+}
+bool CColSvr::GetKGLStr(int nPort, int nType)
+{
+    if(m_strSetting.size()!=0)
+    {
+        m_strSetting+=";";
+    }
+    m_strSetting+=QString::number(nPort+20)+","+QString::number(nType);
+    return true;
+}

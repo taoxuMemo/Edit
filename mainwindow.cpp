@@ -300,35 +300,6 @@ void MainWindow::timerEvent(QTimerEvent *event)
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void MainWindow::on_pushButton_3_clicked()
 {
     QString str=ui->textEdit->toPlainText();

@@ -52,8 +52,8 @@ color: rgb(238, 238, 236);</string>
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>80</width>
-      <height>80</height>
+      <width>81</width>
+      <height>81</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -205,8 +205,8 @@ color: rgb(238, 238, 236);</string>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>30</y>
+      <x>320</x>
+      <y>20</y>
       <width>89</width>
       <height>25</height>
      </rect>

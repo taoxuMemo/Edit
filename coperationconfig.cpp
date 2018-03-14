@@ -56,7 +56,7 @@ bool COperationConfig::ReadItem(stuYZSBSZ *stu, int num)
     val=getText(strName,"isrun");
     stu->isrun=val.toInt();
 
-    val=getText(strName,"real");
+    val=getText(strName,"rtd");
     stu->rtd=val.toInt();
 
     val=getText(strName,"favg");
