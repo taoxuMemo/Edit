@@ -133,7 +133,7 @@ QList<stuInfo>   CColSvr::getlistinfo()
         if(sl.size()!=2)
         {
             m_nErrCode=201;
-            return NULL;
+            return relist;
         }
         QString  str1=sl.at(0);
         QStringList sl1=str1.split("=");
@@ -141,7 +141,7 @@ QList<stuInfo>   CColSvr::getlistinfo()
         if(str12.size()!=6)
         {
             m_nErrCode=202;
-            return NULL;
+            return relist;
         }
 
 
@@ -151,7 +151,7 @@ QList<stuInfo>   CColSvr::getlistinfo()
         {
             stuInfo stu;
             QString     str21=sl2.at(i);
-            QStringList sl21=str21.at("-");
+            QStringList sl21=str21.split("-");
             if(sl21.size()!=2)
             {
                 m_nErrCode=203;

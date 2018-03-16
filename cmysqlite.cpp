@@ -28,6 +28,17 @@ bool CMySqlite::InsertRD(QString sCoding,QString sType,double dValue)
     }
     return true;
 }
+bool CMySqlite::InsertZSRD(QString sCoding, QString sType, double dValue, double dzsValue)
+{
+    QSqlQuery query(database);
+    QString strSql="INSERT INTO c_rt_RealData (coding,type,nvalue,nzsvalue) VALUES(\""+sCoding +"\",\""+sType+"\","+QString::number(dValue)+","+QString::number(dzsValue)+")";
+    if(!query.exec(strSql))
+    {
+        COperationConfig::writelog(ERRLOGDBINSERTZSRD,strSql.toLatin1().data());
+        return false;
+    }
+    return true;
+}
 bool CMySqlite::InsertInfo(QString sCoding, QString sType, QString sValue)
 {
     QSqlQuery query(database);

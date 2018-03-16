@@ -13,6 +13,7 @@ public:
     QSqlDatabase database;
     bool init();
     bool InsertRD(QString sCoding,QString sType,double dValue);
+    bool InsertZSRD(QString sCoding,QString sType,double dValue,double dzsValue);
     bool InsertInfo(QString sCoding,QString sType,QString sValue);
     QSqlQuery SelRealData(QString coding , QDateTime begin , QDateTime end ,double &dMax,double &dMin,double &dAvg,double &dTotal,int &num);
     QSqlQuery SelRtdData(QDateTime begin , QDateTime end);

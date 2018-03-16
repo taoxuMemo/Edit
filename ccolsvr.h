@@ -10,10 +10,12 @@ struct stuCol
         memset(sName,0,7);
         memset(sType,0,7);
         dvalue=0.0;
+        dzsvalue=0.0;
     }
     char sName[7];
     char sType[7];
     double dvalue;
+    double dzsvalue;
 };
 
 struct stuInfo
