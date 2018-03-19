@@ -9,7 +9,7 @@ CQJCYZ::CQJCYZ(QObject *parent) : CJCBase(parent)
     CJCBase::init();
     m_nTimerId = startTimer(1000);
 }
-CQJCYZ::~CDBSTJC()
+CQJCYZ::~CQJCYZ()
 {
     killTimer(m_nTimerId);
 }
@@ -40,20 +40,24 @@ bool  CQJCYZ::GetValue(int nType)
     //***********************拼接数据区字符串*******************************88
     QDateTime dt=QDateTime::currentDateTime();//查询终止时间
     QDateTime dtmin=dt;//查询起始时间
-    double dFQMax=0,dFQMin=0,dFQAvg=0,dFQCou=0;//污水的相关值
-    int num=0; //污水查询结果集的数量
+    int nSecDiff=0;//分钟相差多少秒
+    double dFQMax=0,dFQMin=0,dFQAvg=0,dFQCou=0;//废气的相关值
+    int nFQ=0; //废气查询结果集的数量
     if(nType==1)
     {
-        dtmin.addSecs(60*m_nFSBJG*-1);
+        nSecDiff=60*m_nFSBJG*-1;
+        dtmin.addSecs(nSecDiff);
         strMLBM="2051";
     }else if(nType==2)
     {
-        dtmin.addSecs(60*60*-1);
+        nSecDiff=60*60;
+        dtmin.addSecs(nSecDiff);
         strMLBM="2061";
 
     }else if(nType==3)
     {
-        dtmin.addDays(-1);
+        nSecDiff=60*60*24;
+        dtmin.addSecs(nSecDiff);
         strMLBM="2031";
     }else
     {
@@ -63,8 +67,72 @@ bool  CQJCYZ::GetValue(int nType)
     //添加DataTime字段
     strSpell+="DataTime="+QDateTime::currentDateTime().toString("yyyyMMddhhmmss")+";";
 
-    QSqlQuery mysql=m_pMain->m_mySql.SelRealData("a00000",dtmin,dt,dFQMax,dFQMin,dFQAvg,dFQCou,num);
+    QSqlQuery mysql=m_pMain->m_mySql.SelRealData("a00000",dtmin,dt,dFQMax,dFQMin,dFQAvg,dFQCou,nFQ);
+    if(nFQ>0)
+    {
+        dFQCou=dFQAvg*nSecDiff;   //废气总量=废气平均值*采集周期
+        for(int i=0;i<ITEMSTULEN;i++)
+        {
+            if(strncmp(m_stuSJCYZBMB[i].sCoding,"a00000",6)==0)
+            {
+                strSpell+=SpellUpStr(m_stuSJCYZBMB[i],nType,dFQMax,dFQMin,dFQAvg,dFQCou*1000);
+                break;
+            }
+        }
+
+    }
+
+    for(int i=0;i<3;i++) //气体监测项需要则算的
+    {
+        double dMax=0,dMin=0,dAvg=0,dCou=0,dzsMax=0,dzsMin=0,dzsAvg=0;//气体因子的相关值
+        int nNum=0; //因子查询结果集的数量
+        QSqlQuery mysql=m_pMain->m_mySql.SelRealData(g_QTJCZSCoding[i],dtmin,dt,dMax,dMin,dAvg,dCou,nNum);
+        if(nNum>0) //确定是否有该项监测因子数据
+        {
+            if(nFQ>0)//是否有废气数据以便计算污染项总量
+            {
+                dCou=dAvg*dFQCou;
+            }
+            dzsMax=zsValue(dMax);
+            dzsMin=zsValue(dMin);
+            dzsAvg=zsValue(dAvg);
+            for(int j=0;j<ITEMSTULEN;j++)
+            {
+                if(strncmp(m_stuSJCYZBMB[j].sCoding,g_QTJCZSCoding[i],6)==0)
+                {
+                    strSpell+=SpellUpStr(m_stuSJCYZBMB[j],nType,dFQMax,dFQMin,dFQAvg,dFQCou,dzsMax,dzsMin,dzsAvg);
+                    break;
+                }
+            }
+        }
+
+    }
+    QString strQQBM=QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz");
+    QString strDataTable=SpellUpDataTable(strQQBM,strMLBM,4,strSpell);//拼接数据段
+    QByteArray  baSpell=SpellPackage(strDataTable); //拼接整个包
+    TcpSendVal(baSpell.data(),baSpell.size());
 }
+
+bool CQJCYZ::GetMinValue()
+{
+    QString strSpell;
+    QString strMLBM="2051";
+    //***********************拼接数据区字符串*******************************88
+    QDateTime dt=QDateTime::currentDateTime();//查询终止时间
+    QDateTime dtmin=dt;//查询起始时间
+    int nSecDiff=60*m_nFSBJG*-1;//分钟相差多少秒
+    dtmin.addSecs(nSecDiff);//起始时间
+    double dFQMax=0,dFQMin=0,dFQAvg=0,dFQCou=0;//废气的相关值
+    int nFQ=0; //气体查询结果集的数量
+    strSpell+="DataTime="+QDateTime::currentDateTime().toString("yyyyMMddhhmmss")+";";
+    QSqlQuery mysql=m_pMain->m_mySql.SelRealData("a00000",dtmin,dt,dFQMax,dFQMin,dFQAvg,dFQCou,nFQ);
+    if(nFQ>0)
+        dFQCou=dFQAvg*nSecDiff;   //废气总量=废气平均值*采集周期
+
+    return true;
+}
+
+
 
 //参数：*pData指向数据段指针，nLen数据段结构长度
 bool CQJCYZ::SerialInterFaceNew(char *pData, int nLen, int nID)

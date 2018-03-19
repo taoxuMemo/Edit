@@ -125,6 +125,7 @@ static const char   g_cData[]={8,7,6,5};
 static const float  g_fStop[]={1,1.5,2};
 static const char   g_cParity[]={'n','e','o'};
 extern const char * g_ipaddr[];//={"IP1","IP2","IP3","IP4","IP5","IP6"};
+extern const char * g_QTJCZSCoding[];    //废气需要则算的项
 
 struct  stuChannel{
     bool isrun;

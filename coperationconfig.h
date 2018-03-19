@@ -31,6 +31,7 @@
 #define    CONFIGEQUIPMENTID        0x0000001A      //配置文件中的设备唯一标识错误
 #define    CONFIGCOLERROR           0x0000001B      //读取配置文件COL有字段不存在
 #define    CONFIGCODINGERROR        0x0000001C      //读取item段的coding错误
+#define    CONFIGTYPEERROR          0x0000001D      //读取col段的TYPE错误错误
 //*********************************数据库错误****************************************8
 #define    ERRLOGDBOPENFAIL         0x00000040      //数据库打开失败
 #define    ERRLOGDBINSERTRD         0x00000041      //存储实时数据失败

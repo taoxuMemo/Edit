@@ -45,16 +45,34 @@ MainWindow::MainWindow(QWidget *parent) :
     m_pNetConThread=new CNetConThread(this);
 
     //****************
-    m_pBase=new CDBSTJC(this);
+    switch(m_nColType)
+    {
+        case 31:
+            m_pBase=new CQJCYZ(this);
+            break;
+        case 32:
+            m_pBase=new CDBSTJC(this);
+            break;
+        default:
+            break;
+    }
+
     m_pBase->init();
     m_pthdTest=new CTestTcpThd(this);
+    //启动串口采集线程
+    m_pSerialThread =new CSerialThread(this);
+    m_pSerialThread->SetParam("/dev/ttyO2",9600);
+    m_pSerialThread->start();
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
-    delete  m_pMyThread;
-    delete  m_pNetConThread;
+
+    m_pMyThread->stop();
+    while(m_pMyThread->isRunning());
+
+    m_pNetConThread->stop();
+    while(m_pNetConThread->isRunning());
 
     for(int i=0;i<6;i++)
     {
@@ -64,6 +82,7 @@ MainWindow::~MainWindow()
             m_pMySocket[i]=NULL;
         }
     }
+    delete ui;
 }
 bool MainWindow::init()
 {
@@ -96,6 +115,14 @@ bool MainWindow::init()
     //获取设备标识和访问密码
     //memset(m_sSBWYBS,0,sizeof(m_sSBWYBS));
     //memset(m_sPassWD,0,sizeof(m_sPassWD));
+    QString strType=m_pOpera->getText("col","type");
+    m_nColType=strType.toInt();
+    if(m_nColType!=31 && m_nColType!=32)
+    {
+        COperationConfig::writelog(CONFIGTYPEERROR);
+        return false;
+    }
+
     m_sPassWD=m_pOpera->getText("col","passwd");
     if(m_sPassWD.length()!=6)
     {

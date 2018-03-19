@@ -25,6 +25,9 @@
 #include "cdbstjc.h"
 #include "cmysqlite.h"
 #include "ctesttcpthd.h"
+#include "cqjcyz.h"
+#include "cserialthread.h"
+
 class CMySocketThread;
 class CNetConThread;
 namespace Ui {
@@ -47,6 +50,8 @@ public:
     stuIPAddr   m_stuIPA[8];
     QString     m_sSBWYBS;
     QString     m_sPassWD;
+
+    int        m_nColType;
     bool       m_bXY;   //true是TCP    flase是UDP
 
     QQueue<QString> m_queCom;   //接收com发来的数据
@@ -106,6 +111,7 @@ private:
 
     CMySocketThread * m_pMyThread;
     CNetConThread   * m_pNetConThread;
+    CSerialThread   * m_pSerialThread;
 //    CMySocketThread  * m_pMyThread;
   //  bool m_isRun;
 };

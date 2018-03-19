@@ -77,7 +77,7 @@ public:
     //  QString SpellUpStr(stuSJCYZBMB stu,int type,double dMax,double dMin,double dAvg); //type 判断分钟还是小时还是日
     //   QString SpellUpStr(stuSJCYZBMB stu,int type,double dMax,double dMin,double dAvg,double dTotal);
     QString SpellUpStr(stuSJCYZBMB stu,int type,double dMax,double dMin,double dAvg,double dTotal=0,double dStand=0); //type 判断分钟还是小时还是日
-    QString SpellUpStr(stuSJCYZBMB stu,int type,double dMax,double dMin,double dAvg,double dTotal,double dMaxZS,double dMinZS,double dAvgZS,double dTotalZS);//type 判断分钟还是小时还是日
+    QString SpellUpStr(stuSJCYZBMB stu,int type,double dMax,double dMin,double dAvg,double dTotal,double dMaxZS,double dMinZS,double dAvgZS);//type 判断分钟还是小时还是日
     QString SpellUpDataTable(QString QQBM,QString MLBM,int nFlag,QString sDataArea);    //拼接数据段结构组成表
     bool    virtual UploadReal();  //上传实时数据
    //************************得到数据段各个字段的值**********************

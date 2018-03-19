@@ -240,6 +240,70 @@ QString CJCBase::SpellUpStr(stuSJCYZBMB stu, int type, double dMax, double dMin,
     retstr+=QString(stu.sCoding)+"-Flag=N;";
     return retstr;
 }
+
+QString CJCBase::SpellUpStr(stuSJCYZBMB stu, int type, double dMax, double dMin, double dAvg, double dTotal, double dMaxZS, double dMinZS, double dAvgZS)
+{
+    QString retstr;
+
+    QString strCou=QString(QLatin1String(stu.sCoding))+"-Cou="+CTool::douTostr(dTotal,stu.sDataLen)+",";
+
+    QString strMin=QString(QLatin1String(stu.sCoding))+"-Min="+CTool::douTostr(dMin,stu.sDataLen)+",";
+    QString strAvg=QString(QLatin1String(stu.sCoding))+"-Avg="+CTool::douTostr(dAvg,stu.sDataLen)+",";
+    QString strMax=QString(QLatin1String(stu.sCoding))+"-Max="+CTool::douTostr(dMax,stu.sDataLen)+",";
+
+    QString strzsMin=QString(QLatin1String(stu.sCoding))+"-ZsMin="+CTool::douTostr(dMinZS,stu.sDataLen)+",";
+    QString strzsAvg=QString(QLatin1String(stu.sCoding))+"-ZsAvg="+CTool::douTostr(dAvgZS,stu.sDataLen)+",";
+    QString strzsMax=QString(QLatin1String(stu.sCoding))+"-ZsMax="+CTool::douTostr(dMaxZS,stu.sDataLen)+",";
+
+    switch (type) {
+    case 1:
+        if(stu.stuYZ.fcou==true)
+            retstr+=strCou;
+        if(stu.stuYZ.fmin==true)
+            retstr+=strMin;
+            retstr+=strzsMin;
+        if(stu.stuYZ.favg==true)
+            retstr+=strAvg;
+            retstr+=strzsAvg;
+        if(stu.stuYZ.fmax==true)
+            retstr+=strMax;
+            retstr+=strzsMax;
+        break;
+    case 2:
+        if(stu.stuYZ.hcou==true)
+            retstr+=strCou;
+        if(stu.stuYZ.hmin==true)
+            retstr+=strMin;
+            retstr+=strzsMin;
+        if(stu.stuYZ.havg==true)
+            retstr+=strAvg;
+            retstr+=strzsAvg;
+        if(stu.stuYZ.hmax==true)
+            retstr+=strMax;
+            retstr+=strzsMax;
+        break;
+    case 3:
+        if(stu.stuYZ.rcou==true)
+            retstr+=strCou;
+        if(stu.stuYZ.rmin==true)
+            retstr+=strMin;
+            retstr+=strzsMin;
+        if(stu.stuYZ.ravg==true)
+            retstr+=strAvg;
+            retstr+=strzsAvg;
+        if(stu.stuYZ.rmax==true)
+            retstr+=strMax;
+            retstr+=strzsMax;
+        break;
+    default:
+        break;
+    }
+    retstr+=QString(stu.sCoding)+"-Flag=N;";
+
+
+    return retstr;
+}
+
 QString CJCBase::SpellUpStr(stuSJCYZBMB stu, double dRtd)
 {
     QString retstr;
