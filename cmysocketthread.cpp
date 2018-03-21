@@ -52,7 +52,8 @@ void CMySocketThread::run()
               char sBuf[1024];
               memset(sBuf,0,1024);
               int nByte=  m_Main->m_pMySocket[i]->MyRecv(sBuf);
-
+              QByteArray ba=QByteArray((char*)sBuf,nByte);
+              m_Main->RecvTcpData(ba,i);
             }
         }
         if(m_sData.length()==0)

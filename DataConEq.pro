@@ -60,7 +60,9 @@ SOURCES += \
     ctesttcpthd.cpp \
     cdqhjwry.cpp \
     ccolsvr.cpp \
-    cqjcyz.cpp
+    cqjcyz.cpp \
+    crs232thread.cpp \
+    crs232.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -97,7 +99,9 @@ HEADERS += \
     ctesttcpthd.h \
     cdqhjwry.h \
     ccolsvr.h \
-    cqjcyz.h
+    cqjcyz.h \
+    crs232thread.h \
+    crs232.h
 
 FORMS += \
         mainwindow.ui \

@@ -94,7 +94,16 @@ public:
     void CreateSetting_wlsz();//网络参数设置
     void CreateSetting_sjjy();//时间校验界面启动函数
     int m_nTest;
+
+    void RecvData(QByteArray);
+    void RecvTcpData(QByteArray,int);
+signals:
+    void RecvSignal(QByteArray);
+    void RecvTcpSignal(QByteArray,int);
 private slots:
+    void RecvMsg(QByteArray);
+    void RecvTcpMsg(QByteArray,int);
+
     void on_pushButton_clicked();
 
     void on_pushButton_2_clicked();

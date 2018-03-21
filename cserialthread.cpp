@@ -38,6 +38,11 @@ void CSerialThread::run()
     {
         QString strData;
         RecvData(strData);
+        while(m_list.size()>0)
+        {
+            QString strData=m_list.removeAt(0);
+            m_Main->RecvData(strData.toLatin1());
+        }
         msleep(100);
     }
 }
@@ -45,15 +50,15 @@ bool CSerialThread::SetParam(QString name, int nbaud)
 {
     QString strErr;
     m_fd = tty_init(name.toLatin1().data());
-    if( m_fd < 0){
-        strErr="Initialize tty device "+name+" failed!";
-    //    m_pMain->addList(strErr);
+    if( m_fd < 0){s
+                strErr="Initialize tty device "+name+" failed!";
+        //    m_pMain->addList(strErr);
         return false;
     }
     int  ret= tty_setting(m_fd, nbaud, 8, 1, 0, 'n', 1);
     if(ret < 0){
         strErr="setting tty device "+name+" failed!";
-    //    m_pMain->addList(strErr);
+        //    m_pMain->addList(strErr);
         return false;
     }
     return true;
@@ -64,7 +69,7 @@ bool CSerialThread::SendData(QString sData)
     if(m_fd==-1)
     {
         strErr="Serial not open!!!!";
-    //    m_pMain->addList(strErr);
+        //    m_pMain->addList(strErr);
         return false;
     }
     QByteArray ba=sData.toLatin1();
@@ -72,7 +77,7 @@ bool CSerialThread::SendData(QString sData)
     if(ret <= 0){
 
         strErr="Write tty device failed!";
-    //    m_pMain->addList(strErr);
+        //    m_pMain->addList(strErr);
         close(m_fd);
         return false;
     }
@@ -89,13 +94,13 @@ bool CSerialThread::RecvData(QString &sData)
     memset(sDD,0,2048);
     int ret=tty_read(m_fd, sD);
 
-//    QString strData=QString(QLatin1String(sD));
+    //    QString strData=QString(QLatin1String(sD));
     if(ret > 0 ){
         // got data success
         //        strE="RECV:"+strData;
         //        m_pMain->addList(strE);
-     //   char *pData=sDD;
-     //   int loc=0;
+        //   char *pData=sDD;
+        //   int loc=0;
         for(int i=0,loc=0;i<ret;i++,loc++)
         {
             if(sD[i]=='\n' && sD[i+1]=='\r')
@@ -122,13 +127,13 @@ bool CSerialThread::RecvData(QString &sData)
         // Can read data timeout, try again
         //dbg_printf("== select can timout ===\r\n");
         strE="== select can timout ===";
-     //   m_pMain->addList(strE);
+        //   m_pMain->addList(strE);
     }
     else if(ret < 0){
         // Can read data error!
         // dbg_printf("== read can error ===\r\n");
         strE="== read can error ===";
-    //    m_pMain->addList(strE);
+        //    m_pMain->addList(strE);
     }
     sData=strData;
     return true;
@@ -139,15 +144,15 @@ bool CSerialThread::TestXY(char *pD,int nSize)
     char sD[2048],sDD[2048];
     memset(sD,0,2048);
     memset(sDD,0,2048);
-  //  int ret=tty_read(m_fd, sD);
+    //  int ret=tty_read(m_fd, sD);
     strncpy(sD,pD,nSize);
     int ret=nSize;
     if(ret > 0 ){
         // got data success
         //        strE="RECV:"+strData;
         //        m_pMain->addList(strE);
-     //   char *pData=sDD;
-     //   int loc=0;
+        //   char *pData=sDD;
+        //   int loc=0;
         for(int i=0,loc=0;i<ret;i++,loc++)
         {
             if(sD[i]=='\n' && sD[i+1]=='\r')

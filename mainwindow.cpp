@@ -20,8 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->listView_MSG->setModel(m_model);
     // connect(m_pMyThread, SIGNAL(TestSignal(QString)), this, SLOT(DisplayMsg(QString)));
     //  connect(m_pNetConThread, SIGNAL(TestSignal(QString)), this, SLOT(DisplayMsg(QString)));
-
-
+    connect(this, SIGNAL(RecvSignal(QByteArray)), this, SLOT(RecvMsg(QByteArray))); //单片解数据接收巢
+    connect(this, SIGNAL(RecvTcpSignal(QByteArray,int)), this, SLOT(RecvTcpMsg(QByteArray,int))); //单片解数据接收巢
     init();
     //**********************初始化窗体指针***********************************
     m_fm=NULL;
@@ -41,8 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_fm->show();
     m_nTest=56;
 
-    m_pMyThread=new CMySocketThread(this);
-    m_pNetConThread=new CNetConThread(this);
+
 
     //****************
     switch(m_nColType)
@@ -60,7 +59,9 @@ MainWindow::MainWindow(QWidget *parent) :
     m_pBase->init();
     m_pthdTest=new CTestTcpThd(this);
     //启动串口采集线程
-    m_pSerialThread =new CSerialThread(this);
+    m_pMyThread=new CMySocketThread(this);
+    m_pNetConThread=new CNetConThread(this);
+    m_pSerialThread =new CSerialThread(this);//创建串口采集线程
     m_pSerialThread->SetParam("/dev/ttyO2",9600);
     m_pSerialThread->start();
 }
@@ -143,6 +144,22 @@ bool MainWindow::init()
     }
     return true;
 
+}
+void MainWindow::RecvData(QByteArray baData)
+{
+    emit RecvSignal(baData);
+}
+void MainWindow::RecvTcpData(QByteArray baData,int nID)
+{
+    emit RecvTcpSignal(baData,nID);
+}
+void MainWindow::RecvMsg(QByteArray baData)
+{
+    m_pBase->SerialInterFaceNew(baData.data(),baData.size(),0);
+}
+void MainWindow::RecvTcpMsg(QByteArray baData,int nID)
+{
+    m_pBase->NetInterFace(baData.data(),baData.size(),nID);
 }
 //***************************显示界面函数******************************
 void MainWindow::CreateMainBtn()
