@@ -266,6 +266,7 @@ bool  CDBSTJC::GetValue(int nType)
     QString strQQBM=QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz");
     QString strDataTable=SpellUpDataTable(strQQBM,strMLBM,4,strSpell);//拼接数据段
     QByteArray  baSpell=SpellPackage(strDataTable); //拼接整个包
+
     TcpSendVal(baSpell.data(),baSpell.size());
     return true;
 }
@@ -298,7 +299,7 @@ void CDBSTJC::timerEvent(QTimerEvent *event)
     {
         GetValue(2);
     }
-    //小时上报数据
+    //日上报数据
     if(m_bRSJ==true && nHour==0 && nMin==0 && nSec==0)
     {
         GetValue(3);

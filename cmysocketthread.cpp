@@ -49,11 +49,19 @@ void CMySocketThread::run()
         {
             if(m_Main->m_pMySocket[i]!=NULL &&m_Main->m_pMySocket[i]->isConnect==true)
             {
-              char sBuf[1024];
-              memset(sBuf,0,1024);
-              int nByte=  m_Main->m_pMySocket[i]->MyRecv(sBuf);
-              QByteArray ba=QByteArray((char*)sBuf,nByte);
-              m_Main->RecvTcpData(ba,i);
+                char sBuf[1024];
+                memset(sBuf,0,1024);
+                int nByte=  m_Main->m_pMySocket[i]->MyRecv(sBuf);
+                if(nByte>0)
+                {
+                    QByteArray ba=QByteArray((char*)sBuf,nByte);
+                    m_Main->RecvTcpData(ba,i);
+                }else if(nByte==0)
+                {
+                    //断开状态存入数据库
+                    m_Main->m_mySql.InsertIPStatus(i,QString(QLatin1String(m_Main->m_pMySocket[i]->m_IPAddr.sIP)),m_Main->m_pMySocket[i]->m_IPAddr.nPort,0);
+                }
+
             }
         }
         if(m_sData.length()==0)
@@ -63,8 +71,8 @@ void CMySocketThread::run()
         {
             if(m_Main->m_pMySocket[i]!=NULL &&m_Main->m_pMySocket[i]->isConnect==true)
             {
-              int nByte=  m_Main->m_pMySocket[i]->MySend( str.toLatin1().data(), str.length());
-              QString str="断开连接----"+QString(m_Main->m_pMySocket[i]->m_IPAddr.sIP)+":"+QString::number(m_Main->m_pMySocket[i]->m_IPAddr.nPort);
+                int nByte=  m_Main->m_pMySocket[i]->MySend( str.toLatin1().data(), str.length());
+                QString str="断开连接----"+QString(m_Main->m_pMySocket[i]->m_IPAddr.sIP)+":"+QString::number(m_Main->m_pMySocket[i]->m_IPAddr.nPort);
             }
         }
     }

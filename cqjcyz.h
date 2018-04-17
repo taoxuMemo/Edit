@@ -12,6 +12,7 @@ public:
     ~CQJCYZ();
     double m_dTS,m_dBA,m_dPS,m_dXSW,m_dQSH;//烟气温度 环境大气压值  烟气静压值 烟气绝对湿度
     double m_nPresDuff;                       //气压差值
+    bool SerialInterFace(char *pData,int nLen,int nID);//串口接口  参数1.内容2.长度3.接口号
     bool SerialInterFaceNew(char *pData,int nLen,int nID);
     bool NetInterFace(char *pData, int nLen, int nID);
     void timerEvent(QTimerEvent *event);

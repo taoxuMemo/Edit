@@ -7,6 +7,7 @@
 QT       += core gui
 QT       += sql
 QT       += network
+QT += serialport
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = DataConEq
@@ -62,7 +63,8 @@ SOURCES += \
     ccolsvr.cpp \
     cqjcyz.cpp \
     crs232thread.cpp \
-    crs232.cpp
+    crs232.cpp \
+    tty.c
 
 HEADERS += \
         mainwindow.h \
@@ -101,7 +103,8 @@ HEADERS += \
     ccolsvr.h \
     cqjcyz.h \
     crs232thread.h \
-    crs232.h
+    crs232.h \
+    tty.h
 
 FORMS += \
         mainwindow.ui \

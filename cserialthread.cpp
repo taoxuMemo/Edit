@@ -40,7 +40,7 @@ void CSerialThread::run()
         RecvData(strData);
         while(m_list.size()>0)
         {
-            QString strData=m_list.removeAt(0);
+            QString strData=m_list.takeAt(0);
             m_Main->RecvData(strData.toLatin1());
         }
         msleep(100);
@@ -50,7 +50,7 @@ bool CSerialThread::SetParam(QString name, int nbaud)
 {
     QString strErr;
     m_fd = tty_init(name.toLatin1().data());
-    if( m_fd < 0){s
+    if( m_fd < 0){
                 strErr="Initialize tty device "+name+" failed!";
         //    m_pMain->addList(strErr);
         return false;

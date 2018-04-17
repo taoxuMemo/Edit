@@ -18,14 +18,15 @@ public:
     bool    virtual init();
     bool    getItem();
     bool    TcpSendVal(char *pData,int nLen,int nID=-1);            //nID表示上传SOCKET号 默认-1全部上传
-    char  m_sQQBM[SJDJGZCB_QQBM_LEN+1];//请求编码
-    char  m_sXTBM[SJDJGZCB_STBM_LEN+1]; //系统编码
-    char  m_sMLBM[SJDJGZCB_MLBM_LEN+1]; //命令编码
-    char  m_sFWMM[SJDJGZCB_FWMM_LEN+1]; //访问密码
-    char  m_sSBWYBS[SJDJGZCB_SBWYBS_LEN+1]; //设备唯一标识
-    char  m_sDataArea[2048];                //数据区内容
-    int   m_nDataArea;                      //数据区长度
-    int   m_nXTBM;
+    bool    SendComSet();
+    char    m_sQQBM[SJDJGZCB_QQBM_LEN+1];//请求编码
+    char    m_sXTBM[SJDJGZCB_STBM_LEN+1]; //系统编码
+    char    m_sMLBM[SJDJGZCB_MLBM_LEN+1]; //命令编码
+    char    m_sFWMM[SJDJGZCB_FWMM_LEN+1]; //访问密码
+    char    m_sSBWYBS[SJDJGZCB_SBWYBS_LEN+1]; //设备唯一标识
+    char    m_sDataArea[2048];                //数据区内容
+    int     m_nDataArea;                      //数据区长度
+//    int   m_nXTBM;
     char  m_nMark;           //分包及应答标志
     int   m_nPNUM;           //分包数量
     int   m_nPNO;            //分包号
@@ -82,6 +83,7 @@ public:
     bool    virtual UploadReal();  //上传实时数据
    //************************得到数据段各个字段的值**********************
  //   bool getQQBMQN(QString&,char *);
+    bool AiToCoding(stuCol&);  //计算模拟量实际值，返回0错误 1正常
 
 private:
 

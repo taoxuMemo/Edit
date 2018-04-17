@@ -29,6 +29,9 @@ bool CJCBase::init()
     str=m_pMain->m_pOpera->getText("col","passwd");
     strncpy(m_sFWMM,str.toLatin1().data(),str.size());
 
+    str=m_pMain->m_pOpera->getText("col","type");
+    strncpy(m_sXTBM,str.toLatin1().data(),str.size());
+
     str=m_pMain->m_pOpera->getText("col","Rtd");
     m_nMSBJG=str.toInt();
 
@@ -65,6 +68,8 @@ bool CJCBase::init()
 }
 bool CJCBase::TcpSendVal(char *pData, int nLen, int nID)
 {
+    m_pMain->AddRD(nLen,1);
+    COperationConfig::writeSendRD(QString(QLatin1String(pData,nLen)));
     if(nID==-1)
     {
         for(int i=0;i<6;i++)
@@ -133,6 +138,7 @@ bool CJCBase::CommandData()
     int nCommand=0;
     for(int i=0;i<4;i++)
         nCommand+=(CTool::chartoint(m_sMLBM[3+i])*pow10(3-i));
+    return true;
 
 }
 bool  Splitinst(char *p,QString &a,QString &b) //拆分指令等号前后的
@@ -179,10 +185,10 @@ QString CJCBase::SpellUpDataTable(QString QQBM, QString MLBM, int nFlag,QString 
 
     //  strSpell="QN="+QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz");
     strSpell=("QN="+QQBM);                          //请求编码
-    strSpell+=(";ST="+QString::number(m_nXTBM));    //系统编码
+    strSpell+=(";ST="+QString(m_sXTBM));    //系统编码
     strSpell+=(";CN="+MLBM);                        //命令编码
-    strSpell+=(";"+QString(m_sFWMM));               //访问密码
-    strSpell+=(";"+QString(m_sSBWYBS));             //设备唯一标识
+    strSpell+=(";PW="+QString(m_sFWMM));               //访问密码
+    strSpell+=(";MN="+QString(m_sSBWYBS));             //设备唯一标识
     strSpell+=(";Flag="+QString::number(nFlag));    //拆分包应答标志
     strSpell+=(";CP=&&"+sDataArea+"&&");
 
@@ -261,39 +267,39 @@ QString CJCBase::SpellUpStr(stuSJCYZBMB stu, int type, double dMax, double dMin,
             retstr+=strCou;
         if(stu.stuYZ.fmin==true)
             retstr+=strMin;
-            retstr+=strzsMin;
+        retstr+=strzsMin;
         if(stu.stuYZ.favg==true)
             retstr+=strAvg;
-            retstr+=strzsAvg;
+        retstr+=strzsAvg;
         if(stu.stuYZ.fmax==true)
             retstr+=strMax;
-            retstr+=strzsMax;
+        retstr+=strzsMax;
         break;
     case 2:
         if(stu.stuYZ.hcou==true)
             retstr+=strCou;
         if(stu.stuYZ.hmin==true)
             retstr+=strMin;
-            retstr+=strzsMin;
+        retstr+=strzsMin;
         if(stu.stuYZ.havg==true)
             retstr+=strAvg;
-            retstr+=strzsAvg;
+        retstr+=strzsAvg;
         if(stu.stuYZ.hmax==true)
             retstr+=strMax;
-            retstr+=strzsMax;
+        retstr+=strzsMax;
         break;
     case 3:
         if(stu.stuYZ.rcou==true)
             retstr+=strCou;
         if(stu.stuYZ.rmin==true)
             retstr+=strMin;
-            retstr+=strzsMin;
+        retstr+=strzsMin;
         if(stu.stuYZ.ravg==true)
             retstr+=strAvg;
-            retstr+=strzsAvg;
+        retstr+=strzsAvg;
         if(stu.stuYZ.rmax==true)
             retstr+=strMax;
-            retstr+=strzsMax;
+        retstr+=strzsMax;
         break;
     default:
         break;
@@ -738,4 +744,58 @@ bool CJCBase::Ans9014()
     QStringList sl=str.split("=");
     sl.at(1);
     return true;
+}
+bool CJCBase::AiToCoding(stuCol& stu)
+{
+    //  QChar cID=stu.sCoding.at(2);
+    int nID=CTool::chartoint(stu.sName[2]);
+    if(nID==-1 || nID>=MNLJKSL_NUM)
+    {
+        COperationConfig::writelog(ERRORPROAINUM,(char *)stu.sName);
+        return false;
+    }
+    strncpy(stu.sName,m_pMain->m_stuAIChan[nID].strJCX,6);
+    if(strncmp(stu.sType,"Rtd",3)==0)
+    {
+        if(m_pMain->m_stuAIChan[nID].SignalType==0)//电流
+        {stu.dvalue=m_pMain->m_stuAIChan[nID].nURV*((stu.dvalue-m_pMain->m_stuAIChan[nID].nLRV)/(20-4));}
+        if(m_pMain->m_stuAIChan[nID].SignalType==1)//电压
+        {stu.dvalue=m_pMain->m_stuAIChan[nID].nURV*((stu.dvalue-m_pMain->m_stuAIChan[nID].nLRV)/(10-0));}
+    }
+
+
+    return true;
+}
+bool CJCBase::SendComSet()
+{
+   // QString strSZD="CP=&&";
+    QString strCom;
+    //***************串口配置**********************
+    for(int i=0;i<8;i++)
+    {
+        int nID=m_pMain->m_nCom[i];
+        strCom+=QString::number(i+1)+",";
+        int  nIsRun=(int)(m_pMain->m_stuChan[nID].isrun);
+        strCom+=QString::number(nIsRun)+",";
+        strCom+=QString(QLatin1String(m_pMain->m_stuChan[nID].strXY))+",";
+    }
+    //***************AI配置**********************
+    for(int i=0;i<8;i++)
+    {
+       // int nID=m_pMain->m_nCom;
+        strCom+=QString::number(i+21)+",";
+        int  nIsRun=(int)(m_pMain->m_stuAIChan[i].bRun);
+        strCom+=QString::number(nIsRun)+",";
+        strCom+=QString::number(m_pMain->m_stuAIChan[i].SignalType)+",";
+    }
+    //**************************缺少开关量配置************************
+    QString strLen=QString("%1").arg(strCom.size(), DATALENGTH, 10, QChar('0'));
+    QString strSZD="CN=8000;CP=&&"+strCom+"&&";
+
+    QByteArray baSZD=strSZD.toLatin1();
+    int nCRC=CTool::CRC16_Checkout((unsigned char *)baSZD.data(),(unsigned int)baSZD.size());
+    QString c=QString("%1").arg(nCRC, CRCLENGTH, 16, QChar('0')).toUpper();
+
+    QString strSend="##"+strLen+strSZD+c+"\r\n";
+    true;
 }

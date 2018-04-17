@@ -69,7 +69,7 @@ void FormSetting_WLSZ::on_pushButton_clicked()
     //**************本地IP 设置************************
 
     //************协议类型及传输方式********************
-    bool bXY=ui->radioButton_TCP->isChecked();
+    ui->radioButton_TCP->isChecked();
 
     stuaddr.bIsrun=bIsrun;
     memcpy(stuaddr.sName,strName.toLatin1().data(),strName.length());

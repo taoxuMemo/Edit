@@ -4,7 +4,7 @@
 //#include "formreal.h"
 #include "QMessageBox"
 #include "QDateTime"
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::        MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
@@ -46,24 +46,33 @@ MainWindow::MainWindow(QWidget *parent) :
     //****************
     switch(m_nColType)
     {
-        case 31:
-            m_pBase=new CQJCYZ(this);
-            break;
-        case 32:
-            m_pBase=new CDBSTJC(this);
-            break;
-        default:
-            break;
+    case 31:
+        m_pBase=new CQJCYZ(this);
+        break;
+    case 32:
+        m_pBase=new CDBSTJC(this);
+        break;
+    default:
+
+        break;
     }
 
     m_pBase->init();
     m_pthdTest=new CTestTcpThd(this);
     //启动串口采集线程
     m_pMyThread=new CMySocketThread(this);
+    m_pMyThread->start();
     m_pNetConThread=new CNetConThread(this);
+    m_pNetConThread->start();
     m_pSerialThread =new CSerialThread(this);//创建串口采集线程
-    m_pSerialThread->SetParam("/dev/ttyO2",9600);
-    m_pSerialThread->start();
+    m_pRs232=new CRs232(this);
+    if(m_pRs232->start()==false)
+    {
+        COperationConfig::writelog(SYSSTARTCONSERIALERROR);
+    }
+    //
+    //    m_pSerialThread->SetParam("/dev/ttyO2",9600);
+    //    m_pSerialThread->start();
 }
 
 MainWindow::~MainWindow()
@@ -101,14 +110,21 @@ bool MainWindow::init()
         if(bb==false)
         {
             // QMessageBox::information(this,"异常信息","程序异常关闭 请查看错误日志！！！！");
+            COperationConfig::writelog(CONFIGCOMERROT,QString::number(i).toLatin1().data());
             return false;
         }
 
     }
+    //获取模拟量配置信息
+    for(int i=0;i<MNLJKSL_NUM;i++)
+    {
+        m_pOpera->ReadAI(&m_stuAIChan[i],i+1);
+    }
+
     //获取网络配置信息
     for(int i=0;i<6;i++)
     {
-        bool bb=m_pOpera->ReadIPAddr(&m_stuIPA[i],i+1);
+        m_pOpera->ReadIPAddr(&m_stuIPA[i],i+1);
 
         m_pMySocket[i]=new CMySocket();
         m_pMySocket[i]->SetParam(m_stuIPA[i]);
@@ -353,4 +369,139 @@ void MainWindow::on_pushButton_3_clicked()
     sData[str.size()+1]=0x0A;
     sData[str.size()+2]=0x00;
     m_pBase->SerialInterFaceNew((char *)sData,str.size()+2,0);
+}
+
+void MainWindow::AddRD(int nLen, int nFX)
+{
+    if(m_fr==NULL)
+        return;
+    m_fr->addlist(nLen,nFX);
+}
+void MainWindow::CheckChange()
+{
+    QString strVal=m_pOpera->getText("ischange","val");
+    for(int i=0;i<strVal.size();i++)
+    {
+        stuIPAddr       stuIP;
+        stuChannel      stuChn;
+        stuYZSBSZ       stuItem;
+        QChar cVal = strVal.at(i);
+        if(cVal.toLatin1()=='1')
+        {
+            switch (i) {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                m_pOpera->ReadIPAddr(&stuIP,1);
+                m_pMySocket[0]->SetParam(stuIP);
+                break;
+            case 3:
+                m_pOpera->ReadIPAddr(&stuIP,2);
+                m_pMySocket[1]->SetParam(stuIP);
+                break;
+            case 4:
+                m_pOpera->ReadIPAddr(&stuIP,3);
+                m_pMySocket[2]->SetParam(stuIP);
+                break;
+            case 5:
+                m_pOpera->ReadIPAddr(&stuIP,4);
+                m_pMySocket[3]->SetParam(stuIP);
+                break;
+            case 6:
+                m_pOpera->ReadIPAddr(&stuIP,5);
+                m_pMySocket[4]->SetParam(stuIP);
+                break;
+            case 7:
+                m_pOpera->ReadIPAddr(&stuIP,6);
+                m_pMySocket[5]->SetParam(stuIP);
+                break;
+            case 8:
+                m_pOpera->ReadChn(&stuChn,1);
+                m_stuChan[0]=stuChn;
+                break;
+            case 9:
+                m_pOpera->ReadChn(&stuChn,2);
+                m_stuChan[1]=stuChn;
+                break;
+            case 10:
+                m_pOpera->ReadChn(&stuChn,3);
+                m_stuChan[2]=stuChn;
+                break;
+            case 11:
+                m_pOpera->ReadChn(&stuChn,4);
+                m_stuChan[3]=stuChn;
+                break;
+            case 12:
+                m_pOpera->ReadChn(&stuChn,5);
+                m_stuChan[4]=stuChn;
+                break;
+            case 13:
+                m_pOpera->ReadChn(&stuChn,6);
+                m_stuChan[5]=stuChn;
+                break;
+            case 14:
+                m_pOpera->ReadChn(&stuChn,7);
+                m_stuChan[6]=stuChn;
+                break;
+            case 15:
+                m_pOpera->ReadChn(&stuChn,8);
+                m_stuChan[7]=stuChn;
+                break;
+            case 16:
+                m_pOpera->ReadItem(&stuItem,1);
+                m_pBase->m_stuSJCYZBMB[0].stuYZ=stuItem;
+                break;
+            case 17:
+                m_pOpera->ReadItem(&stuItem,2);
+                m_pBase->m_stuSJCYZBMB[1].stuYZ=stuItem;
+                break;
+            case 18:
+                m_pOpera->ReadItem(&stuItem,3);
+                m_pBase->m_stuSJCYZBMB[2].stuYZ=stuItem;
+                break;
+            case 19:
+                m_pOpera->ReadItem(&stuItem,4);
+                m_pBase->m_stuSJCYZBMB[3].stuYZ=stuItem;
+                break;
+            case 20:
+                m_pOpera->ReadItem(&stuItem,5);
+                m_pBase->m_stuSJCYZBMB[4].stuYZ=stuItem;
+                break;
+            case 21:
+                m_pOpera->ReadItem(&stuItem,6);
+                m_pBase->m_stuSJCYZBMB[5].stuYZ=stuItem;
+                break;
+            case 22:
+                m_pOpera->ReadItem(&stuItem,7);
+                m_pBase->m_stuSJCYZBMB[6].stuYZ=stuItem;
+                break;
+            case 23:
+                m_pOpera->ReadItem(&stuItem,8);
+                m_pBase->m_stuSJCYZBMB[7].stuYZ=stuItem;
+                break;
+            case 24:
+                m_pOpera->ReadItem(&stuItem,9);
+                m_pBase->m_stuSJCYZBMB[8].stuYZ=stuItem;
+                break;
+            case 25:
+                m_pOpera->ReadItem(&stuItem,10);
+                m_pBase->m_stuSJCYZBMB[9].stuYZ=stuItem;
+                break;
+            case 26:
+                m_pOpera->ReadItem(&stuItem,11);
+                m_pBase->m_stuSJCYZBMB[10].stuYZ=stuItem;
+                break;
+            case 27:
+                m_pOpera->ReadItem(&stuItem,12);
+                m_pBase->m_stuSJCYZBMB[11].stuYZ=stuItem;
+                break;
+            default:
+                break;
+            }
+        }
+    }
+    m_pOpera->writeText("ischange","val","0");
+    return;
 }

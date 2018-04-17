@@ -4,6 +4,9 @@
 #include "cmysqlite.h"
 #include "mainwindow.h"
 #include"qdatetime.h"
+
+#include <QDebug>
+#include <sys/time.h>
 CQJCYZ::CQJCYZ(QObject *parent) : CJCBase(parent)
 {
     CJCBase::init();
@@ -45,19 +48,19 @@ bool  CQJCYZ::GetValue(int nType)
     int nFQ=0; //废气查询结果集的数量
     if(nType==1)
     {
-        nSecDiff=60*m_nFSBJG*-1;
-        dtmin.addSecs(nSecDiff);
+        nSecDiff=60*m_nFSBJG;
+        dtmin=dtmin.addSecs(nSecDiff*-1);
         strMLBM="2051";
     }else if(nType==2)
     {
         nSecDiff=60*60;
-        dtmin.addSecs(nSecDiff);
+        dtmin=dtmin.addSecs(nSecDiff*-1);
         strMLBM="2061";
 
     }else if(nType==3)
     {
         nSecDiff=60*60*24;
-        dtmin.addSecs(nSecDiff);
+        dtmin=dtmin.addSecs(nSecDiff*-1);
         strMLBM="2031";
     }else
     {
@@ -134,22 +137,48 @@ bool CQJCYZ::GetMinValue()
 
 
 
+bool CQJCYZ::SerialInterFace(char *pData, int nLen, int nID)
+{
+    return true;
+}
 //参数：*pData指向数据段指针，nLen数据段结构长度
 bool CQJCYZ::SerialInterFaceNew(char *pData, int nLen, int nID)
 {
+    struct timeval tpstart,tpend;
+    float timeuse;
     CColSvr cs;
+    QList<stuZSRD> stuRD;
+    gettimeofday(&tpstart,NULL);
     if(cs.setData(pData,nLen)==false)
     {
 
         COperationConfig::writelog(ERRORSERIALPROTOCOL,QString::number(cs.m_nErrCode).toLatin1().data());
         return false;
     }
+    gettimeofday(&tpend,NULL);
+    timeuse=(1000000*(tpend.tv_sec-tpstart.tv_sec) + tpend.tv_usec-tpstart.tv_usec)/1000000.0;
+    //   qDebug()<<timeuse<<"s1";
+
     if(cs.m_nCN==2011)
     {
         QList <stuCol> ls=cs.getlist();
         for(int i=0;i<ls.size();i++)
         {
             stuCol stu=ls.at(i);
+
+            if(strncmp(stu.sName,"AI",2)==0)//将模拟量转换为数字量
+            {
+                if(strncmp(stu.sType,"T",1)==0)
+                    continue;
+                if(!AiToCoding(stu))
+                {
+                    COperationConfig::writelog(ERRORPROAISET,stu.sName);
+                    continue;
+                }
+
+            }
+            QString strMsg=QString(QLatin1String(stu.sName))+"---"+QString(QLatin1String(stu.sType))+"---"+QString::number(stu.dvalue);
+            qDebug()<<strMsg;
             if(strncmp(stu.sName,"a01012",6)==0)//烟气温度
                 m_dTS=stu.dvalue;
             if(strncmp(stu.sName,"a01013",6)==0)//烟气压力
@@ -158,12 +187,28 @@ bool CQJCYZ::SerialInterFaceNew(char *pData, int nLen, int nID)
                 m_dXSW=stu.dvalue;
             if(strncmp(stu.sName,"a21002",6)==0 || strncmp(stu.sName,"a21026",6)==0 || strncmp(stu.sName,"a34013",6)==0)
             {
-                stu.dzsvalue = zsValue(stu.dvalue);
-                m_pMain->m_mySql.InsertZSRD(QString(QLatin1String(stu.sName)),QString(QLatin1String(stu.sType)),stu.dvalue,stu.dzsvalue);
-            }else
-            {
-                m_pMain->m_mySql.InsertRD(QString(QLatin1String(stu.sName)),QString(QLatin1String(stu.sType)),stu.dvalue);
+
+                //        m_pMain->m_mySql.InsertZSRD(QString(QLatin1String(stu.sName)),QString(QLatin1String(stu.sType)),stu.dvalue,stu.dzsvalue);
+                stuZSRD rd;
+                rd.sCoding=QString(QLatin1String(stu.sName));
+                rd.sType=QString(QLatin1String(stu.sType));
+                rd.dValue=stu.dvalue;
+                rd.dzsValue=zsValue(stu.dvalue);;
+                stuRD.append(rd);
             }
+            else
+            {
+                //             m_pMain->m_mySql.InsertRD(QString(QLatin1String(stu.sName)),QString(QLatin1String(stu.sType)),stu.dvalue);
+                stuZSRD rd;
+                rd.sCoding=QString(QLatin1String(stu.sName));
+                rd.sType=QString(QLatin1String(stu.sType));
+                rd.dValue=stu.dvalue;
+                rd.dzsValue=0;
+                stuRD.append(rd);
+            }
+            gettimeofday(&tpend,NULL);
+            timeuse=(1000000*(tpend.tv_sec-tpstart.tv_sec) + tpend.tv_usec-tpstart.tv_usec)/1000000.0;
+            //          qDebug()<<timeuse<<"s0";
 
         }
     }else if(cs.m_nCN==3020)
@@ -174,11 +219,22 @@ bool CQJCYZ::SerialInterFaceNew(char *pData, int nLen, int nID)
             stuInfo stu=ls.at(i);
             m_pMain->m_mySql.InsertInfo(QString(QLatin1String(stu.sName)),QString(QLatin1String(stu.sType)),QString(QLatin1String(stu.sValue)));
         }
+    } else if(cs.m_nCN==8000)
+    {
+
     }
+    gettimeofday(&tpend,NULL);
+    timeuse=(1000000*(tpend.tv_sec-tpstart.tv_sec) + tpend.tv_usec-tpstart.tv_usec)/1000000.0;
+    //   qDebug()<<timeuse<<"s2";
     if(cs.m_nErrCode!=0)
     {
         COperationConfig::writelog(ERRORSERIALPROTOCOL,QString::number(cs.m_nErrCode).toLatin1().data());
     }
+
+    m_pMain->m_mySql.InsertListZSRD(stuRD);
+    gettimeofday(&tpend,NULL);
+    timeuse=(1000000*(tpend.tv_sec-tpstart.tv_sec) + tpend.tv_usec-tpstart.tv_usec)/1000000.0;
+    //   qDebug()<<timeuse<<"s3";
     return true;
 }
 double CQJCYZ::zsValue(double dZS)
@@ -204,7 +260,7 @@ void CQJCYZ::timerEvent(QTimerEvent *event)
     int nMin=time.minute();
     int nHour=time.hour();
     //分钟上报
-    if(m_bFZSJ==true && nSec==0 && nMin%m_nFSBJG!=0)//添加上报标记
+    if(m_bFZSJ==true && nSec==0 && nMin%m_nFSBJG==0)//添加上报标记
     {
         GetValue(1);
         ;
@@ -214,9 +270,21 @@ void CQJCYZ::timerEvent(QTimerEvent *event)
     {
         GetValue(2);
     }
-    //小时上报数据
+    //日上报数据
     if(m_bRSJ==true && nHour==0 && nMin==0 && nSec==0)
     {
         GetValue(3);
     }
 }
+//bool CQJCYZ::SendComSet()
+//{
+//    QString strSZD="CP=&&";
+//    QString strCom;
+//    for(int i=0;i<8;i++)
+//    {
+//        strCom+=QString::number(i+1);+","
+//        strCom+=
+
+//    }
+//    true;
+//}

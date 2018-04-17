@@ -108,6 +108,7 @@ bool FormState::AddItemStatus(int nType, int nRow, QString sPZ, QString sZT, QSt
     pmodel->setItem(nRow,1,new QStandardItem(sPZ));
     pmodel->setItem(nRow,2,new QStandardItem(sZT));
     pmodel->setItem(nRow,3,new QStandardItem(sSJ));
+    return true;
 }
 
 void FormState::on_pushButton_clicked()

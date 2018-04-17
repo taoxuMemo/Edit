@@ -1,12 +1,14 @@
 #ifndef QDATATYPE_H
 #define QDATATYPE_H
-
+#include <QDebug>
 //**********************************211xieyi****************************
 #define PACKAGEHEAD     2
 #define DATALENGTH      4
 #define CRCLENGTH       4
 #define PACKAGETAIL     2
 #define PACKAGEHEADTAIL PACKAGEHEAD+DATALENGTH+CRCLENGTH+PACKAGETAIL
+
+#define MNLJKSL_NUM      8//模拟量接口数量
 //数据段结构组成表 字节长度
 #define SJDJGZCB_QQBM_LEN                   20                          //请求编码 QN
 #define SJDJGZCB_STBM_LEN                   5                           //系统编码 ST
@@ -134,28 +136,48 @@ struct  stuChannel{
     char nData;
     float nStop;
     char nParity;
-    char *pName;
-    char *pModel;
-    char *pType;
-    bool bMinAvg;
-    bool bMinMax;
-    bool bMinMin;
-    bool bMinTotal;
-    bool bHourAvg;
-    bool bHourMax;
-    bool bHourMin;
-    bool bHourTotal;
-    bool bDayAvg;
-    bool bDayMax;
-    bool bDayMin;
-    bool bDayTotal;
-    int nAlarmUp;
-    int nAlarmDown;
-    int nCycle;
+//    char *pName;
+//    char *pModel;
+//    char *pType;
+//    bool bMinAvg;
+//    bool bMinMax;
+//    bool bMinMin;
+//    bool bMinTotal;
+//    bool bHourAvg;
+//    bool bHourMax;
+//    bool bHourMin;
+//    bool bHourTotal;
+//    bool bDayAvg;
+//    bool bDayMax;
+//    bool bDayMin;
+//    bool bDayTotal;
+//    int nAlarmUp;
+//    int nAlarmDown;
+//    int nCycle;
     char strCS[50];  //厂商
     char strXH[20];  //型号
     char strJCX[7];  //监测项  如污水是w00000
     char strXY[20];  //协议
+    int  nItem;
+};
+struct stuAIChan
+        {
+    stuAIChan()
+    {
+        nID=0;
+        bRun=0;
+        memset(strJCX,0,7);
+        SignalType=0;
+        nURV=0;
+        nURV=0;
+    }
+    int nID;            //通道号
+    bool bRun;          //是否启用
+    char strJCX[7];     //监测项  如污水是w00000
+    int SignalType;     //0是电流 4-20ma 1是电压0-10V
+    int nURV;           //量程上限
+    int nLRV;           //量程下限
+
 };
 struct stuIPAddr{
     bool isChange;
@@ -226,10 +248,49 @@ struct UpDataStu
     char sData[1500];  //发送数据内容
     int  nLen;         //有效位长度
 };
+struct stuRD
+{
+    QString sCoding;
+    QString sType;
+    double dValue;
+};
+struct stuZSRD
+{
+    QString sCoding;
+    QString sType;
+    double dValue;
+    double dzsValue;
+};
 class QDatatype
 {
 public:
     QDatatype();
 };
+struct stuCol
+{
+    stuCol()
+    {
+        memset(sName,0,7);
+        memset(sType,0,7);
+        dvalue=0.0;
+ //       dzsvalue=0.0;
+    }
+    char sName[7];
+    char sType[7];
+    double dvalue;
+ //   double dzsvalue;
+};
 
+struct stuInfo
+{
+    stuInfo()
+    {
+        memset(sName,0,7);
+        memset(sType,0,7);
+        memset(sValue,0,11);
+    }
+    char sName[7];
+    char sType[7];
+    char sValue[11];
+};
 #endif // QDATATYPE_H

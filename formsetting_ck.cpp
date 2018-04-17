@@ -83,28 +83,26 @@ void FormSetting_CK::on_comboBox_2_currentIndexChanged(int index)
     ui->comboBox_5->setCurrentText(QString::number(stuChan.nStop));
     ui->comboBox_6->setCurrentText(QString(stuChan.nParity));
 
-    ui->checkBox_2->setChecked(stuChan.bMinAvg);
-    ui->checkBox_3->setChecked(stuChan.bMinMax);
-    ui->checkBox_4->setChecked(stuChan.bMinMin);
-    ui->checkBox_5->setChecked(stuChan.bMinTotal);
+//    ui->checkBox_2->setChecked(stuChan.bMinAvg);
+//    ui->checkBox_3->setChecked(stuChan.bMinMax);
+//    ui->checkBox_4->setChecked(stuChan.bMinMin);
+//    ui->checkBox_5->setChecked(stuChan.bMinTotal);
 
-    ui->checkBox_8->setChecked(stuChan.bHourAvg);
-    ui->checkBox_6->setChecked(stuChan.bHourMax);
-    ui->checkBox_9->setChecked(stuChan.bHourMin);
-    ui->checkBox_7->setChecked(stuChan.bHourTotal);
+//    ui->checkBox_8->setChecked(stuChan.bHourAvg);
+//    ui->checkBox_6->setChecked(stuChan.bHourMax);
+//    ui->checkBox_9->setChecked(stuChan.bHourMin);
+//    ui->checkBox_7->setChecked(stuChan.bHourTotal);
 
-    ui->checkBox_12->setChecked(stuChan.bDayAvg);
-    ui->checkBox_10->setChecked(stuChan.bDayMax);
-    ui->checkBox_13->setChecked(stuChan.bDayMin);
-    ui->checkBox_11->setChecked(stuChan.bDayTotal);
+//    ui->checkBox_12->setChecked(stuChan.bDayAvg);
+//    ui->checkBox_10->setChecked(stuChan.bDayMax);
+//    ui->checkBox_13->setChecked(stuChan.bDayMin);
+//    ui->checkBox_11->setChecked(stuChan.bDayTotal);
 
-    ui->spinBox->setValue(stuChan.nAlarmUp);
-    ui->spinBox_2->setValue(stuChan.nAlarmDown);
-    ui->spinBox_3->setValue(stuChan.nCycle);
+//    ui->spinBox->setValue(stuChan.nAlarmUp);
+//    ui->spinBox_2->setValue(stuChan.nAlarmDown);
+//    ui->spinBox_3->setValue(stuChan.nCycle);
 
-  //  int dex =ui->comboBox_3->currentIndex();
-  //  QMessageBox::information(this,"123",QString::number(dex));
-   // stuChan.nBaud
+
 
 }
 //***********************保存按钮**********************************
@@ -122,22 +120,22 @@ void FormSetting_CK::on_pushButton_3_clicked()
     m_Main->m_stuChan[dexchn].nStop=g_fStop[ui->comboBox_5->currentIndex()];
     m_Main->m_stuChan[dexchn].nParity=g_cParity[ui->comboBox_6->currentIndex()];
 
-    m_Main->m_stuChan[dexchn].bMinAvg=ui->checkBox_2->isChecked();
-    m_Main->m_stuChan[dexchn].bMinMax=ui->checkBox_3->isChecked();
-    m_Main->m_stuChan[dexchn].bMinMin=ui->checkBox_4->isChecked();
-    m_Main->m_stuChan[dexchn].bMinTotal=ui->checkBox_5->isChecked();
-    m_Main->m_stuChan[dexchn].bHourAvg=ui->checkBox_8->isChecked();
-    m_Main->m_stuChan[dexchn].bHourMax=ui->checkBox_6->isChecked();
-    m_Main->m_stuChan[dexchn].bHourMin=ui->checkBox_9->isChecked();
-    m_Main->m_stuChan[dexchn].bHourTotal=ui->checkBox_7->isChecked();
-    m_Main->m_stuChan[dexchn].bDayAvg=ui->checkBox_12->isChecked();
-    m_Main->m_stuChan[dexchn].bDayMax=ui->checkBox_10->isChecked();
-    m_Main->m_stuChan[dexchn].bDayMin=ui->checkBox_13->isChecked();
-    m_Main->m_stuChan[dexchn].bDayTotal=ui->checkBox_11->isChecked();
+//    m_Main->m_stuChan[dexchn].bMinAvg=ui->checkBox_2->isChecked();
+//    m_Main->m_stuChan[dexchn].bMinMax=ui->checkBox_3->isChecked();
+//    m_Main->m_stuChan[dexchn].bMinMin=ui->checkBox_4->isChecked();
+//    m_Main->m_stuChan[dexchn].bMinTotal=ui->checkBox_5->isChecked();
+//    m_Main->m_stuChan[dexchn].bHourAvg=ui->checkBox_8->isChecked();
+//    m_Main->m_stuChan[dexchn].bHourMax=ui->checkBox_6->isChecked();
+//    m_Main->m_stuChan[dexchn].bHourMin=ui->checkBox_9->isChecked();
+//    m_Main->m_stuChan[dexchn].bHourTotal=ui->checkBox_7->isChecked();
+//    m_Main->m_stuChan[dexchn].bDayAvg=ui->checkBox_12->isChecked();
+//    m_Main->m_stuChan[dexchn].bDayMax=ui->checkBox_10->isChecked();
+//    m_Main->m_stuChan[dexchn].bDayMin=ui->checkBox_13->isChecked();
+//    m_Main->m_stuChan[dexchn].bDayTotal=ui->checkBox_11->isChecked();
 
-    m_Main->m_stuChan[dexchn].nAlarmUp=ui->spinBox->value();
-    m_Main->m_stuChan[dexchn].nAlarmDown=ui->spinBox_2->value();
-    m_Main->m_stuChan[dexchn].nCycle=ui->spinBox_3->value();
+//    m_Main->m_stuChan[dexchn].nAlarmUp=ui->spinBox->value();
+//    m_Main->m_stuChan[dexchn].nAlarmDown=ui->spinBox_2->value();
+//    m_Main->m_stuChan[dexchn].nCycle=ui->spinBox_3->value();
 
       if(QMessageBox::information(this,"配置信息","是否确定修改配置信息",QMessageBox::Yes | QMessageBox::No)==QMessageBox::Yes)
           {

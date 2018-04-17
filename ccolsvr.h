@@ -3,33 +3,7 @@
 #include <string.h>
 #include <qlist.h>
 #include "qbytearray.h"
-struct stuCol
-{
-    stuCol()
-    {
-        memset(sName,0,7);
-        memset(sType,0,7);
-        dvalue=0.0;
-        dzsvalue=0.0;
-    }
-    char sName[7];
-    char sType[7];
-    double dvalue;
-    double dzsvalue;
-};
-
-struct stuInfo
-{
-    stuInfo()
-    {
-        memset(sName,0,7);
-        memset(sType,0,7);
-        memset(sValue,0,11);
-    }
-    char sName[7];
-    char sType[7];
-    char sValue[11];
-};
+#include "qdatatype.h"
 
 class CColSvr
 {
@@ -47,6 +21,7 @@ public:
     QByteArray GetSendStr();
     QList<stuCol>   getlist();
     QList<stuInfo>  getlistinfo();
+
 };
 
 #endif // CCOLSVR_H

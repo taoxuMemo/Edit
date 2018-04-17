@@ -27,6 +27,7 @@
 #include "ctesttcpthd.h"
 #include "cqjcyz.h"
 #include "cserialthread.h"
+#include"crs232.h"
 
 class CMySocketThread;
 class CNetConThread;
@@ -47,6 +48,7 @@ public:
     COperationConfig * m_pOpera;
     unsigned char m_nCom[8];
     stuChannel  m_stuChan[8];
+    stuAIChan   m_stuAIChan[MNLJKSL_NUM];
     stuIPAddr   m_stuIPA[8];
     QString     m_sSBWYBS;
     QString     m_sPassWD;
@@ -58,6 +60,7 @@ public:
     QQueue<QString> m_queTcp;   //接收tcp发来的数据
 
   //  CDBSTJC     m_DBSTJC;       //地表项处理函数
+
     CJCBase     *m_pBase;
  //   QQueue m_queTcp<QString,int>;  //接收tcp发来的数据
     //****************************界面指针******************************************
@@ -78,6 +81,7 @@ public:
     CMySqlite m_mySql;                  //数据库操作类
 
     CTestTcpThd *m_pthdTest;              //
+    CRs232 * m_pRs232;
     //*************************初始化***************************************
     bool init();
    //***************************创建界面函数****************************************
@@ -94,9 +98,10 @@ public:
     void CreateSetting_wlsz();//网络参数设置
     void CreateSetting_sjjy();//时间校验界面启动函数
     int m_nTest;
-
+    void AddRD(int ,int);  //在实时数据界面添加数据
     void RecvData(QByteArray);
     void RecvTcpData(QByteArray,int);
+    void CheckChange();
 signals:
     void RecvSignal(QByteArray);
     void RecvTcpSignal(QByteArray,int);

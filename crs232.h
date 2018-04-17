@@ -16,8 +16,9 @@ public:
     bool start();
     QByteArray m_baData;
 signals:
-     void Read_Data();
+
 public slots:
+         void ReadData();
 };
 
 #endif // CRS232_H

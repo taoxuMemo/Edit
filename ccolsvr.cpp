@@ -2,7 +2,7 @@
 #include "ctool.h"
 CColSvr::CColSvr()
 {
-
+    m_nErrCode=0;
 }
 bool CColSvr::setData(char *pData, int nLen)
 {
@@ -26,7 +26,7 @@ bool CColSvr::setData(char *pData, int nLen)
     char sCRC[5];
     strncpy(sCRC,pData+nSJDLen,4);
     sCRC[4]=NULL;
-    int nCRC=atoi(sCRC);
+    int nCRC=QString(QLatin1String(sCRC)).toInt(Q_NULLPTR,16);
     unsigned int nDataCRC=CTool::CRC16_Checkout((unsigned char *)pData,(unsigned int)nSJDLen);
     if(nCRC!=nDataCRC)
     {
@@ -114,9 +114,42 @@ QList<stuCol>   CColSvr::getlist()
             strncpy(stu.sType,ba1.data(),ba1.size());
 
             QString sVal=sl2.at(1);
-            stu.dvalue=sVal.toDouble();
-            if(stu.dvalue==0)
-                continue;
+            if(sVal.length()>0)
+            {
+                switch (sVal.at(0).toLatin1()) {
+                case 'N':
+                    stu.dvalue=1;
+                    break;
+                case 'F':
+                    stu.dvalue=2;
+                    break;
+                case 'M':
+                    stu.dvalue=3;
+                    break;
+                case 'S':
+                    stu.dvalue=4;
+                    break;
+                case 'D':
+                    stu.dvalue=5;
+                    break;
+                case 'C':
+                    stu.dvalue=6;
+                    break;
+                case 'T':
+                    stu.dvalue=7;
+                    break;
+                case 'B':
+                    stu.dvalue=8;
+                    break;
+                default:
+                    stu.dvalue=sVal.toDouble();
+                    break;
+                }
+            }
+
+
+//            if(stu.dvalue==0)
+//                continue;
             relist.append(stu);
         }
         return relist;
